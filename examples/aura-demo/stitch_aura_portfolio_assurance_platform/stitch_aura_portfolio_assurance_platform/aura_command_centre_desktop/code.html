@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AURA - Command Centre</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-variant": "#e1e2e4",
+                        "on-tertiary-container": "#b6875a",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary": "#006a69",
+                        "primary-fixed-dim": "#b0c8f0",
+                        "inverse-surface": "#2e3132",
+                        "tertiary-fixed": "#ffdcbe",
+                        "surface-container": "#edeef0",
+                        "secondary-fixed-dim": "#7cd5d3",
+                        "on-tertiary-fixed": "#2d1600",
+                        "on-primary-fixed-variant": "#304869",
+                        "surface-bright": "#f8f9fb",
+                        "secondary-fixed": "#98f2f0",
+                        "on-secondary-fixed-variant": "#00504f",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-fixed-variant": "#633f18",
+                        "surface-tint": "#485f82",
+                        "on-secondary-fixed": "#002020",
+                        "error": "#ba1a1a",
+                        "on-surface-variant": "#43474e",
+                        "on-primary-fixed": "#001c3a",
+                        "on-primary": "#ffffff",
+                        "outline": "#74777f",
+                        "on-tertiary": "#ffffff",
+                        "inverse-on-surface": "#f0f1f3",
+                        "background": "#f8f9fb",
+                        "primary-container": "#0f2a4a",
+                        "on-primary-container": "#7a92b7",
+                        "inverse-primary": "#b0c8f0",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed-dim": "#f1bc8b",
+                        "tertiary": "#231000",
+                        "secondary-container": "#98f2f0",
+                        "outline-variant": "#c4c6cf",
+                        "surface-container-highest": "#e1e2e4",
+                        "tertiary-container": "#402200",
+                        "on-surface": "#191c1e",
+                        "on-error": "#ffffff",
+                        "surface-container-low": "#f2f4f6",
+                        "surface-container-high": "#e7e8ea",
+                        "primary": "#00152f",
+                        "surface-dim": "#d9dadc",
+                        "surface": "#f8f9fb",
+                        "on-background": "#191c1e",
+                        "on-secondary-container": "#00706f",
+                        "error-container": "#ffdad6",
+                        "primary-fixed": "#d4e3ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack_gap_sm": "8px",
+                        "stack_gap_md": "16px",
+                        "topbar_height": "64px",
+                        "sidebar_width": "240px",
+                        "gutter": "24px",
+                        "container_max_width": "1440px",
+                        "card_padding": "20px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Inter"],
+                        "display-lg-mobile": ["Inter"],
+                        "data-mono": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "display-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "500" }],
+                        "display-lg-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "data-mono": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "label-caps": ["11px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .icon-fill { font-variation-settings: 'FILL' 1; }
+        
+        /* Subtle ambient shadow for specific floating elements if needed */
+        .ambient-shadow {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.03);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen font-body-md text-body-md antialiased overflow-x-hidden">
+<!-- Shared Component: SideNavBar -->
+<nav class="fixed left-0 top-0 h-full w-[240px] bg-primary dark:bg-primary flex flex-col py-6 px-4 z-20">
+<div class="mb-8 px-2">
+<h1 class="font-headline-md text-headline-md font-bold tracking-tight text-white">AURA</h1>
+<p class="font-body-sm text-body-sm text-on-primary-container/70 mt-1">Portfolio Assurance</p>
+</div>
+<ul class="flex flex-col gap-2">
+<!-- Active Nav Item -->
+<li>
+<a class="flex items-center gap-3 px-3 py-2 rounded-md text-white font-bold bg-primary-container/20 hover:bg-primary-container/10 transition-colors group" href="#">
+<span class="material-symbols-outlined icon-fill opacity-80 duration-150">dashboard</span>
+                    Command Centre
+                </a>
+</li>
+<!-- Inactive Nav Items -->
+<li>
+<a class="flex items-center gap-3 px-3 py-2 rounded-md text-on-primary-container/70 font-medium hover:bg-primary-container/10 hover:text-white transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:opacity-80 duration-150">account_balance_wallet</span>
+                    Portfolios
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2 rounded-md text-on-primary-container/70 font-medium hover:bg-primary-container/10 hover:text-white transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:opacity-80 duration-150">build_circle</span>
+                    Remediation
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2 rounded-md text-on-primary-container/70 font-medium hover:bg-primary-container/10 hover:text-white transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:opacity-80 duration-150">history_edu</span>
+                    Audit Log
+                </a>
+</li>
+<li class="mt-auto">
+<a class="flex items-center gap-3 px-3 py-2 rounded-md text-on-primary-container/70 font-medium hover:bg-primary-container/10 hover:text-white transition-colors group" href="#">
+<span class="material-symbols-outlined group-hover:opacity-80 duration-150">settings</span>
+                    Settings
+                </a>
+</li>
+</ul>
+</nav>
+<!-- Shared Component: TopNavBar -->
+<header class="fixed top-0 right-0 w-[calc(100%-240px)] h-[64px] bg-surface dark:bg-surface border-b border-outline-variant dark:border-outline-variant flex justify-between items-center px-gutter z-10">
+<!-- Search Left -->
+<div class="flex items-center bg-surface-container-low rounded-md px-3 py-1.5 border border-outline-variant focus-within:border-secondary transition-colors w-64">
+<span class="material-symbols-outlined text-on-surface-variant mr-2 text-[18px]">search</span>
+<input class="bg-transparent border-none outline-none text-body-sm font-body-sm text-on-surface w-full placeholder:text-on-surface-variant focus:ring-0 p-0" placeholder="Search portfolios, clients..." type="text"/>
+</div>
+<!-- Trailing Actions -->
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-1 border border-outline-variant rounded px-2 py-1 bg-surface-container-lowest cursor-pointer hover:bg-surface-container-high transition-all">
+<span class="w-2 h-2 rounded-full bg-secondary-fixed"></span>
+<span class="font-body-sm text-body-sm text-on-surface font-medium">Production</span>
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">arrow_drop_down</span>
+</div>
+<button class="text-on-surface-variant hover:bg-surface-container-high transition-all p-1.5 rounded-full active:scale-[0.99] duration-100 flex items-center justify-center">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:bg-surface-container-high transition-all p-1.5 rounded-full active:scale-[0.99] duration-100 flex items-center justify-center">
+<span class="material-symbols-outlined">help_outline</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-variant border border-outline-variant overflow-hidden ml-2 cursor-pointer">
+<img alt="User Profile Avatar" class="w-full h-full object-cover" data-alt="A professional headshot of an executive in a modern, well-lit office setting. The lighting is crisp and natural, highlighting a calm and authoritative demeanor. The background is slightly blurred with subtle architectural details, conveying a high-end corporate environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkfe0EA_G3K8q1i26TXjZNGDaptbprurw8EYJhvcEbsaQ40h8kh6QRv2FKC1Ut2ZrziQrGbkFS3m1HOm9rfKVOyBx72E-8zCqPORtFi0UmrUlL0fEgpWphPz_fZzSHBbybePy1V683JvMFk7vvrdkq9q5PkxA0KSzvCspPTb_km16TRVCwn3l9L2uAa3IdVOJ-hm05cDUk_II8Thku3JxvnizGAdYK8UTPBoUCb9RYOrdZ111LZPx1TM9c4fyvd2P7Sz2NQcH_K4G4"/>
+</div>
+</div>
+</header>
+<!-- Main Canvas Area -->
+<main class="ml-[240px] mt-[64px] p-gutter max-w-container_max_width">
+<!-- AI Assurance Summary Banner -->
+<div class="w-full bg-secondary-container/20 border-l-4 border-l-secondary border border-outline-variant rounded-lg p-4 mb-stack_gap_md flex items-start gap-4">
+<div class="p-2 bg-secondary-container rounded-full text-on-secondary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined icon-fill text-[20px]">auto_awesome</span>
+</div>
+<div>
+<h2 class="font-data-mono text-data-mono font-bold text-on-surface mb-1">AI Assurance Summary</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">38 of 45 portfolios aligned. <span class="text-on-error-container font-medium">4 breached</span>, <span class="text-on-tertiary-fixed-variant font-medium">3 need attention</span>. Largest risk vector identified: Tech sector concentration across High Growth accounts.</p>
+</div>
+</div>
+<!-- KPI Stat Cards Row -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-stack_gap_md mb-gutter">
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-card_padding flex flex-col justify-between hover:border-outline transition-colors group">
+<div class="flex justify-between items-start mb-2">
+<span class="font-body-sm text-body-sm text-on-surface-variant font-medium uppercase tracking-wider">Total FUM</span>
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]">payments</span>
+</div>
+<div>
+<div class="font-display-lg text-display-lg text-on-surface tabular-nums tracking-tight">$1.42B</div>
+<div class="flex items-center gap-1 mt-1 text-secondary">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+<span class="font-body-sm text-body-sm font-medium">+2.4% this month</span>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-card_padding flex flex-col justify-between hover:border-outline transition-colors group">
+<div class="flex justify-between items-start mb-2">
+<span class="font-body-sm text-body-sm text-on-surface-variant font-medium uppercase tracking-wider">Aligned</span>
+<span class="material-symbols-outlined text-on-secondary-container text-[18px]">check_circle</span>
+</div>
+<div>
+<div class="font-display-lg text-display-lg text-on-surface tabular-nums tracking-tight">84.4%</div>
+<div class="w-full bg-surface-variant h-1.5 rounded-full mt-3 overflow-hidden">
+<div class="bg-secondary-fixed h-full w-[84.4%]"></div>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-card_padding flex flex-col justify-between hover:border-tertiary-fixed transition-colors group">
+<div class="flex justify-between items-start mb-2">
+<span class="font-body-sm text-body-sm text-on-tertiary-fixed-variant font-medium uppercase tracking-wider">Needs Attention</span>
+<span class="material-symbols-outlined text-on-tertiary-fixed-variant text-[18px]">warning</span>
+</div>
+<div>
+<div class="font-display-lg text-display-lg text-on-surface tabular-nums tracking-tight">3</div>
+<div class="flex items-center gap-1 mt-1 text-on-surface-variant">
+<span class="font-body-sm text-body-sm">Representing $42M FUM</span>
+</div>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-card_padding flex flex-col justify-between hover:border-error transition-colors group">
+<div class="flex justify-between items-start mb-2">
+<span class="font-body-sm text-body-sm text-on-error-container font-medium uppercase tracking-wider">Breached</span>
+<span class="material-symbols-outlined text-on-error-container text-[18px]">error</span>
+</div>
+<div>
+<div class="font-display-lg text-display-lg text-on-error-container tabular-nums tracking-tight">4</div>
+<div class="flex items-center gap-1 mt-1 text-on-error-container">
+<span class="material-symbols-outlined text-[14px]">arrow_upward</span>
+<span class="font-body-sm text-body-sm font-medium">+1 since yesterday</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Main Heatmap & Triage Layout -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Heatmap Area (Left 9 columns) -->
+<div class="col-span-12 lg:col-span-8 xl:col-span-9 flex flex-col gap-stack_gap_sm">
+<!-- Filters Bar -->
+<div class="flex flex-wrap items-center justify-between bg-surface-container-lowest border border-outline-variant rounded-lg px-4 py-2">
+<div class="flex items-center gap-4">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-widest">Filters:</span>
+<select class="text-body-sm font-body-sm border-none bg-transparent py-1 pl-0 pr-6 text-on-surface focus:ring-0 cursor-pointer hover:text-primary-container">
+<option>All Advisers</option>
+<option>Sarah Jenkins</option>
+<option>Michael Chen</option>
+</select>
+<div class="w-px h-4 bg-outline-variant"></div>
+<select class="text-body-sm font-body-sm border-none bg-transparent py-1 pl-0 pr-6 text-on-surface focus:ring-0 cursor-pointer hover:text-primary-container">
+<option>All Statuses</option>
+<option>Breached</option>
+<option>Attention</option>
+</select>
+<div class="w-px h-4 bg-outline-variant"></div>
+<select class="text-body-sm font-body-sm border-none bg-transparent py-1 pl-0 pr-6 text-on-surface focus:ring-0 cursor-pointer hover:text-primary-container">
+<option>All Asset Classes</option>
+<option>Equities</option>
+<option>Fixed Income</option>
+</select>
+</div>
+<div class="flex items-center gap-2 border-b border-outline-variant pb-1">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">search</span>
+<input class="bg-transparent border-none p-0 text-body-sm font-body-sm w-32 focus:ring-0 placeholder:text-on-surface-variant" placeholder="Find portfolio..." type="text"/>
+</div>
+</div>
+<!-- Treemap Heatmap Construction (CSS Flex/Grid proxy for structural layout) -->
+<div class="w-full h-[600px] bg-surface-variant border border-outline-variant rounded-lg p-1 flex gap-1 overflow-hidden">
+<!-- Major Block 1 (Large FUM, Mixed Status) -->
+<div class="w-1/2 flex flex-col gap-1">
+<div class="h-[60%] bg-secondary-fixed/90 hover:bg-secondary-fixed border border-secondary-fixed-dim rounded-sm p-3 relative group cursor-pointer transition-colors overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent"></div>
+<h3 class="font-data-mono text-data-mono font-bold text-on-secondary-fixed-variant relative z-10">Vanguard Growth Mandate</h3>
+<p class="font-body-sm text-body-sm text-on-secondary-fixed-variant/80 relative z-10 tabular-nums">$342.5M</p>
+<div class="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-on-secondary-fixed-variant">open_in_new</span>
+</div>
+</div>
+<div class="flex gap-1 h-[40%]">
+<div class="w-[60%] bg-tertiary-fixed/90 hover:bg-tertiary-fixed border border-tertiary-fixed-dim rounded-sm p-3 relative group cursor-pointer transition-colors overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent"></div>
+<h3 class="font-data-mono text-data-mono font-bold text-on-tertiary-fixed-variant relative z-10 line-clamp-1">Alpha Tech Core</h3>
+<p class="font-body-sm text-body-sm text-on-tertiary-fixed-variant/80 relative z-10 tabular-nums">$128.2M</p>
+</div>
+<div class="w-[40%] bg-error-container/90 hover:bg-error-container border border-error/20 rounded-sm p-2 relative group cursor-pointer transition-colors overflow-hidden">
+<h3 class="font-data-mono text-data-mono font-bold text-on-error-container text-[12px] leading-tight mb-1">Global Infra Y</h3>
+<p class="font-body-sm text-body-sm text-on-error-container/80 tabular-nums text-[11px]">$84.0M</p>
+</div>
+</div>
+</div>
+<!-- Major Block 2 (Multiple smaller portfolios) -->
+<div class="w-1/2 flex flex-col gap-1">
+<div class="flex gap-1 h-[30%]">
+<div class="w-1/2 bg-secondary-fixed/90 hover:bg-secondary-fixed border border-secondary-fixed-dim rounded-sm p-3 cursor-pointer transition-colors">
+<h3 class="font-data-mono text-data-mono font-bold text-on-secondary-fixed-variant text-[13px] line-clamp-1">BlueChip Div</h3>
+<p class="font-body-sm text-body-sm text-on-secondary-fixed-variant/80 tabular-nums text-[12px]">$95.1M</p>
+</div>
+<div class="w-1/2 bg-secondary-fixed/70 hover:bg-secondary-fixed border border-secondary-fixed-dim rounded-sm p-3 cursor-pointer transition-colors">
+<h3 class="font-data-mono text-data-mono font-bold text-on-secondary-fixed-variant text-[13px] line-clamp-1">Defensive Bond X</h3>
+<p class="font-body-sm text-body-sm text-on-secondary-fixed-variant/80 tabular-nums text-[12px]">$88.4M</p>
+</div>
+</div>
+<div class="h-[40%] bg-error-container/90 hover:bg-error-container border border-error/20 rounded-sm p-3 relative group cursor-pointer transition-colors overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"></div>
+<h3 class="font-data-mono text-data-mono font-bold text-on-error-container relative z-10">Emerging Mkts High Beta</h3>
+<p class="font-body-sm text-body-sm text-on-error-container/80 relative z-10 tabular-nums">$145.8M</p>
+<div class="absolute top-3 right-3 bg-error text-white rounded-full p-1 flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px]">warning</span>
+</div>
+</div>
+<div class="flex gap-1 h-[30%]">
+<div class="w-1/3 bg-tertiary-fixed/90 hover:bg-tertiary-fixed border border-tertiary-fixed-dim rounded-sm p-2 cursor-pointer transition-colors">
+<h3 class="font-data-mono text-data-mono font-bold text-on-tertiary-fixed-variant text-[11px] leading-tight">Sust. Ag</h3>
+</div>
+<div class="w-1/3 bg-tertiary-fixed/70 hover:bg-tertiary-fixed border border-tertiary-fixed-dim rounded-sm p-2 cursor-pointer transition-colors">
+<h3 class="font-data-mono text-data-mono font-bold text-on-tertiary-fixed-variant text-[11px] leading-tight">Micro Cap</h3>
+</div>
+<div class="w-1/3 flex flex-col gap-1">
+<div class="h-1/2 bg-error-container/80 border border-error/20 rounded-sm"></div>
+<div class="h-1/2 bg-error-container/60 border border-error/20 rounded-sm"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-4 mt-2 px-2">
+<span class="font-label-caps text-label-caps text-on-surface-variant">LEGEND:</span>
+<div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-sm bg-secondary-fixed"></span><span class="font-body-sm text-body-sm text-on-surface">Aligned</span></div>
+<div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-sm bg-tertiary-fixed"></span><span class="font-body-sm text-body-sm text-on-surface">Attention</span></div>
+<div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-sm bg-error-container"></span><span class="font-body-sm text-body-sm text-on-surface">Breached</span></div>
+<div class="ml-auto font-body-sm text-body-sm text-on-surface-variant italic text-[12px]">Box size represents FUM</div>
+</div>
+</div>
+<!-- Triage Panel (Right 3 columns) -->
+<div class="col-span-12 lg:col-span-4 xl:col-span-3">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg h-full flex flex-col shadow-sm">
+<div class="p-4 border-b border-outline-variant flex items-center justify-between bg-surface-bright rounded-t-lg">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container">local_hospital</span>
+<h2 class="font-headline-md text-headline-md font-bold text-primary-container">Triage Queue</h2>
+</div>
+<span class="bg-error-container text-on-error-container font-data-mono text-[12px] px-2 py-0.5 rounded-full font-bold">4 Urgent</span>
+</div>
+<div class="flex-1 overflow-y-auto p-2 flex flex-col gap-2">
+<!-- Triage Item 1 (Breached) -->
+<div class="p-3 border border-error-container/30 bg-error-container/5 rounded-md hover:border-error-container transition-colors cursor-pointer group">
+<div class="flex justify-between items-start mb-1">
+<h4 class="font-data-mono text-data-mono font-bold text-on-surface group-hover:text-primary-container transition-colors line-clamp-1">Emerging Mkts High Beta</h4>
+<span class="bg-error-container text-on-error-container font-label-caps text-[10px] px-1.5 py-0.5 rounded uppercase tracking-wider shrink-0">Breached</span>
+</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant tabular-nums mb-2">$145.8M FUM</div>
+<p class="font-body-sm text-body-sm text-on-error-container/80 text-[12px] leading-tight border-l-2 border-error pl-2">Tracking error exceeded 5% threshold vs Benchmark.</p>
+</div>
+<!-- Triage Item 2 (Breached) -->
+<div class="p-3 border border-error-container/30 bg-error-container/5 rounded-md hover:border-error-container transition-colors cursor-pointer group">
+<div class="flex justify-between items-start mb-1">
+<h4 class="font-data-mono text-data-mono font-bold text-on-surface group-hover:text-primary-container transition-colors line-clamp-1">Global Infra Y</h4>
+<span class="bg-error-container text-on-error-container font-label-caps text-[10px] px-1.5 py-0.5 rounded uppercase tracking-wider shrink-0">Breached</span>
+</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant tabular-nums mb-2">$84.0M FUM</div>
+<p class="font-body-sm text-body-sm text-on-error-container/80 text-[12px] leading-tight border-l-2 border-error pl-2">Cash holding below 2% mandate minimum.</p>
+</div>
+<!-- Triage Item 3 (Attention) -->
+<div class="p-3 border border-outline-variant bg-surface-container-lowest rounded-md hover:border-tertiary-fixed transition-colors cursor-pointer group">
+<div class="flex justify-between items-start mb-1">
+<h4 class="font-data-mono text-data-mono font-bold text-on-surface group-hover:text-primary-container transition-colors line-clamp-1">Alpha Tech Core</h4>
+<span class="bg-tertiary-fixed text-on-tertiary-fixed font-label-caps text-[10px] px-1.5 py-0.5 rounded uppercase tracking-wider shrink-0">Attention</span>
+</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant tabular-nums mb-2">$128.2M FUM</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant text-[12px] leading-tight border-l-2 border-tertiary-fixed pl-2">Approaching sector concentration limit (Tech).</p>
+</div>
+<!-- Triage Item 4 (Attention) -->
+<div class="p-3 border border-outline-variant bg-surface-container-lowest rounded-md hover:border-tertiary-fixed transition-colors cursor-pointer group">
+<div class="flex justify-between items-start mb-1">
+<h4 class="font-data-mono text-data-mono font-bold text-on-surface group-hover:text-primary-container transition-colors line-clamp-1">Sust. Ag</h4>
+<span class="bg-tertiary-fixed text-on-tertiary-fixed font-label-caps text-[10px] px-1.5 py-0.5 rounded uppercase tracking-wider shrink-0">Attention</span>
+</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant tabular-nums mb-2">$32.1M FUM</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant text-[12px] leading-tight border-l-2 border-tertiary-fixed pl-2">ESG rating downgrade on key holding.</p>
+</div>
+</div>
+<div class="p-3 border-t border-outline-variant bg-surface-bright rounded-b-lg">
+<button class="w-full py-2 bg-surface-container-lowest border border-outline-variant text-primary-container font-body-sm font-medium rounded hover:bg-surface-container-high transition-colors text-center">
+                            View All (7)
+                        </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

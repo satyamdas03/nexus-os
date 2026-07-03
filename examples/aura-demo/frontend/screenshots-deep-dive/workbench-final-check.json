@@ -1,0 +1,172 @@
+{
+  "status": "green",
+  "breaches": [],
+  "watches": [],
+  "per_rule": [
+    {
+      "rule": "max_asset_class_weight:Bonds",
+      "pass": true,
+      "current": 0.08647745536424349,
+      "limit": 0.155,
+      "offending_holdings": [],
+      "severity": "green"
+    },
+    {
+      "rule": "max_asset_class_weight:Cash",
+      "pass": true,
+      "current": 0,
+      "limit": 1,
+      "offending_holdings": [],
+      "severity": "green"
+    },
+    {
+      "rule": "max_asset_class_weight:Commodity",
+      "pass": true,
+      "current": 0,
+      "limit": 0.154,
+      "offending_holdings": [],
+      "severity": "green"
+    },
+    {
+      "rule": "max_asset_class_weight:Crypto",
+      "pass": true,
+      "current": 0.01507683462620542,
+      "limit": 0.146,
+      "offending_holdings": [],
+      "severity": "green"
+    },
+    {
+      "rule": "max_asset_class_weight:Equity",
+      "pass": true,
+      "current": 0.7195023508095788,
+      "limit": 0.968,
+      "offending_holdings": [],
+      "severity": "green"
+    },
+    {
+      "rule": "max_sector_weight:Energy",
+      "pass": true,
+      "current": 0,
+      "limit": 0.381,
+      "offending_holdings": [],
+      "severity": "green"
+    },
+    {
+      "rule": "max_sector_weight:Metals",
+      "pass": true,
+      "current": 0,
+      "limit": 0.385,
+      "offending_holdings": [],
+      "severity": "green"
+    },
+    {
+      "rule": "max_sector_weight:Technology",
+      "pass": true,
+      "current": 0,
+      "limit": 0.363,
+      "offending_holdings": [],
+      "severity": "green"
+    },
+    {
+      "rule": "approved_universe",
+      "pass": true,
+      "current": [],
+      "limit": [
+        "XLRE",
+        "LQD",
+        "VTI",
+        "XLP",
+        "XLF",
+        "BTC",
+        "VEA",
+        "EEM",
+        "BNDX",
+        "EWJ",
+        "IEF",
+        "XLV",
+        "DBC",
+        "HYG",
+        "EWG",
+        "VWO",
+        "XLK",
+        "XLE",
+        "INDA",
+        "XLY"
+      ],
+      "offending_holdings": [],
+      "severity": "green"
+    },
+    {
+      "rule": "max_single_holding",
+      "pass": true,
+      "current": 0.20000000083358171,
+      "limit": 0.2,
+      "offending_holdings": [],
+      "severity": "green"
+    },
+    {
+      "rule": "min_cash",
+      "pass": true,
+      "current": 0.17894335919997226,
+      "limit": 0.022,
+      "offending_holdings": [],
+      "severity": "green"
+    },
+    {
+      "rule": "max_region_weight:EM",
+      "pass": true,
+      "current": 0.10100740062625078,
+      "limit": 0.259,
+      "offending_holdings": [],
+      "severity": "green"
+    },
+    {
+      "rule": "max_region_weight:ExUS",
+      "pass": true,
+      "current": 0.1863056004007483,
+      "limit": 0.418,
+      "offending_holdings": [],
+      "severity": "green"
+    },
+    {
+      "rule": "max_region_weight:US",
+      "pass": true,
+      "current": 0.5337436397730286,
+      "limit": 0.583,
+      "offending_holdings": [],
+      "severity": "green"
+    },
+    {
+      "rule": "esg_exclusions",
+      "pass": true,
+      "current": [],
+      "limit": [
+        "XLP"
+      ],
+      "offending_holdings": [],
+      "severity": "green"
+    },
+    {
+      "rule": "max_top_n_concentration",
+      "pass": true,
+      "current": 0.556854852010572,
+      "limit": 0.676,
+      "offending_holdings": [
+        "VTI",
+        "EWJ",
+        "INDA",
+        "VEA",
+        "XLV"
+      ],
+      "severity": "green"
+    },
+    {
+      "rule": "min_liquid_pct",
+      "pass": true,
+      "current": 0.5344231561606323,
+      "limit": 0.259,
+      "offending_holdings": [],
+      "severity": "green"
+    }
+  ]
+}

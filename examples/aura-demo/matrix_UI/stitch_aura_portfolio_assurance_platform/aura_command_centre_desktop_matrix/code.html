@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AURA Command Centre</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        /* Scanline effect */
+        .scanlines {
+            position: relative;
+            overflow: hidden;
+        }
+        .scanlines::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 2;
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+        }
+
+        /* Luminous Elevation */
+        .glow-active {
+            box-shadow: 0 0 8px #00ff41;
+        }
+        .glow-hover:hover {
+            box-shadow: 0 0 15px #00ff41;
+            transition: box-shadow 0.3s ease;
+        }
+        
+        /* Heatmap specific colors */
+        .heat-green { background-color: rgba(0, 255, 65, 0.15); border: 1px solid #00FF41; }
+        .heat-amber { background-color: rgba(255, 191, 0, 0.15); border: 1px solid #FFBF00; }
+        .heat-red { background-color: rgba(255, 0, 0, 0.15); border: 1px solid #FF0000; animation: pulse-red 2s infinite; }
+        
+        @keyframes pulse-red {
+            0% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 0, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0); }
+        }
+
+        /* Scrollbar styling for terminal feel */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #050505; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 143, 17, 0.3); 
+            border: 1px solid #008F11;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 255, 65, 0.5); 
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary-fixed": "#002201",
+                      "tertiary": "#fcf8f8",
+                      "surface": "#121414",
+                      "surface-container-highest": "#333535",
+                      "on-error": "#690005",
+                      "surface-tint": "#00e639",
+                      "on-primary-fixed-variant": "#00530e",
+                      "surface-bright": "#37393a",
+                      "on-primary-fixed": "#002203",
+                      "secondary-container": "#2ca62a",
+                      "secondary-fixed-dim": "#69df5c",
+                      "on-secondary-fixed-variant": "#005306",
+                      "background": "#000000", /* Overridden for pure black */
+                      "surface-container-lowest": "#050505", /* Overridden for base layer */
+                      "primary-fixed": "#72ff70",
+                      "surface-container-high": "#282a2b",
+                      "on-tertiary": "#313030",
+                      "on-error-container": "#ffdad6",
+                      "tertiary-fixed-dim": "#c9c6c5",
+                      "primary": "#ebffe2",
+                      "outline": "#84967e",
+                      "inverse-surface": "#e2e2e2",
+                      "inverse-on-surface": "#2f3131",
+                      "surface-variant": "#333535",
+                      "inverse-primary": "#006e16",
+                      "tertiary-fixed": "#e5e2e1",
+                      "primary-container": "#00ff41", /* Kept as vibrant green */
+                      "error-container": "#93000a",
+                      "tertiary-container": "#dfdcdb",
+                      "on-surface-variant": "#b9ccb2",
+                      "on-surface": "#e2e2e2",
+                      "primary-fixed-dim": "#00e639",
+                      "outline-variant": "#3b4b37",
+                      "surface-container": "#1e2020",
+                      "on-secondary-container": "#003202",
+                      "on-background": "#e2e2e2",
+                      "secondary": "#69df5c",
+                      "on-tertiary-fixed-variant": "#474646",
+                      "surface-container-low": "#1a1c1c",
+                      "on-primary": "#003907",
+                      "surface-dim": "#121414",
+                      "on-tertiary-fixed": "#1c1b1b",
+                      "on-tertiary-container": "#626060",
+                      "on-secondary": "#003a03",
+                      "on-primary-container": "#007117",
+                      "error": "#ffb4ab",
+                      "secondary-fixed": "#85fd75"
+              },
+              "borderRadius": {
+                      "DEFAULT": "4px", /* Strict 4px corners */
+                      "lg": "4px",
+                      "xl": "4px",
+                      "full": "4px"
+              },
+              "spacing": {
+                      "margin-desktop": "32px",
+                      "gutter": "16px",
+                      "unit": "4px",
+                      "margin-mobile": "16px",
+                      "container-max": "1440px"
+              },
+              "fontFamily": {
+                      "headline-lg": [
+                              "JetBrains Mono"
+                      ],
+                      "headline-sm": [
+                              "JetBrains Mono"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "label-caps": [
+                              "JetBrains Mono"
+                      ],
+                      "headline-md": [
+                              "JetBrains Mono"
+                      ],
+                      "data-mono": [
+                              "JetBrains Mono"
+                      ]
+              },
+              "fontSize": {
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-sm": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "1.5",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-lg": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-caps": [
+                              "12px",
+                              {
+                                      "lineHeight": "1",
+                                      "letterSpacing": "0.1em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "data-mono": [
+                              "14px",
+                              {
+                                      "lineHeight": "1.4",
+                                      "fontWeight": "500"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+</head>
+<body class="bg-[#000000] text-primary font-body-md h-screen overflow-hidden flex flex-col selection:bg-primary-container selection:text-black">
+<!-- TopAppBar from JSON -->
+<header class="fixed top-0 right-0 left-64 h-16 z-30 flex justify-between items-center px-margin-desktop bg-surface dark:bg-surface border-b border-secondary/30">
+<div class="flex items-center gap-4">
+<span class="font-headline-sm text-headline-sm text-primary dark:text-primary font-bold tracking-widest uppercase glitch-hover">
+                ASSURANCE_OS
+            </span>
+</div>
+<div class="flex-1 max-w-md mx-8">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#008F11]">search</span>
+<input class="w-full bg-[#000000] border border-[#008F11] text-primary focus:border-[#00FF41] focus:ring-0 focus:shadow-[0_0_8px_#00FF41] pl-10 pr-4 py-1.5 font-data-mono text-data-mono placeholder-[#008F11]/50 transition-all rounded" placeholder="QUERY_SYSTEM..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:text-primary hover:shadow-[0_0_10px_rgba(0,255,65,0.4)] transition-all">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary hover:shadow-[0_0_10px_rgba(0,255,65,0.4)] transition-all">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">lan</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary hover:shadow-[0_0_10px_rgba(0,255,65,0.4)] transition-all">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">terminal</span>
+</button>
+</div>
+<div class="h-8 w-px bg-secondary/30 mx-2"></div>
+<div class="flex items-center gap-3">
+<div class="text-right hidden md:block">
+<p class="font-data-mono text-data-mono text-primary uppercase text-xs">Root User</p>
+<p class="font-data-mono text-[10px] text-[#008F11] uppercase tracking-wider">SEC_LEVEL_9</p>
+</div>
+<div class="w-8 h-8 bg-[#0D0D0D] border border-[#008F11]/50 flex items-center justify-center rounded">
+<span class="material-symbols-outlined text-primary text-sm">admin_panel_settings</span>
+</div>
+</div>
+</div>
+</header>
+<!-- SideNavBar from JSON -->
+<nav class="fixed left-0 top-0 h-full z-40 flex flex-col w-64 border-r border-secondary/30 bg-surface dark:bg-surface shadow-[0_0_8px_rgba(105,223,92,0.15)]">
+<div class="p-6 border-b border-secondary/30">
+<h1 class="font-headline-sm text-headline-sm text-primary dark:text-primary uppercase tracking-widest mb-1">NEO_FINANCE</h1>
+<p class="font-data-mono text-[10px] text-[#008F11] uppercase tracking-wider">v4.0.1-STABLE</p>
+</div>
+<div class="flex-1 py-6 flex flex-col gap-2">
+<!-- Active Tab -->
+<a class="flex items-center gap-3 px-4 py-3 bg-secondary/10 text-secondary border-l-2 border-primary shadow-[0_0_15px_rgba(0,255,65,0.2)] font-data-mono text-data-mono uppercase" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">terminal</span>
+                Command Centre
+            </a>
+<!-- Inactive Tabs -->
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-secondary/5 hover:text-primary transition-all duration-200 font-data-mono text-data-mono uppercase" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">account_balance_wallet</span>
+                Portfolios
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-secondary/5 hover:text-primary transition-all duration-200 font-data-mono text-data-mono uppercase" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">build_circle</span>
+                Remiation
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-secondary/5 hover:text-primary transition-all duration-200 font-data-mono text-data-mono uppercase" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">history_edu</span>
+                Audit Log
+            </a>
+</div>
+<div class="p-4 border-t border-secondary/30">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-secondary/5 hover:text-primary transition-all duration-200 font-data-mono text-data-mono uppercase" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">settings</span>
+                Settings
+            </a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="ml-64 mt-16 p-gutter flex-1 flex gap-gutter h-[calc(100vh-64px)] overflow-hidden">
+<!-- Left/Center Canvas: Heatmap & Top Info -->
+<div class="flex-1 flex flex-col gap-gutter min-w-0">
+<!-- Top Banner: SYSTEM_ASSURANCE_SUMMARY -->
+<div class="bg-[#0D0D0D] border border-[#008F11]/30 p-4 rounded relative scanlines">
+<div class="absolute top-0 left-0 w-full h-[2px] bg-primary-container"></div>
+<div class="flex justify-between items-start mb-2">
+<h2 class="font-label-caps text-label-caps text-primary-container uppercase">System_Assurance_Summary</h2>
+<span class="font-data-mono text-[10px] text-[#008F11] flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-primary-container animate-pulse inline-block"></span>
+                        LIVE_FEED
+                    </span>
+</div>
+<p class="font-data-mono text-data-mono text-on-surface-variant leading-relaxed">
+                    &gt; INITIATING SCAN... [OK]<br/>
+                    &gt; 84.2% OF TOTAL FUM ALIGNED TO TARGET OPERATING MODELS.<br/>
+                    &gt; <span class="text-[#FFBF00]">WARNING:</span> 12 PORTFOLIOS DETECTED OUTSIDE TOLERANCE BANDS.<br/>
+                    &gt; <span class="text-[#FF0000] font-bold">CRITICAL:</span> 3 BREACHES REQUIRE IMMEDIATE INTERVENTION.
+                </p>
+</div>
+<!-- KPI Row -->
+<div class="grid grid-cols-4 gap-gutter">
+<!-- KPI 1 -->
+<div class="bg-[#050505] border border-[#008F11]/50 p-4 rounded glow-hover relative overflow-hidden group">
+<div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjMDcwNzA3Ij48L3JlY3Q+Cjxwb2x5Z29uIGZpbGw9IiMwMDAwMDAiIHBvaW50cz0iMCAwIDQgMCA0IDQgMCA0IiBvcGFjaXR5PSIuOSI+PC9wb2x5Z29uPgo8L3N2Zz4=')] opacity-20 pointer-events-none"></div>
+<div class="flex justify-between items-start mb-2 relative z-10">
+<span class="font-data-mono text-[10px] text-[#008F11] uppercase tracking-wider">Total FUM</span>
+<span class="material-symbols-outlined text-[#008F11] text-sm">monitoring</span>
+</div>
+<div class="font-headline-md text-headline-md text-primary mb-1 relative z-10">$14.2B</div>
+<!-- Sparkline placeholder using div -->
+<div class="h-6 w-full flex items-end gap-1 mt-2 relative z-10 opacity-50 group-hover:opacity-100 transition-opacity">
+<div class="w-full h-1/3 bg-primary-container/20 border-t border-primary-container"></div>
+<div class="w-full h-1/2 bg-primary-container/20 border-t border-primary-container"></div>
+<div class="w-full h-2/3 bg-primary-container/20 border-t border-primary-container"></div>
+<div class="w-full h-full bg-primary-container/40 border-t border-primary-container shadow-[0_0_8px_#00FF41]"></div>
+<div class="w-full h-3/4 bg-primary-container/20 border-t border-primary-container"></div>
+</div>
+</div>
+<!-- KPI 2 -->
+<div class="bg-[#050505] border border-[#008F11]/50 p-4 rounded glow-hover relative overflow-hidden group">
+<div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjMDcwNzA3Ij48L3JlY3Q+Cjxwb2x5Z29uIGZpbGw9IiMwMDAwMDAiIHBvaW50cz0iMCAwIDQgMCA0IDQgMCA0IiBvcGFjaXR5PSIuOSI+PC9wb2x5Z29uPgo8L3N2Zz4=')] opacity-20 pointer-events-none"></div>
+<div class="flex justify-between items-start mb-2 relative z-10">
+<span class="font-data-mono text-[10px] text-[#008F11] uppercase tracking-wider">% Aligned</span>
+<span class="material-symbols-outlined text-[#008F11] text-sm">done_all</span>
+</div>
+<div class="font-headline-md text-headline-md text-primary mb-1 relative z-10">84.2%</div>
+<div class="h-6 w-full flex items-end gap-1 mt-2 relative z-10 opacity-50 group-hover:opacity-100 transition-opacity">
+<div class="w-full h-3/4 bg-[#008F11]/20 border-t border-[#008F11]"></div>
+<div class="w-full h-3/4 bg-[#008F11]/20 border-t border-[#008F11]"></div>
+<div class="w-full h-4/5 bg-[#008F11]/20 border-t border-[#008F11]"></div>
+<div class="w-full h-full bg-[#008F11]/40 border-t border-[#008F11]"></div>
+<div class="w-full h-full bg-primary-container/40 border-t border-primary-container shadow-[0_0_8px_#00FF41]"></div>
+</div>
+</div>
+<!-- KPI 3 -->
+<div class="bg-[#0D0D0D] border border-[#FFBF00]/50 p-4 rounded relative overflow-hidden group hover:shadow-[0_0_15px_rgba(255,191,0,0.5)] transition-shadow">
+<div class="absolute top-0 left-0 w-[2px] h-full bg-[#FFBF00]"></div>
+<div class="flex justify-between items-start mb-2 relative z-10 pl-2">
+<span class="font-data-mono text-[10px] text-[#FFBF00] uppercase tracking-wider">Attention</span>
+<span class="material-symbols-outlined text-[#FFBF00] text-sm">warning</span>
+</div>
+<div class="font-headline-md text-headline-md text-[#FFBF00] mb-1 relative z-10 pl-2">12</div>
+<div class="h-6 w-full flex items-end gap-1 mt-2 relative z-10 opacity-70 group-hover:opacity-100 transition-opacity pl-2">
+<div class="w-full h-1/4 bg-[#FFBF00]/20 border-t border-[#FFBF00]"></div>
+<div class="w-full h-1/3 bg-[#FFBF00]/20 border-t border-[#FFBF00]"></div>
+<div class="w-full h-1/2 bg-[#FFBF00]/20 border-t border-[#FFBF00]"></div>
+<div class="w-full h-3/4 bg-[#FFBF00]/40 border-t border-[#FFBF00] shadow-[0_0_8px_#FFBF00]"></div>
+<div class="w-full h-2/3 bg-[#FFBF00]/20 border-t border-[#FFBF00]"></div>
+</div>
+</div>
+<!-- KPI 4 -->
+<div class="bg-[#0D0D0D] border border-[#FF0000]/50 p-4 rounded relative overflow-hidden group hover:shadow-[0_0_15px_rgba(255,0,0,0.5)] transition-shadow">
+<div class="absolute top-0 left-0 w-[2px] h-full bg-[#FF0000] animate-pulse"></div>
+<div class="flex justify-between items-start mb-2 relative z-10 pl-2">
+<span class="font-data-mono text-[10px] text-[#FF0000] uppercase tracking-wider">Breached</span>
+<span class="material-symbols-outlined text-[#FF0000] text-sm" style="font-variation-settings: 'FILL' 1;">error</span>
+</div>
+<div class="font-headline-md text-headline-md text-[#FF0000] mb-1 relative z-10 pl-2">3</div>
+<div class="h-6 w-full flex items-end gap-1 mt-2 relative z-10 opacity-70 group-hover:opacity-100 transition-opacity pl-2">
+<div class="w-full h-[5%] bg-[#FF0000]/20 border-t border-[#FF0000]"></div>
+<div class="w-full h-[10%] bg-[#FF0000]/20 border-t border-[#FF0000]"></div>
+<div class="w-full h-[5%] bg-[#FF0000]/20 border-t border-[#FF0000]"></div>
+<div class="w-full h-[20%] bg-[#FF0000]/20 border-t border-[#FF0000]"></div>
+<div class="w-full h-full bg-[#FF0000]/40 border-t border-[#FF0000] shadow-[0_0_8px_#FF0000]"></div>
+</div>
+</div>
+</div>
+<!-- Hero: Treemap Heatmap Placeholder Container -->
+<div class="flex-1 bg-[#050505] border border-[#008F11]/30 rounded relative flex flex-col overflow-hidden">
+<div class="p-3 border-b border-[#008F11]/30 flex justify-between items-center bg-[#0D0D0D]">
+<h3 class="font-label-caps text-label-caps text-primary-container">PORTFOLIO_FUM_TOPOLOGY</h3>
+<div class="flex gap-4">
+<div class="flex items-center gap-1 font-data-mono text-[10px] text-[#008F11]">
+<span class="w-2 h-2 heat-green inline-block rounded-sm"></span> ALIGNED
+                        </div>
+<div class="flex items-center gap-1 font-data-mono text-[10px] text-[#FFBF00]">
+<span class="w-2 h-2 heat-amber inline-block rounded-sm"></span> DEVIATING
+                        </div>
+<div class="flex items-center gap-1 font-data-mono text-[10px] text-[#FF0000]">
+<span class="w-2 h-2 heat-red inline-block rounded-sm"></span> BREACHED
+                        </div>
+</div>
+</div>
+<!-- Bento-style manual treemap layout for demonstration -->
+<div class="flex-1 p-2 flex gap-2">
+<!-- Major Block 1 (Aligned) -->
+<div class="flex-[3] flex flex-col gap-2">
+<div class="heat-green flex-1 rounded relative group hover:bg-[rgba(0,255,65,0.25)] transition-colors cursor-pointer overflow-hidden p-3 flex flex-col justify-between">
+<div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjMDcwNzA3Ij48L3JlY3Q+Cjxwb2x5Z29uIGZpbGw9IiMwMDAwMDAiIHBvaW50cz0iMCAwIDQgMCA0IDQgMCA0IiBvcGFjaXR5PSIuOSI+PC9wb2x5Z29uPgo8L3N2Zz4=')] opacity-10 pointer-events-none"></div>
+<span class="font-data-mono text-data-mono text-primary font-bold">EQ_ALPHA_STRAT</span>
+<span class="font-data-mono text-xs text-primary-container opacity-80 self-end">$4.2B</span>
+</div>
+<div class="flex-[0.8] flex gap-2">
+<div class="heat-green flex-[2] rounded p-2 flex flex-col justify-between group hover:bg-[rgba(0,255,65,0.25)] transition-colors cursor-pointer">
+<span class="font-data-mono text-xs text-primary truncate">FIXED_INC_CORE</span>
+<span class="font-data-mono text-[10px] text-primary-container opacity-80 self-end">$1.8B</span>
+</div>
+<div class="heat-amber flex-1 rounded p-2 flex flex-col justify-between group hover:bg-[rgba(255,191,0,0.25)] transition-colors cursor-pointer">
+<span class="font-data-mono text-xs text-[#FFBF00] truncate">EMERGING_MKTS</span>
+<span class="font-data-mono text-[10px] text-[#FFBF00] opacity-80 self-end">$0.9B</span>
+</div>
+</div>
+</div>
+<!-- Major Block 2 (Mixed) -->
+<div class="flex-[2] flex flex-col gap-2">
+<div class="flex-1 flex gap-2">
+<div class="heat-red flex-[1.5] rounded p-2 flex flex-col justify-between group cursor-pointer relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-full bg-[#FF0000]/10 animate-pulse pointer-events-none"></div>
+<span class="font-data-mono text-xs text-white font-bold relative z-10">REAL_ESTATE_TRUST</span>
+<span class="font-data-mono text-[10px] text-white opacity-90 self-end relative z-10">$1.1B</span>
+</div>
+<div class="heat-green flex-1 rounded p-2 flex flex-col justify-between group hover:bg-[rgba(0,255,65,0.25)] transition-colors cursor-pointer">
+<span class="font-data-mono text-[10px] text-primary truncate">TECH_GROWTH</span>
+<span class="font-data-mono text-[9px] text-primary-container opacity-80 self-end">$0.6B</span>
+</div>
+</div>
+<div class="heat-green flex-[1.5] rounded p-3 flex flex-col justify-between group hover:bg-[rgba(0,255,65,0.25)] transition-colors cursor-pointer">
+<span class="font-data-mono text-sm text-primary">GLOBAL_MACRO</span>
+<span class="font-data-mono text-xs text-primary-container opacity-80 self-end">$2.4B</span>
+</div>
+</div>
+<!-- Minor Block 3 -->
+<div class="flex-1 flex flex-col gap-2">
+<div class="heat-amber flex-1 rounded p-2 flex flex-col justify-between group hover:bg-[rgba(255,191,0,0.25)] transition-colors cursor-pointer">
+<span class="font-data-mono text-[10px] text-[#FFBF00] truncate">ESG_FOCUS</span>
+<span class="font-data-mono text-[9px] text-[#FFBF00] opacity-80 self-end">$0.8B</span>
+</div>
+<div class="heat-red flex-[0.8] rounded p-2 flex flex-col justify-between group cursor-pointer">
+<span class="font-data-mono text-[10px] text-white truncate font-bold">CRYPTO_BASKET</span>
+<span class="font-data-mono text-[9px] text-white opacity-90 self-end">$0.4B</span>
+</div>
+<div class="heat-green flex-[1.2] rounded p-2 flex flex-col justify-between group hover:bg-[rgba(0,255,65,0.25)] transition-colors cursor-pointer">
+<span class="font-data-mono text-[10px] text-primary truncate">LIQUID_ALT</span>
+<span class="font-data-mono text-[9px] text-primary-container opacity-80 self-end">$0.7B</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Panel: URGENT_TRIAGE_LOG -->
+<div class="w-80 bg-[#0D0D0D] border border-[#008F11]/30 rounded flex flex-col overflow-hidden">
+<div class="p-4 border-b border-[#008F11]/30 bg-surface-container-lowest">
+<h3 class="font-label-caps text-label-caps text-primary-container uppercase flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">gavel</span>
+                    URGENT_TRIAGE_LOG
+                </h3>
+</div>
+<div class="flex-1 overflow-y-auto p-2 flex flex-col gap-2">
+<!-- Log Item: CRITICAL -->
+<div class="bg-[#050505] border-l-2 border-[#FF0000] p-3 rounded-r cursor-pointer hover:bg-[#121010] transition-colors relative group">
+<div class="absolute inset-0 bg-gradient-to-r from-[#FF0000]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
+<div class="flex justify-between items-start mb-1">
+<span class="font-data-mono text-xs text-white">ID: RET_7784</span>
+<span class="px-1.5 py-0.5 bg-[#FF0000]/20 border border-[#FF0000] text-[#FF0000] font-data-mono text-[9px] uppercase tracking-wider rounded-sm">CRITICAL</span>
+</div>
+<div class="font-body-md text-xs text-on-surface-variant mb-2">
+                        Liquidity threshold breached by -4.2%. Margin call imminent.
+                    </div>
+<div class="flex justify-between items-end">
+<span class="font-data-mono text-[10px] text-[#008F11]">T-MINUS: 02h:14m</span>
+<span class="font-data-mono text-xs text-white font-bold">FUM: $1.1B</span>
+</div>
+</div>
+<!-- Log Item: HIGH -->
+<div class="bg-[#050505] border-l-2 border-[#FF0000] p-3 rounded-r cursor-pointer hover:bg-[#121010] transition-colors relative group">
+<div class="flex justify-between items-start mb-1">
+<span class="font-data-mono text-xs text-white">ID: CRY_9011</span>
+<span class="px-1.5 py-0.5 bg-[#FF0000]/20 border border-[#FF0000] text-[#FF0000] font-data-mono text-[9px] uppercase tracking-wider rounded-sm">HIGH</span>
+</div>
+<div class="font-body-md text-xs text-on-surface-variant mb-2">
+                        Asset allocation drift &gt; 15% on Volatility Index.
+                    </div>
+<div class="flex justify-between items-end">
+<span class="font-data-mono text-[10px] text-[#008F11]">T-MINUS: 08h:45m</span>
+<span class="font-data-mono text-xs text-white font-bold">FUM: $0.4B</span>
+</div>
+</div>
+<!-- Log Item: HIGH -->
+<div class="bg-[#050505] border-l-2 border-[#FF0000] p-3 rounded-r cursor-pointer hover:bg-[#121010] transition-colors relative group">
+<div class="flex justify-between items-start mb-1">
+<span class="font-data-mono text-xs text-white">ID: MAC_2234</span>
+<span class="px-1.5 py-0.5 bg-[#FF0000]/20 border border-[#FF0000] text-[#FF0000] font-data-mono text-[9px] uppercase tracking-wider rounded-sm">HIGH</span>
+</div>
+<div class="font-body-md text-xs text-on-surface-variant mb-2">
+                       Counterparty risk exposure exceeded limit (Entity: CITI).
+                   </div>
+<div class="flex justify-between items-end">
+<span class="font-data-mono text-[10px] text-[#008F11]">T-MINUS: 12h:00m</span>
+<span class="font-data-mono text-xs text-white font-bold">FUM: $2.4B</span>
+</div>
+</div>
+<!-- Log Divider -->
+<div class="my-2 border-b border-[#008F11]/20 border-dashed"></div>
+<div class="px-2 font-data-mono text-[10px] text-[#FFBF00] uppercase mb-1">Attention Queue</div>
+<!-- Log Item: MEDIUM -->
+<div class="bg-[#050505] border-l-2 border-[#FFBF00] p-3 rounded-r cursor-pointer hover:bg-[#121010] transition-colors relative group opacity-80">
+<div class="flex justify-between items-start mb-1">
+<span class="font-data-mono text-xs text-primary">ID: EMK_4412</span>
+<span class="px-1.5 py-0.5 bg-[#FFBF00]/10 border border-[#FFBF00]/50 text-[#FFBF00] font-data-mono text-[9px] uppercase tracking-wider rounded-sm">MED</span>
+</div>
+<div class="font-body-md text-xs text-on-surface-variant mb-2">
+                        Currency hedge ratio deviation detected (ZAR/USD).
+                    </div>
+<div class="flex justify-between items-end">
+<span class="font-data-mono text-[10px] text-[#008F11]">PENDING</span>
+<span class="font-data-mono text-xs text-primary">FUM: $0.9B</span>
+</div>
+</div>
+<!-- Log Item: MEDIUM -->
+<div class="bg-[#050505] border-l-2 border-[#FFBF00] p-3 rounded-r cursor-pointer hover:bg-[#121010] transition-colors relative group opacity-80">
+<div class="flex justify-between items-start mb-1">
+<span class="font-data-mono text-xs text-primary">ID: ESG_1098</span>
+<span class="px-1.5 py-0.5 bg-[#FFBF00]/10 border border-[#FFBF00]/50 text-[#FFBF00] font-data-mono text-[9px] uppercase tracking-wider rounded-sm">MED</span>
+</div>
+<div class="font-body-md text-xs text-on-surface-variant mb-2">
+                        Pending compliance verification for new energy asset.
+                    </div>
+<div class="flex justify-between items-end">
+<span class="font-data-mono text-[10px] text-[#008F11]">PENDING</span>
+<span class="font-data-mono text-xs text-primary">FUM: $0.8B</span>
+</div>
+</div>
+</div>
+<div class="p-3 border-t border-[#008F11]/30 bg-surface-container-lowest text-center">
+<button class="font-data-mono text-xs text-[#008F11] hover:text-[#00FF41] transition-colors uppercase w-full">
+                    [ VIEW_FULL_LOG ]
+                </button>
+</div>
+</div>
+</main>
+</body></html>

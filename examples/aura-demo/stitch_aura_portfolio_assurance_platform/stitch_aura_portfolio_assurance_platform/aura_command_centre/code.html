@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AURA - Command Centre</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<!-- Tailwind Setup -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-surface": "#191c1e",
+                    "surface-bright": "#f8f9fb",
+                    "on-tertiary-fixed": "#2d1600",
+                    "surface-container": "#edeef0",
+                    "background": "#f8f9fb",
+                    "tertiary-fixed": "#ffdcbe",
+                    "surface-container-high": "#e7e8ea",
+                    "surface-container-highest": "#e1e2e4",
+                    "surface": "#f8f9fb",
+                    "on-primary-fixed": "#001c3a",
+                    "secondary-fixed": "#98f2f0",
+                    "on-tertiary-fixed-variant": "#633f18",
+                    "on-error-container": "#93000a",
+                    "tertiary-container": "#402200",
+                    "on-secondary": "#ffffff",
+                    "tertiary": "#231000",
+                    "on-secondary-fixed-variant": "#00504f",
+                    "on-tertiary-container": "#b6875a",
+                    "on-primary-container": "#7a92b7",
+                    "error-container": "#ffdad6",
+                    "surface-container-low": "#f2f4f6",
+                    "secondary-fixed-dim": "#7cd5d3",
+                    "on-background": "#191c1e",
+                    "secondary": "#006a69",
+                    "surface-container-lowest": "#ffffff",
+                    "primary-fixed": "#d4e3ff",
+                    "on-secondary-fixed": "#002020",
+                    "surface-dim": "#d9dadc",
+                    "surface-tint": "#485f82",
+                    "on-surface-variant": "#43474e",
+                    "inverse-primary": "#b0c8f0",
+                    "outline": "#74777f",
+                    "surface-variant": "#e1e2e4",
+                    "on-secondary-container": "#00706f",
+                    "outline-variant": "#c4c6cf",
+                    "tertiary-fixed-dim": "#f1bc8b",
+                    "primary": "#00152f",
+                    "inverse-surface": "#2e3132",
+                    "on-error": "#ffffff",
+                    "secondary-container": "#98f2f0",
+                    "error": "#ba1a1a",
+                    "on-primary": "#ffffff",
+                    "on-primary-fixed-variant": "#304869",
+                    "inverse-on-surface": "#f0f1f3",
+                    "on-tertiary": "#ffffff",
+                    "primary-fixed-dim": "#b0c8f0",
+                    "primary-container": "#0f2a4a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container_max_width": "1440px",
+                    "stack_gap_md": "16px",
+                    "sidebar_width": "240px",
+                    "gutter": "24px",
+                    "topbar_height": "64px",
+                    "card_padding": "20px",
+                    "stack_gap_sm": "8px"
+            },
+            "fontFamily": {
+                    "body-sm": ["Inter", "sans-serif"],
+                    "body-md": ["Inter", "sans-serif"],
+                    "display-lg-mobile": ["Inter", "sans-serif"],
+                    "data-mono": ["Inter", "monospace"],
+                    "display-lg": ["Inter", "sans-serif"],
+                    "headline-md": ["Inter", "sans-serif"],
+                    "label-caps": ["Inter", "sans-serif"]
+            },
+            "fontSize": {
+                    "body-sm": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "display-lg-mobile": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "data-mono": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                    "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "500"}],
+                    "label-caps": ["11px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md antialiased min-h-screen">
+<!-- DESKTOP SIDEBAR (NavigationDrawer) -->
+<aside class="hidden md:flex flex-col fixed left-0 top-0 h-full w-[240px] bg-primary-container dark:bg-primary z-40 p-gutter gap-stack_gap_md">
+<div class="font-display-lg text-display-lg text-surface-container-lowest tracking-tight pb-8">
+            AURA
+        </div>
+<nav class="flex flex-col gap-2 flex-grow">
+<!-- Active: Command Centre -->
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-secondary-fixed font-semibold bg-on-primary-fixed-variant/10 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span>Command Centre</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-primary-fixed-variant opacity-70 hover:bg-on-primary-fixed-variant/10 hover:text-secondary-fixed-dim transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+<span>Portfolios</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-primary-fixed-variant opacity-70 hover:bg-on-primary-fixed-variant/10 hover:text-secondary-fixed-dim transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">build_circle</span>
+<span>Remediation</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-primary-fixed-variant opacity-70 hover:bg-on-primary-fixed-variant/10 hover:text-secondary-fixed-dim transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">history_edu</span>
+<span>Audit Log</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-primary-fixed-variant opacity-70 hover:bg-on-primary-fixed-variant/10 hover:text-secondary-fixed-dim transition-colors duration-200 mt-auto" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span>Settings</span>
+</a>
+</nav>
+</aside>
+<!-- TOP APP BAR -->
+<header class="fixed top-0 w-full md:right-0 md:w-[calc(100%-240px)] h-topbar_height bg-surface-container-lowest dark:bg-surface-dim border-b border-outline-variant flex items-center justify-between px-gutter z-30 transition-all duration-150">
+<!-- Mobile Logo (Hidden on Desktop) -->
+<div class="md:hidden font-headline-md text-headline-md text-primary font-bold">
+            AURA
+        </div>
+<!-- Search / Context -->
+<div class="hidden md:flex items-center gap-2 text-on-surface-variant bg-surface-container-low px-4 py-1.5 rounded-full border border-outline-variant/30">
+<span class="material-symbols-outlined text-[20px]">search</span>
+<span class="font-body-sm text-body-sm">Search portfolios, clients, policies...</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-surface-container-lowest font-body-sm text-body-sm font-semibold">
+                JD
+            </div>
+</div>
+</header>
+<!-- MOBILE BOTTOM NAV (Derived from NavigationDrawer, shown only on mobile) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full bg-surface-container-lowest shadow-[0_-10px_15px_-3px_rgba(0,0,0,0.05)] z-50 flex justify-between items-center px-4 py-2 pb-safe">
+<a class="flex flex-col items-center gap-1 p-2 text-secondary font-semibold" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="font-label-caps text-label-caps text-[10px]">Command Centre</span>
+</a>
+<a class="flex flex-col items-center gap-1 p-2 text-on-surface-variant opacity-70" href="#">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+<span class="font-label-caps text-label-caps text-[10px]">Portfolios</span>
+</a>
+<a class="flex flex-col items-center gap-1 p-2 text-on-surface-variant opacity-70" href="#">
+<span class="material-symbols-outlined">build_circle</span>
+<span class="font-label-caps text-label-caps text-[10px]">Remediation</span>
+</a>
+<a class="flex flex-col items-center gap-1 p-2 text-on-surface-variant opacity-70" href="#">
+<span class="material-symbols-outlined">history_edu</span>
+<span class="font-label-caps text-label-caps text-[10px]">Audit</span>
+</a>
+</nav>
+<!-- MAIN CANVAS -->
+<main class="pt-[80px] pb-[90px] md:pb-8 md:pl-[240px] w-full min-h-screen">
+<div class="max-w-container_max_width mx-auto px-4 md:px-gutter flex flex-col gap-6 md:gap-8">
+<!-- Page Header (Mobile mostly) -->
+<div class="md:hidden">
+<h1 class="font-display-lg-mobile text-display-lg-mobile text-primary">Command Centre</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Portfolio Health Overview</p>
+</div>
+<div class="hidden md:block">
+<h1 class="font-display-lg text-display-lg text-primary">Command Centre</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Real-time portfolio alignment and risk matrix</p>
+</div>
+<!-- AI Assurance Summary Banner -->
+<section class="relative bg-surface-container-lowest border border-outline-variant rounded-xl p-4 overflow-hidden shadow-sm flex items-start gap-4 border-l-4 border-l-secondary">
+<!-- Soft background glow -->
+<div class="absolute inset-0 bg-gradient-to-r from-secondary-fixed/20 to-transparent pointer-events-none"></div>
+<div class="relative flex-shrink-0 mt-0.5 text-secondary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+<div class="relative flex flex-col gap-1">
+<h2 class="font-headline-md text-headline-md text-on-surface">AI Assurance Summary</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+<strong class="text-on-surface">38 of 45 portfolios aligned.</strong> 4 breached, 3 need attention. Largest localized risk identified as technical sector concentration across growth mandates.
+                    </p>
+</div>
+</section>
+<!-- KPI Cards -->
+<section class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-card_padding flex flex-col gap-2 hover:border-outline transition-colors shadow-sm">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Total Managed (FUM)</span>
+<div class="font-headline-md text-headline-md text-primary">$1.42B</div>
+<div class="flex items-center gap-1 text-secondary font-body-sm text-body-sm mt-1">
+<span class="material-symbols-outlined text-[16px]">trending_up</span>
+<span>+2.4% vs last mo</span>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-card_padding flex flex-col gap-2 hover:border-outline transition-colors shadow-sm">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Aligned</span>
+<div class="font-headline-md text-headline-md text-primary">84.4%</div>
+<div class="w-full h-1.5 bg-surface-variant rounded-full mt-2 overflow-hidden">
+<div class="w-[84%] h-full bg-secondary"></div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-card_padding flex flex-col gap-2 hover:border-outline transition-colors shadow-sm">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Needs Attention</span>
+<div class="font-headline-md text-headline-md text-tertiary-container">3 Portfolios</div>
+<div class="flex gap-1 mt-2 h-4 items-end">
+<div class="w-2 rounded-t bg-tertiary-fixed/30 h-[40%]"></div>
+<div class="w-2 rounded-t bg-tertiary-fixed/60 h-[70%]"></div>
+<div class="w-2 rounded-t bg-tertiary-fixed h-[100%]"></div>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="bg-surface-container-lowest border border-error/30 rounded-xl p-card_padding flex flex-col gap-2 hover:border-error/50 transition-colors shadow-sm relative overflow-hidden">
+<div class="absolute top-0 right-0 w-16 h-16 bg-error-container/20 rounded-bl-full pointer-events-none"></div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Breached</span>
+<div class="font-headline-md text-headline-md text-error">4 Portfolios</div>
+<span class="font-label-caps text-label-caps text-error bg-error-container/30 w-fit px-2 py-0.5 rounded-full mt-1">URGENT ACTION</span>
+</div>
+</section>
+<!-- Filters Bar -->
+<section class="flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between bg-surface-container-lowest border border-outline-variant rounded-xl p-2 md:px-4 md:py-3 shadow-sm">
+<div class="flex flex-wrap items-center gap-2 md:gap-4 flex-grow">
+<!-- Search -->
+<div class="relative flex-grow md:max-w-xs">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px]">search</span>
+<input class="w-full pl-9 pr-3 py-2 bg-surface border border-outline-variant rounded-lg font-body-sm text-body-sm focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary/50 transition-all" placeholder="Search client or policy..." type="text"/>
+</div>
+<!-- Dropdowns -->
+<select class="px-3 py-2 bg-surface border border-outline-variant rounded-lg font-body-sm text-body-sm text-on-surface-variant focus:outline-none focus:border-secondary transition-all">
+<option>All Advisers</option>
+<option>Sarah Jenkins</option>
+<option>Marcus Cole</option>
+</select>
+<select class="px-3 py-2 bg-surface border border-outline-variant rounded-lg font-body-sm text-body-sm text-on-surface-variant focus:outline-none focus:border-secondary transition-all hidden sm:block">
+<option>Asset Class: All</option>
+<option>Equities</option>
+<option>Fixed Income</option>
+</select>
+</div>
+<button class="hidden md:flex items-center gap-2 px-4 py-2 bg-surface border border-outline-variant rounded-lg font-body-sm text-body-sm hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-[18px]">filter_list</span>
+<span>More Filters</span>
+</button>
+</section>
+<!-- HERO: Portfolio Heatmap & Triage Panel Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
+<!-- Portfolio Heatmap (Treemap Concept) -->
+<section class="lg:col-span-2 bg-surface-container-lowest border border-outline-variant rounded-xl flex flex-col shadow-sm overflow-hidden">
+<div class="p-card_padding border-b border-outline-variant flex justify-between items-center">
+<h3 class="font-headline-md text-headline-md text-primary">Portfolio Health Matrix</h3>
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-1.5 font-label-caps text-label-caps text-on-surface-variant">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary"></span> Aligned
+                            </div>
+<div class="flex items-center gap-1.5 font-label-caps text-label-caps text-on-surface-variant">
+<span class="w-2.5 h-2.5 rounded-full bg-tertiary-fixed"></span> Monitor
+                            </div>
+<div class="flex items-center gap-1.5 font-label-caps text-label-caps text-on-surface-variant">
+<span class="w-2.5 h-2.5 rounded-full bg-error"></span> Breach
+                            </div>
+</div>
+</div>
+<!-- Stylized Bento Treemap -->
+<div class="p-4 grid grid-cols-4 grid-rows-3 gap-2 h-[320px] md:h-[400px]">
+<!-- Large Aligned Block -->
+<div class="col-span-2 row-span-2 bg-secondary-fixed/20 border border-secondary/20 rounded-lg p-3 flex flex-col justify-between hover:border-secondary/50 transition-colors group relative cursor-pointer">
+<span class="font-body-sm text-body-sm text-on-secondary-container opacity-80">Growth Fund A</span>
+<span class="font-data-mono text-data-mono text-on-secondary-container">$420M</span>
+<!-- Tooltip Simulation on hover -->
+<div class="absolute inset-0 bg-surface-container-lowest/95 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity p-3 flex flex-col justify-center rounded-lg z-10 border border-outline-variant shadow-lg pointer-events-none">
+<span class="font-body-sm text-body-sm font-semibold text-primary">Growth Fund A</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-1">Status: Fully Aligned</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">FUM: $420,500,000</span>
+</div>
+</div>
+<!-- Monitor Block -->
+<div class="col-span-1 row-span-2 bg-tertiary-fixed/30 border border-tertiary/20 rounded-lg p-3 flex flex-col justify-between hover:border-tertiary/50 transition-colors cursor-pointer">
+<span class="font-body-sm text-body-sm text-tertiary-container opacity-80 leading-tight">Income Plus</span>
+<span class="font-data-mono text-data-mono text-tertiary-container">$210M</span>
+</div>
+<!-- Breach Block 1 -->
+<div class="col-span-1 row-span-1 bg-error-container border border-error/30 rounded-lg p-3 flex flex-col justify-between hover:border-error/60 transition-colors cursor-pointer relative overflow-hidden">
+<div class="absolute top-0 right-0 w-0 h-0 border-t-[20px] border-l-[20px] border-t-error border-l-transparent"></div>
+<span class="font-body-sm text-body-sm text-on-error-container opacity-90 truncate">Tech Alpha</span>
+<span class="font-data-mono text-data-mono text-on-error-container">$85M</span>
+</div>
+<!-- Smaller Aligned Block -->
+<div class="col-span-1 row-span-1 bg-secondary-fixed/20 border border-secondary/20 rounded-lg p-3 flex flex-col justify-between hover:border-secondary/50 transition-colors cursor-pointer">
+<span class="font-body-sm text-body-sm text-on-secondary-container opacity-80 truncate">Global Eq</span>
+<span class="font-data-mono text-data-mono text-on-secondary-container">$120M</span>
+</div>
+<!-- Row 3 Blocks -->
+<div class="col-span-1 row-span-1 bg-secondary-fixed/10 border border-secondary/10 rounded-lg p-2 flex flex-col justify-between cursor-pointer">
+<span class="font-body-sm text-body-sm text-on-secondary-container opacity-70 text-[11px]">ESG Core</span>
+</div>
+<div class="col-span-1 row-span-1 bg-error-container border border-error/30 rounded-lg p-2 flex flex-col justify-between cursor-pointer">
+<span class="font-body-sm text-body-sm text-on-error-container opacity-90 text-[11px] truncate">Emerging Mkts</span>
+</div>
+<div class="col-span-2 row-span-1 bg-secondary-fixed/20 border border-secondary/20 rounded-lg p-3 flex flex-col justify-between hover:border-secondary/50 transition-colors cursor-pointer">
+<span class="font-body-sm text-body-sm text-on-secondary-container opacity-80">Balanced Conservative</span>
+<span class="font-data-mono text-data-mono text-on-secondary-container">$315M</span>
+</div>
+</div>
+</section>
+<!-- Triage Panel -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl flex flex-col shadow-sm">
+<div class="p-card_padding border-b border-outline-variant flex justify-between items-center">
+<h3 class="font-headline-md text-headline-md text-primary">Urgent Triage</h3>
+<span class="font-label-caps text-label-caps bg-surface-container-high px-2 py-1 rounded-md text-on-surface-variant">Top 4</span>
+</div>
+<div class="flex flex-col flex-grow">
+<!-- Triage Item 1 -->
+<div class="p-4 border-b border-surface-variant flex flex-col gap-2 hover:bg-surface-bright transition-colors cursor-pointer">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center font-body-sm text-body-sm text-on-surface-variant border border-outline-variant/50">
+                                        TA
+                                    </div>
+<div>
+<div class="font-body-md text-body-md font-semibold text-on-surface">Tech Alpha</div>
+<div class="font-data-mono text-data-mono text-on-surface-variant text-[12px]">$85M FUM</div>
+</div>
+</div>
+<span class="px-2.5 py-0.5 rounded-full bg-error-container text-on-error-container font-label-caps text-label-caps border border-error/20">Breach</span>
+</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant pl-11">
+                                Sector limit exceeded: Tech allocation at 42% (Limit 35%).
+                            </div>
+</div>
+<!-- Triage Item 2 -->
+<div class="p-4 border-b border-surface-variant flex flex-col gap-2 hover:bg-surface-bright transition-colors cursor-pointer">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center font-body-sm text-body-sm text-on-surface-variant border border-outline-variant/50">
+                                        EM
+                                    </div>
+<div>
+<div class="font-body-md text-body-md font-semibold text-on-surface">Emerging Mkts</div>
+<div class="font-data-mono text-data-mono text-on-surface-variant text-[12px]">$42M FUM</div>
+</div>
+</div>
+<span class="px-2.5 py-0.5 rounded-full bg-error-container text-on-error-container font-label-caps text-label-caps border border-error/20">Breach</span>
+</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant pl-11">
+                                Unapproved asset held: BRZ Gov Bond 2028.
+                            </div>
+</div>
+<!-- Triage Item 3 -->
+<div class="p-4 border-b border-surface-variant flex flex-col gap-2 hover:bg-surface-bright transition-colors cursor-pointer">
+<div class="flex justify-between items-start">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center font-body-sm text-body-sm text-on-surface-variant border border-outline-variant/50">
+                                        IP
+                                    </div>
+<div>
+<div class="font-body-md text-body-md font-semibold text-on-surface">Income Plus</div>
+<div class="font-data-mono text-data-mono text-on-surface-variant text-[12px]">$210M FUM</div>
+</div>
+</div>
+<span class="px-2.5 py-0.5 rounded-full bg-tertiary-fixed text-tertiary-container font-label-caps text-label-caps border border-tertiary/20">Attention</span>
+</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant pl-11">
+                                Nearing duration limit threshold (4.8y / 5.0y).
+                            </div>
+</div>
+<!-- View All Action -->
+<div class="p-4 mt-auto">
+<button class="w-full py-2 bg-surface border border-outline-variant rounded-lg font-body-sm text-body-sm text-primary font-medium hover:bg-surface-container-low transition-colors">
+                                View Full Triage List
+                            </button>
+</div>
+</div>
+</section>
+</div>
+</div>
+</main>
+</body></html>

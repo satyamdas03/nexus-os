@@ -1,0 +1,50 @@
+{
+  "counts": {
+    "scanned": 34000,
+    "green": 27196,
+    "remediated": 63,
+    "missed": 1512,
+    "skipped": 5229
+  },
+  "queue_size": 63,
+  "miss_count": 1512,
+  "score": {
+    "alignment_rate": 0.8,
+    "avg_trades_per_fix": 360.7,
+    "acceptance_rate": 0.932,
+    "breaches_remaining": 0,
+    "composite": 0.68
+  },
+  "top_misses": [
+    {
+      "client_id": "c00048",
+      "prior_status": "red",
+      "remaining_breaches": 2,
+      "rationale": "trim XLF to single-holding cap; redeploy into SPY"
+    },
+    {
+      "client_id": "c00074",
+      "prior_status": "red",
+      "remaining_breaches": 1,
+      "rationale": "trim Consumer to 30% cap; trim XLP to single-holding cap; redeploy into SPY"
+    },
+    {
+      "client_id": "c00076",
+      "prior_status": "red",
+      "remaining_breaches": 3,
+      "rationale": "trim EWJ to single-holding cap; redeploy into SPY"
+    },
+    {
+      "client_id": "c00125",
+      "prior_status": "red",
+      "remaining_breaches": 2,
+      "rationale": "trim BNDX to single-holding cap; redeploy into SPY"
+    },
+    {
+      "client_id": "c00137",
+      "prior_status": "red",
+      "remaining_breaches": 2,
+      "rationale": "trim Bonds to 25% cap; trim IEF to single-holding cap; redeploy into SPY"
+    }
+  ]
+}

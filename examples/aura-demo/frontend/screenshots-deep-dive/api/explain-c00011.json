@@ -1,0 +1,9 @@
+{
+  "narrative": "[MOCK LLM] grounded explanation for: Rules-engine result (GROUND TRUTH — do not contradict):\n{\"client\": \"Hazel Pension #00011\", \"fum\": 7197854.38, \"holdings\"",
+  "breach_summaries": [
+    "Single holding 30% > 20% cap",
+    "Cash 1.1% < 2.2% min",
+    "US 70% > 58% region cap"
+  ],
+  "watch_summaries": []
+}

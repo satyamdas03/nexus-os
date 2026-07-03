@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Remediation Workbench - AURA</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-variant": "#e1e2e4",
+                        "on-tertiary-container": "#b6875a",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary": "#006a69",
+                        "primary-fixed-dim": "#b0c8f0",
+                        "inverse-surface": "#2e3132",
+                        "tertiary-fixed": "#ffdcbe",
+                        "surface-container": "#edeef0",
+                        "secondary-fixed-dim": "#7cd5d3",
+                        "on-tertiary-fixed": "#2d1600",
+                        "on-primary-fixed-variant": "#304869",
+                        "surface-bright": "#f8f9fb",
+                        "secondary-fixed": "#98f2f0",
+                        "on-secondary-fixed-variant": "#00504f",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-fixed-variant": "#633f18",
+                        "surface-tint": "#485f82",
+                        "on-secondary-fixed": "#002020",
+                        "error": "#ba1a1a",
+                        "on-surface-variant": "#43474e",
+                        "on-primary-fixed": "#001c3a",
+                        "on-primary": "#ffffff",
+                        "outline": "#74777f",
+                        "on-tertiary": "#ffffff",
+                        "inverse-on-surface": "#f0f1f3",
+                        "background": "#f8f9fb",
+                        "primary-container": "#0f2a4a",
+                        "on-primary-container": "#7a92b7",
+                        "inverse-primary": "#b0c8f0",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed-dim": "#f1bc8b",
+                        "tertiary": "#231000",
+                        "secondary-container": "#98f2f0",
+                        "outline-variant": "#c4c6cf",
+                        "surface-container-highest": "#e1e2e4",
+                        "tertiary-container": "#402200",
+                        "on-surface": "#191c1e",
+                        "on-error": "#ffffff",
+                        "surface-container-low": "#f2f4f6",
+                        "surface-container-high": "#e7e8ea",
+                        "primary": "#00152f",
+                        "surface-dim": "#d9dadc",
+                        "surface": "#f8f9fb",
+                        "on-background": "#191c1e",
+                        "on-secondary-container": "#00706f",
+                        "error-container": "#ffdad6",
+                        "primary-fixed": "#d4e3ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack_gap_sm": "8px",
+                        "stack_gap_md": "16px",
+                        "topbar_height": "64px",
+                        "sidebar_width": "240px",
+                        "gutter": "32px",
+                        "container_max_width": "1440px",
+                        "card_padding": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Inter", "sans-serif"],
+                        "display-lg-mobile": ["Inter", "sans-serif"],
+                        "data-mono": ["Inter", "monospace"],
+                        "body-sm": ["Inter", "sans-serif"],
+                        "body-md": ["Inter", "sans-serif"],
+                        "label-caps": ["Inter", "sans-serif"],
+                        "display-lg": ["Inter", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "500" }],
+                        "display-lg-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "data-mono": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "label-caps": ["11px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-surface font-body-md text-on-surface antialiased overflow-hidden">
+<!-- SideNavBar -->
+<nav class="fixed left-0 top-0 h-full w-sidebar_width bg-primary text-on-primary flex flex-col py-6 px-4 z-30">
+<div class="mb-12 px-2 flex items-center gap-3">
+<div class="w-8 h-8 bg-surface-container-lowest rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-primary font-bold">query_stats</span>
+</div>
+<div>
+<div class="font-headline-md text-headline-md font-bold tracking-tight text-white">AURA</div>
+<div class="font-label-caps text-label-caps text-on-primary/70">Portfolio Assurance</div>
+</div>
+</div>
+<ul class="flex flex-col gap-2 flex-grow">
+<li>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-primary-container/70 font-medium hover:bg-primary-container/10 hover:text-white transition-colors duration-150 group" href="#">
+<span class="material-symbols-outlined opacity-70 group-hover:opacity-100">dashboard</span>
+<span>Command Centre</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-primary-container/70 font-medium hover:bg-primary-container/10 hover:text-white transition-colors duration-150 group" href="#">
+<span class="material-symbols-outlined opacity-70 group-hover:opacity-100">account_balance_wallet</span>
+<span>Portfolios</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-white font-bold bg-primary-container/20 transition-colors duration-150" href="#">
+<span class="material-symbols-outlined">build_circle</span>
+<span>Remediation</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-primary-container/70 font-medium hover:bg-primary-container/10 hover:text-white transition-colors duration-150 group" href="#">
+<span class="material-symbols-outlined opacity-70 group-hover:opacity-100">history_edu</span>
+<span>Audit Log</span>
+</a>
+</li>
+</ul>
+<ul class="mt-auto flex flex-col gap-2">
+<li>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-primary-container/70 font-medium hover:bg-primary-container/10 hover:text-white transition-colors duration-150 group" href="#">
+<span class="material-symbols-outlined opacity-70 group-hover:opacity-100">settings</span>
+<span>Settings</span>
+</a>
+</li>
+</ul>
+</nav>
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 w-[calc(100%-240px)] h-topbar_height bg-surface border-b border-outline-variant flex justify-between items-center px-gutter z-20 transition-all">
+<div class="flex items-center w-96 relative">
+<span class="material-symbols-outlined absolute left-3 text-outline">search</span>
+<input class="w-full bg-surface-container-lowest border border-surface-container-highest rounded-lg py-2 pl-10 pr-4 font-body-sm text-body-sm text-on-surface focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary transition-all" placeholder="Search portfolios, assets, rules..." type="text"/>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2 bg-surface-container-low px-3 py-1.5 rounded-full border border-surface-container-highest">
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Production</span>
+</div>
+<div class="flex items-center gap-4 text-primary">
+<button class="hover:bg-surface-container-high p-2 rounded-full transition-all">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="hover:bg-surface-container-high p-2 rounded-full transition-all">
+<span class="material-symbols-outlined">help_outline</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-primary-fixed-dim overflow-hidden border border-outline-variant ml-2">
+<img alt="User Profile Avatar" class="w-full h-full object-cover" data-alt="A professional headshot of a financial portfolio manager in a bright, modern office setting. The individual is wearing a dark suit with a light blue shirt, exuding quiet authority and competence. The lighting is soft and natural, emphasizing a calm and reliable persona." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAB_ngYWmP0ZozMnMVQn3xAaeGsOrw27Uo8xGOPMAgg75asELN96YlGNnLPNZ-VdyskNrXfyx8hTrNkZ0HUlpEY7Qs9blfJnLJNT3F5zJ1cLFg5mI2MFg3GXLDZB55fJRm-ITQWSJGfXOW1Ar8c2p-YluBGSeksAarQpMmpBAzJytX_CqmcB-cMubynPiwlQ5-NAzXBsbzwBsWwUsv5yASetn7lEC1nlnv2Dz5fPGY9lh42QbLzTb7tNXc810MkcoiKIGVTsh82qw0W"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="ml-sidebar_width mt-topbar_height h-[calc(100vh-64px)] overflow-y-auto pb-24">
+<div class="max-w-container_max_width mx-auto p-gutter">
+<!-- Header -->
+<div class="mb-stack_gap_md flex items-end justify-between">
+<div>
+<h1 class="font-display-lg text-display-lg text-on-surface mb-2">Remediation Workbench</h1>
+<p class="font-body-md text-body-md text-on-surface-variant flex items-center gap-2">
+                        Portfolio: <span class="font-data-mono font-medium text-on-surface">Alpha Growth Fund (AGF-01)</span>
+<span class="material-symbols-outlined text-[16px] text-error ml-2">warning</span>
+<span class="text-error font-medium">Breach Detected</span>
+</p>
+</div>
+<div class="text-right">
+<p class="font-label-caps text-label-caps text-on-surface-variant mb-1">AUM Impact</p>
+<p class="font-data-mono text-data-mono text-on-surface font-medium">$12.4M (1.8%)</p>
+</div>
+</div>
+<div class="grid grid-cols-12 gap-8">
+<!-- Left Panel: Trade Table & AI Rationale (8 cols) -->
+<div class="col-span-12 xl:col-span-8 flex flex-col gap-stack_gap_md">
+<!-- AI Rationale -->
+<div class="bg-secondary/5 border-l-4 border-secondary rounded-r-xl p-card_padding border-y border-r border-surface-container-highest">
+<div class="flex items-start gap-4">
+<span class="material-symbols-outlined text-secondary pt-1" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2 flex items-center gap-2">
+                                    AI Remediation Strategy
+                                    <span class="bg-secondary/10 text-secondary text-[10px] px-2 py-0.5 rounded-full font-label-caps uppercase tracking-wider">Confidence: 98%</span>
+</h3>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+<strong class="text-on-surface">Proposed:</strong> Trim <span class="font-data-mono">NVDA</span> to lock in gains and reduce tech sector concentration. Completely exit <span class="font-data-mono">AVAX</span> to resolve crypto mandate breach. Reallocate freed capital to <span class="font-data-mono">XLV</span> (Healthcare) to restore target sector balance and reduce overall portfolio volatility.
+                                </p>
+</div>
+</div>
+</div>
+<!-- Trade Table Card -->
+<div class="bg-surface-container-lowest border border-surface-container-highest rounded-xl overflow-hidden shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05),0_2px_4px_-2px_rgba(0,0,0,0.03)]">
+<div class="px-card_padding py-4 border-b border-surface-container-highest flex justify-between items-center bg-surface-bright">
+<h2 class="font-headline-md text-headline-md text-on-surface">Proposed Execution Ledger</h2>
+<button class="font-body-sm text-body-sm text-secondary font-medium hover:underline flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">download</span> Export CSV
+                            </button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-surface-container-highest bg-surface-bright/50">
+<th class="py-3 px-card_padding font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Holding</th>
+<th class="py-3 px-4 font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider text-right">Current Wgt</th>
+<th class="py-3 px-4 font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider">Proposed Action</th>
+<th class="py-3 px-4 font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider text-right">Value (USD)</th>
+<th class="py-3 px-card_padding font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider text-right">New Wgt</th>
+</tr>
+</thead>
+<tbody class="font-data-mono text-data-mono text-on-surface">
+<tr class="border-b border-surface-container-highest/50 hover:bg-surface-container-low/50 transition-colors">
+<td class="py-4 px-card_padding flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-surface-container flex items-center justify-center font-bold text-[12px]">NVDA</div>
+<div>
+<div>NVIDIA Corp</div>
+<div class="text-[12px] text-on-surface-variant font-body-sm">Technology</div>
+</div>
+</td>
+<td class="py-4 px-4 text-right text-error font-medium">8.2%</td>
+<td class="py-4 px-4">
+<div class="inline-flex items-center gap-1.5 bg-error-container/30 text-on-error-container px-2.5 py-1 rounded-full text-[12px] font-medium border border-error-container">
+<span class="material-symbols-outlined text-[14px]">arrow_downward</span>
+                                                SELL 4,500 units
+                                            </div>
+</td>
+<td class="py-4 px-4 text-right">($4,050,000)</td>
+<td class="py-4 px-card_padding text-right text-secondary font-medium">5.0%</td>
+</tr>
+<tr class="border-b border-surface-container-highest/50 hover:bg-surface-container-low/50 transition-colors">
+<td class="py-4 px-card_padding flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-surface-container flex items-center justify-center font-bold text-[12px]">AVAX</div>
+<div>
+<div>Avalanche</div>
+<div class="text-[12px] text-on-surface-variant font-body-sm">Crypto Asset</div>
+</div>
+</td>
+<td class="py-4 px-4 text-right text-error font-medium">1.2%</td>
+<td class="py-4 px-4">
+<div class="inline-flex items-center gap-1.5 bg-error-container/30 text-on-error-container px-2.5 py-1 rounded-full text-[12px] font-medium border border-error-container">
+<span class="material-symbols-outlined text-[14px]">close</span>
+                                                EXIT 22,500 units
+                                            </div>
+</td>
+<td class="py-4 px-4 text-right">($810,000)</td>
+<td class="py-4 px-card_padding text-right text-secondary font-medium">0.0%</td>
+</tr>
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-4 px-card_padding flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-surface-container flex items-center justify-center font-bold text-[12px]">XLV</div>
+<div>
+<div>Health Care ETF</div>
+<div class="text-[12px] text-on-surface-variant font-body-sm">Healthcare</div>
+</div>
+</td>
+<td class="py-4 px-4 text-right">12.5%</td>
+<td class="py-4 px-4">
+<div class="inline-flex items-center gap-1.5 bg-secondary/10 text-secondary px-2.5 py-1 rounded-full text-[12px] font-medium border border-secondary/20">
+<span class="material-symbols-outlined text-[14px]">add</span>
+                                                BUY 34,200 units
+                                            </div>
+</td>
+<td class="py-4 px-4 text-right">+$4,860,000</td>
+<td class="py-4 px-card_padding text-right text-secondary font-medium">15.9%</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- Right Panel: Assurance Verification (4 cols) -->
+<div class="col-span-12 xl:col-span-4">
+<!-- Assurance Hero Card -->
+<div class="bg-surface-container-lowest border border-surface-container-highest rounded-xl p-card_padding shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05),0_2px_4px_-2px_rgba(0,0,0,0.03)] sticky top-gutter">
+<div class="flex items-center gap-3 mb-6">
+<div class="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+</div>
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface">Assurance Check</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">AI recommended. Assurance verifies.</p>
+</div>
+</div>
+<!-- Before / After Visual -->
+<div class="bg-surface-bright rounded-lg p-4 mb-6 border border-surface-container-highest flex items-center justify-between relative overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-r from-error/5 to-secondary/5 pointer-events-none"></div>
+<div class="flex flex-col items-center z-10 w-[40%]">
+<span class="font-label-caps text-label-caps text-on-surface-variant mb-2">Current State</span>
+<div class="bg-error-container text-on-error-container px-3 py-1.5 rounded flex items-center gap-2 border border-error/20">
+<span class="material-symbols-outlined text-[16px]">cancel</span>
+<span class="font-data-mono font-medium">Breach</span>
+</div>
+</div>
+<div class="z-10 flex-shrink-0 text-outline-variant">
+<span class="material-symbols-outlined">arrow_forward</span>
+</div>
+<div class="flex flex-col items-center z-10 w-[40%]">
+<span class="font-label-caps text-label-caps text-on-surface-variant mb-2">Post-Trade</span>
+<div class="bg-secondary/10 text-secondary px-3 py-1.5 rounded flex items-center gap-2 border border-secondary/20">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-data-mono font-medium">Compliant</span>
+</div>
+</div>
+</div>
+<!-- Mandate Rules Checklist -->
+<div class="space-y-4">
+<h3 class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider mb-2">Mandate Verification</h3>
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-secondary mt-0.5" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<div>
+<div class="font-data-mono text-data-mono text-on-surface">Technology ≤ 25%</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Resolves NVDA overweight (Post: 22.8%)</div>
+</div>
+</div>
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-secondary mt-0.5" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<div>
+<div class="font-data-mono text-data-mono text-on-surface">Crypto Exposure = 0%</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Clears unauthorized AVAX holding</div>
+</div>
+</div>
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-secondary mt-0.5" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<div>
+<div class="font-data-mono text-data-mono text-on-surface">Cash Drag &lt; 5%</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Capital fully reallocated to XLV</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Action Bar -->
+<div class="fixed bottom-0 right-0 w-[calc(100%-240px)] bg-surface-container-lowest border-t border-surface-container-highest p-4 px-gutter flex justify-between items-center z-40 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.02)]">
+<div class="flex items-center gap-2 text-on-surface-variant max-w-xl">
+<span class="material-symbols-outlined text-[20px]">info</span>
+<span class="font-body-sm text-body-sm leading-tight">Nothing executes automatically. Approving will log the intent and queue orders for manual trader review in the Order Management System.</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="px-6 py-2.5 rounded-lg border border-surface-container-highest text-primary-container font-body-md font-medium hover:bg-surface-container-low transition-colors">
+                Modify
+            </button>
+<button class="px-6 py-2.5 rounded-lg bg-primary-container text-on-primary font-body-md font-medium flex items-center gap-2 hover:bg-primary transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]">gavel</span>
+                Approve &amp; Log
+            </button>
+</div>
+</div>
+</body></html>

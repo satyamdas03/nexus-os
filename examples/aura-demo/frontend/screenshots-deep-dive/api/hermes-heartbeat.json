@@ -1,0 +1,50 @@
+{
+  "counts": {
+    "scanned": 200,
+    "green": 131,
+    "remediated": 0,
+    "missed": 8,
+    "skipped": 61
+  },
+  "queue_size": 0,
+  "miss_count": 8,
+  "score": {
+    "alignment_rate": 0.655,
+    "avg_trades_per_fix": 0,
+    "acceptance_rate": 0.931,
+    "breaches_remaining": 0,
+    "composite": 0.807
+  },
+  "top_misses": [
+    {
+      "client_id": "c00007",
+      "prior_status": "red",
+      "remaining_breaches": 5,
+      "rationale": "trim Commodity to 5% cap; trim Equity to 43% cap"
+    },
+    {
+      "client_id": "c00030",
+      "prior_status": "red",
+      "remaining_breaches": 4,
+      "rationale": "trim Equity to 81% cap"
+    },
+    {
+      "client_id": "c00032",
+      "prior_status": "red",
+      "remaining_breaches": 2,
+      "rationale": "trim XLRE to single-holding cap; redeploy into SPY"
+    },
+    {
+      "client_id": "c00066",
+      "prior_status": "red",
+      "remaining_breaches": 1,
+      "rationale": "trim Crypto to 5% cap; redeploy into SPY"
+    },
+    {
+      "client_id": "c00070",
+      "prior_status": "red",
+      "remaining_breaches": 5,
+      "rationale": "trim Equity to 68% cap"
+    }
+  ]
+}

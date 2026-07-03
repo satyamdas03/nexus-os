@@ -27,3 +27,7 @@ e2e_screenshot_report.json
 e2e_screenshots/
 e2e_deep_report.json
 e2e_screenshots_deep/
+
+# Preserve the frontend shared library despite the root `lib/` Python rule.
+!frontend/src/lib/
+

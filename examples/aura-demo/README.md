@@ -239,6 +239,16 @@ Produces `ASSURE_Synthetic_34k_Book.xlsx` in the project root: 34,000 portfolios
 
 ---
 
+## Security & deployment notes
+
+- **Admin endpoints** (`POST /admin/reset`) are open by default for local demos. In production, set `ADMIN_SECRET` on the backend and `NEXT_PUBLIC_ADMIN_SECRET_HINT` on the frontend; the reset button will then send `X-Admin-Secret` automatically.
+- **CORS** defaults to permissive (`*`) for local development. Restrict it in production with `CORS_ALLOWED_ORIGINS=https://your-frontend.example.com`.
+- **Frontend security headers** (CSP, X-Frame-Options, HSTS-style referrer policy, nosniff) are emitted from `next.config.js` on every route.
+- **Explain-fetch races** in `BreachChips` and `HoldingsTable` are cancelled via `AbortController`, preventing stale results from appearing under the wrong rule or ticker.
+- **CI** runs backend `pytest` and frontend typecheck/tests on every push via `.github/workflows/ci.yml`.
+
+---
+
 ## Demo (60-second click-path)
 
 See `docs/WALKTHROUGH.md` for the full script. In brief:

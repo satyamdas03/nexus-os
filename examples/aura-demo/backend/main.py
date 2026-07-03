@@ -5,12 +5,20 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="Assure", version="0.1.0")
 
+# In production, CORS should be restricted to the deployed frontend origin.
+# Dev keeps permissive origins so local Next.js / Vercel previews work.
+_allowed_origins = os.environ.get("CORS_ALLOWED_ORIGINS", "*").split(",")
+if _allowed_origins == ["*"]:
+    allow_origins = ["*"]
+else:
+    allow_origins = [o.strip() for o in _allowed_origins if o.strip()]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=allow_origins,
+    allow_credentials="*" not in allow_origins,
+    allow_methods=["GET", "POST"],
+    allow_headers=["Content-Type", "X-Admin-Secret"],
 )
 
 

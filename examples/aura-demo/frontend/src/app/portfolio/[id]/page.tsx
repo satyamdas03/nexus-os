@@ -81,6 +81,13 @@ export default function Diagnosis({ params }: { params: { id: string } }) {
               <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
             </PrimaryButton>
           </Link>
+          <Link
+            href={`/portfolio/${id}/mandate`}
+            className="inline-flex items-center gap-1.5 font-mono text-xs text-aura-navy hover:text-aura-navy/80 underline underline-offset-2"
+          >
+            <span className="material-symbols-outlined text-[16px]">assignment</span>
+            View Mandate
+          </Link>
           <EvidencePackButton clientId={id} />
         </div>
       </div>

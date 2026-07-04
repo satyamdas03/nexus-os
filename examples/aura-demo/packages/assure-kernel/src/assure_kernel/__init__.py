@@ -1,5 +1,13 @@
 """ASSURE kernel — deterministic portfolio assurance engine."""
 
+from assure_kernel.docs import describe_mandate, describe_rule, rule_type_metadata
+from assure_kernel.dsl import (
+    dump_mandate,
+    dumps_mandate,
+    load_mandate,
+    parse_mandate,
+    to_legacy_dict,
+)
 from assure_kernel.engine import check, evaluate_portfolio
 from assure_kernel.models import (
     Holding,
@@ -32,4 +40,12 @@ __all__ = [
     "register",
     "get",
     "list_rules",
+    "load_mandate",
+    "parse_mandate",
+    "to_legacy_dict",
+    "dump_mandate",
+    "dumps_mandate",
+    "describe_rule",
+    "describe_mandate",
+    "rule_type_metadata",
 ]

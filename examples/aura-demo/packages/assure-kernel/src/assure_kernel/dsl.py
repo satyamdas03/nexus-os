@@ -5,6 +5,7 @@ plus round-trip conversion from/to the legacy Python-dict format used by the
 original aura-demo.
 """
 
+import io
 from pathlib import Path
 from typing import Any
 
@@ -167,32 +168,45 @@ def to_legacy_dict(mandate: Mandate) -> dict[str, Any]:
     return out
 
 
+def _drop_none(d: dict[str, Any]) -> dict[str, Any]:
+    """Remove keys whose values are None from a shallow dict."""
+    return {k: v for k, v in d.items() if v is not None}
+
+
+def dumps_mandate(mandate: Mandate) -> str:
+    """Return a mandate as a DSL YAML string.
+
+    Strips None values so the serialized output is clean and regulator-reviewable.
+    """
+    rules_section = []
+    for rule in mandate.rules:
+        rule_doc: dict[str, Any] = {
+            "type": rule.type,
+            "enabled": rule.enabled,
+            "severity": rule.severity.value if rule.severity else None,
+            "message": rule.message,
+            "parameters": dict(rule.params),
+        }
+        rules_section.append(_drop_none(rule_doc))
+
+    mandate_doc = {
+        "id": mandate.id,
+        "name": mandate.name,
+        "version": mandate.version,
+        "metadata": mandate.metadata,
+        "rules": rules_section,
+    }
+    document = {"mandate": _drop_none(mandate_doc)}
+    buf = io.StringIO()
+    yaml.safe_dump(document, buf, sort_keys=False)
+    return buf.getvalue()
+
+
 def dump_mandate(mandate: Mandate, path: str | Path) -> None:
     """Write a mandate to a YAML file in the DSL format."""
     path = Path(path)
-    rules_section = []
-    for rule in mandate.rules:
-        rules_section.append(
-            {
-                "id": rule.params.get("id") if "id" in rule.params else None,
-                "type": rule.type,
-                "enabled": rule.enabled,
-                "severity": rule.severity,
-                "message": rule.message,
-                "parameters": rule.params,
-            }
-        )
-    document = {
-        "mandate": {
-            "id": mandate.id,
-            "name": mandate.name,
-            "version": mandate.version,
-            "metadata": mandate.metadata,
-            "rules": [r for r in rules_section if r["id"] is not None or True],
-        }
-    }
     with path.open("w", encoding="utf-8") as f:
-        yaml.safe_dump(document, f, sort_keys=False)
+        f.write(dumps_mandate(mandate))
 
 
 # Re-export evaluate_portfolio so `from assure_kernel.dsl import evaluate_portfolio` works.
@@ -201,5 +215,6 @@ __all__ = [
     "parse_mandate",
     "to_legacy_dict",
     "dump_mandate",
+    "dumps_mandate",
     "evaluate_portfolio",
 ]

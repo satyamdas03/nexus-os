@@ -61,3 +61,29 @@ def test_some_template_can_breach():
         if mandates.build_mandate(random.Random(3), i)["max_single_holding"] <= 0.12
     )
     assert tight["max_single_holding"] <= 0.12
+
+def test_templates_load_from_yaml():
+    for i in range(mandates.template_count()):
+        m = mandates.load_template(i)
+        assert m.id
+        assert m.name
+        assert m.version
+        assert len(m.rules) >= 5
+
+
+def test_build_mandate_uses_yaml_template_base():
+    rng = random.Random(1)
+    m = mandates.build_mandate(rng, 0)
+    assert m["name"] == "Balanced Growth"
+    assert "max_asset_class_weight" in m
+    assert "max_sector_weight" in m
+    assert "approved_universe" in m
+    assert "excluded_tickers" in m
+    assert mandates.is_valid_mandate(m)
+
+
+def test_mandate_metadata_preserved_in_yaml():
+    m = mandates.load_template(0)
+    assert m.metadata
+    assert "sector_cap_base" in m.metadata
+    assert "approved_n" in m.metadata

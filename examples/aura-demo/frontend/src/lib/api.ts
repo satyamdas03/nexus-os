@@ -1,4 +1,4 @@
-import type { PortfolioSummary, Portfolio, RulesResult, RemediationResult, AuditEntry, ApproveResult, ExplainResult, SummaryAiResult, EvidencePack, HermesStrategy, HermesProposal, HermesAdoptResult, HermesHeartbeat, HermesHistoryEntry, HermesApproveBatchItem, HermesApproveBatchResult, HermesRollbackResult, MarketClock, MarketHistoryPoint, MarketPrices, MarketStatus, TopSafeguard, HermesQueuePage, HermesScanJob } from "./types";
+import type { PortfolioSummary, Portfolio, RulesResult, RemediationResult, AuditEntry, ApproveResult, ExplainResult, SummaryAiResult, EvidencePack, HermesStrategy, HermesProposal, HermesAdoptResult, HermesHeartbeat, HermesHistoryEntry, HermesApproveBatchItem, HermesApproveBatchResult, HermesRollbackResult, MarketClock, MarketHistoryPoint, MarketPrices, MarketStatus, TopSafeguard, HermesQueuePage, HermesScanJob, MandateDetail } from "./types";
 
 function base() {
   // Client (browser): same-origin /api, proxied to backend via next.config rewrites.
@@ -30,6 +30,7 @@ export const api = {
   portfoliosTop: (limit = 200) =>
     j<TopSafeguard>(`/portfolios/top?limit=${limit}`),
   getPortfolio: (id: string) => j<Portfolio>(`/portfolio/${id}`),
+  getMandate: (id: string) => j<MandateDetail>(`/portfolio/${id}/mandate`),
   check: (id: string) => j<RulesResult>(`/portfolio/${id}/check`),
   explain: (id: string, metric?: string, signal?: AbortSignal) =>
     j<ExplainResult>(`/portfolio/${id}/explain`, {

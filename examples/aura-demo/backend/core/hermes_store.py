@@ -89,31 +89,27 @@ class SQLiteHermesStore(HermesStore):
         self._db_path: Optional[str] = None
 
     def _db_file(self) -> str:
-        if self._db_path:
-            return self._db_path
-        # Use the path from the provided connection, or the default DB path.
         if self._provided_conn is not None:
-            row = self._provided_conn.execute("PRAGMA database_list").fetchone()
+            if self._db_path is None:
+                row = self._provided_conn.execute("PRAGMA database_list").fetchone()
+                self._db_path = row["file"] if row else storage.DB_PATH
+            return self._db_path
+        # When no connection was pinned at construction, follow the active
+        # data_loader connection so tests that call set_conn(temp_db) stay
+        # isolated without needing a fresh store instance.
+        from core import data_loader
+        override = getattr(data_loader, "_conn_override", None)
+        if override is not None:
+            row = override.execute("PRAGMA database_list").fetchone()
             file_path = row["file"] if row else None
-            self._db_path = file_path if file_path else storage.DB_PATH
-        else:
+            if file_path:
+                return file_path
+        if self._db_path is None:
             self._db_path = storage.DB_PATH
         return self._db_path
 
-    def _resolve_conn(self):
-        # Open a fresh connection each time so we never share the data_loader
-        # cached connection with the scan loop.
-        if self._conn is None:
-            self._conn = storage.get_conn(self._db_file())
-            storage.init_schema(self._conn)
-            self.init()
-        return self._conn
-
-    def get_conn(self):
-        return self._resolve_conn()
-
-    def init(self) -> None:
-        conn = self._resolve_conn()
+    def _ensure_tables(self, conn: sqlite3.Connection) -> None:
+        """Create/migrate Hermes-specific tables (heartbeat, queue)."""
         conn.execute(
             f"CREATE TABLE IF NOT EXISTS {HEARTBEAT_TABLE} (id INTEGER PRIMARY KEY CHECK(id=1), payload TEXT, updated_ts TEXT)"
         )
@@ -144,6 +140,30 @@ class SQLiteHermesStore(HermesStore):
             conn.execute("ALTER TABLE hermes_queue ADD COLUMN processed_at TEXT")
         conn.execute("CREATE INDEX IF NOT EXISTS idx_queue_processed ON hermes_queue(processed_at)")
         conn.commit()
+
+    def _resolve_conn(self):
+        # Open a fresh connection each time so we never share the data_loader
+        # cached connection with the scan loop. Reopen if the active DB path
+        # changed (e.g. tests swapped in a temp db).
+        target = self._db_file()
+        if self._conn is not None:
+            current = self._conn.execute("PRAGMA database_list").fetchone()["file"]
+            if current == target:
+                return self._conn
+            self._conn.close()
+            self._conn = None
+        if self._conn is None:
+            self._conn = storage.get_conn(target)
+            storage.init_schema(self._conn)
+            self._ensure_tables(self._conn)
+        return self._conn
+
+    def get_conn(self):
+        return self._resolve_conn()
+
+    def init(self) -> None:
+        conn = self._resolve_conn()
+        self._ensure_tables(conn)
 
     def insert_scan_job(self, job_id: str, kind: str, status: str, started_ts: str) -> None:
         conn = self._resolve_conn()

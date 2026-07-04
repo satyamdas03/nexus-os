@@ -9,6 +9,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from core import storage, data_loader
+from core.hermes_store import SQLiteHermesStore, set_hermes_store
 from generators import generate_data
 from core.rules_engine import check
 from core.trades import apply_trades
@@ -25,6 +26,11 @@ def _client(n=400):
     conn = storage.get_conn(path); storage.init_schema(conn); storage.migrate(conn)
     generate_data.build_book(conn, n=n, seed=42, market_seed=42)
     data_loader.set_conn(conn)
+    # Pin Hermes store to the same temp DB so scan/approve endpoints are isolated.
+    set_hermes_store(SQLiteHermesStore(conn))
+    # Reset any loop-level store override left by loop tests; use the global store.
+    from agents.hermes import loop
+    loop._set_store(None)
     from main import app
     return TestClient(app), conn
 

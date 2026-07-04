@@ -1,0 +1,43 @@
+mandate:
+  id: conservative-income
+  name: Conservative Income
+  version: 1.0.0
+  metadata:
+    sector_cap_base: 0.2
+    approved_n: 14
+    allow_crypto: false
+    excl_k: 3
+  rules:
+  - type: asset_class_weight
+    parameters:
+      max_weights:
+        Equity: 0.45
+        Bonds: 0.6
+        Commodity: 0.05
+        Crypto: 0.0
+        Cash: 1.0
+  - type: region_weight
+    parameters:
+      max_weights:
+        US: 0.85
+        ExUS: 0.25
+        EM: 0.05
+  - type: single_holding
+    parameters:
+      max_weight: 0.1
+  - type: minimum_cash
+    parameters:
+      min_weight: 0.1
+  - type: target_allocation
+    parameters:
+      targets:
+        Equity: 0.35
+        Bonds: 0.55
+      drift_tolerance: 0.06
+  - type: top_n_concentration
+    parameters:
+      n: 5
+      max_weight: 0.45
+  - type: minimum_liquidity
+    parameters:
+      min_liquid_pct: 0.6

@@ -1,0 +1,43 @@
+mandate:
+  id: liquid-floored
+  name: Liquid Floored
+  version: 1.0.0
+  metadata:
+    sector_cap_base: 0.22
+    approved_n: 13
+    allow_crypto: false
+    excl_k: 2
+  rules:
+  - type: asset_class_weight
+    parameters:
+      max_weights:
+        Equity: 0.7
+        Bonds: 0.4
+        Commodity: 0.08
+        Crypto: 0.0
+        Cash: 1.0
+  - type: region_weight
+    parameters:
+      max_weights:
+        US: 0.8
+        ExUS: 0.3
+        EM: 0.1
+  - type: single_holding
+    parameters:
+      max_weight: 0.11
+  - type: minimum_cash
+    parameters:
+      min_weight: 0.08
+  - type: target_allocation
+    parameters:
+      targets:
+        Equity: 0.55
+        Bonds: 0.35
+      drift_tolerance: 0.07
+  - type: top_n_concentration
+    parameters:
+      n: 5
+      max_weight: 0.48
+  - type: minimum_liquidity
+    parameters:
+      min_liquid_pct: 0.75

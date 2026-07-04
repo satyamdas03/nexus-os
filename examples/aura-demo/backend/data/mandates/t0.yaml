@@ -1,0 +1,43 @@
+mandate:
+  id: balanced-growth
+  name: Balanced Growth
+  version: 1.0.0
+  metadata:
+    sector_cap_base: 0.3
+    approved_n: 18
+    allow_crypto: true
+    excl_k: 2
+  rules:
+  - type: asset_class_weight
+    parameters:
+      max_weights:
+        Equity: 0.8
+        Bonds: 0.3
+        Commodity: 0.1
+        Crypto: 0.05
+        Cash: 1.0
+  - type: region_weight
+    parameters:
+      max_weights:
+        US: 0.7
+        ExUS: 0.35
+        EM: 0.15
+  - type: single_holding
+    parameters:
+      max_weight: 0.12
+  - type: minimum_cash
+    parameters:
+      min_weight: 0.05
+  - type: target_allocation
+    parameters:
+      targets:
+        Equity: 0.65
+        Bonds: 0.25
+      drift_tolerance: 0.08
+  - type: top_n_concentration
+    parameters:
+      n: 5
+      max_weight: 0.55
+  - type: minimum_liquidity
+    parameters:
+      min_liquid_pct: 0.4

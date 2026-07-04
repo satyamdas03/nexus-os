@@ -2,6 +2,7 @@
 import os, json, sqlite3, tempfile
 from fastapi.testclient import TestClient
 from core import storage, data_loader
+from core.hermes_store import SQLiteHermesStore, set_hermes_store
 from generators import generate_data
 
 
@@ -10,6 +11,12 @@ def _client(n=400):
     conn = storage.get_conn(path); storage.init_schema(conn); storage.migrate(conn)
     generate_data.build_book(conn, n=n, seed=42, market_seed=42)
     data_loader.set_conn(conn)
+    # Pin Hermes store to the same temp DB so scan/approve endpoints see the
+    # same queue/state tables as the test connection.
+    set_hermes_store(SQLiteHermesStore(conn))
+    # Reset any loop-level store override left by loop tests; use the global store.
+    from agents.hermes import loop
+    loop._set_store(None)
     from main import app
     return TestClient(app), conn
 
@@ -145,3 +152,21 @@ def test_admin_reset_clears_state_and_clock():
     # book_summary refreshed at day 0
     s = conn.execute("SELECT * FROM book_summary WHERE id=1").fetchone()
     assert s["day"] == 0 and s["total"] == 200
+
+
+# --- Mandate DSL endpoint (Sprint 2) ---
+
+def test_portfolio_mandate_endpoint():
+    c, conn = _client(n=200)
+    r = c.get("/portfolio/c00000/mandate")
+    assert r.status_code == 200
+    body = r.json()
+    assert body["client_id"] == "c00000"
+    assert {"mandate_id", "version", "dsl", "docs"} <= set(body)
+    assert body["version"] == "1.0.0"
+    assert isinstance(body["mandate_id"], str)
+    assert body["mandate_id"].strip() != ""
+    docs = body["docs"]
+    assert docs["rule_count"] >= docs["enabled_rule_count"] >= 0
+    assert isinstance(docs["rules"], list) and len(docs["rules"]) > 0
+    assert "title" in docs["rules"][0] and "description" in docs["rules"][0]

@@ -64,106 +64,96 @@ examples/aura-demo/packages/assure-kernel/
 
 ---
 
-## Sprint 2 — Declarative Mandate DSL (Weeks 3–4)
+## Sprint 2 — Declarative Mandate DSL ✅ COMPLETE
 
 ### Goal
 Replace hardcoded JSON/Python mandates with a versioned, regulator-reviewable rule language.
 
 ### Status
-**Foundation delivered in Sprint 1.** Remaining work is to migrate demo data and expose the DSL in the UI.
+**Completed 2026-07-03 on `feat/aura-demo-improvements`.**
 
-### Schema sketch (YAML/JSON)
+### Canonical DSL schema (YAML/JSON)
 ```yaml
 mandate:
-  id: "moderate-growth"
-  version: "1.0.0"
+  id: balanced-growth
+  name: Balanced Growth
+  version: 1.0.0
+  metadata:
+    sector_cap_base: 0.30
+    approved_n: 18
+    allow_crypto: true
+    excl_k: 2
   rules:
     - type: asset_class_weight
       parameters:
         max_weights:
-          Equity: 0.60
-          FixedIncome: 0.40
-    - type: sector_weight
-      parameters:
-        max_weights:
-          Technology: 0.25
-    - type: single_holding
-      parameters:
-        max_weight: 0.10
-    - type: minimum_cash
-      parameters:
-        min_weight: 0.05
-    - type: approved_universe
-      parameters:
-        tickers: [AAPL, MSFT, BHP, CBA, ...]
-    - type: excluded_tickers
-      parameters:
-        tickers: [WEAP, COAL, ...]
+          Equity: 0.80
+          Bonds: 0.30
+          Commodity: 0.10
+          Crypto: 0.05
+          Cash: 1.0
     - type: region_weight
       parameters:
         max_weights:
-          Emerging Markets: 0.15
+          US: 0.70
+          ExUS: 0.35
+          EM: 0.15
+    - type: single_holding
+      parameters:
+        max_weight: 0.12
+    - type: minimum_cash
+      parameters:
+        min_weight: 0.05
+    - type: target_allocation
+      parameters:
+        targets:
+          Equity: 0.65
+          Bonds: 0.25
+        drift_tolerance: 0.08
+    - type: top_n_concentration
+      parameters:
+        n: 5
+        max_weight: 0.55
     - type: minimum_liquidity
       parameters:
-        min_liquid_pct: 0.80
+        min_liquid_pct: 0.4
 ```
 
-### Remaining tasks
-1. Migrate demo data (`generators/`) to load mandates from DSL files.
-2. Add rule documentation renderer (human-readable explanation per rule).
-3. Version mandates in the SQLite schema.
-4. Add frontend mandate viewer / editor.
+### Delivered tasks
+1. ✅ Created 8 canonical DSL templates under `backend/data/mandates/t0.yaml` … `t7.yaml`.
+2. ✅ Rewrote `backend/generators/mandates.py` to load templates via `assure_kernel.load_mandate` and return the legacy dict shape.
+3. ✅ Added `assure_kernel.docs.py` with deterministic rule documentation (`describe_rule`, `describe_mandate`, `rule_type_metadata`).
+4. ✅ Added `assure_kernel.dsl.dumps_mandate()` for clean YAML serialization and idempotent SQLite migration (`_migrate_mandates_table`) adding `version`, `dsl`, `source_path`, `created_ts`, `spec_hash` columns.
+5. ✅ Added `GET /portfolio/{client_id}/mandate` returning version, DSL YAML, and human-readable rule docs.
+6. ✅ Added frontend `MandatePanel` component and `/portfolio/[id]/mandate` page with rule-doc cards and raw-DSL tab.
+7. ✅ Added backend + kernel tests for YAML templates, DSL round-trip, and the mandate endpoint.
+
+### Files changed
+- `backend/data/mandates/t0.yaml` … `t7.yaml`
+- `backend/generators/mandates.py`
+- `backend/generators/generate_data.py`
+- `backend/core/storage.py`
+- `backend/core/data_loader.py`
+- `backend/routers/portfolios.py`
+- `packages/assure-kernel/src/assure_kernel/dsl.py`
+- `packages/assure-kernel/src/assure_kernel/docs.py`
+- `packages/assure-kernel/src/assure_kernel/__init__.py`
+- `packages/assure-kernel/tests/test_docs.py`
+- `backend/tests/test_mandates.py`
+- `backend/tests/test_routers.py`
+- `frontend/src/lib/types.ts`
+- `frontend/src/lib/api.ts`
+- `frontend/src/components/MandatePanel.tsx`
+- `frontend/src/app/portfolio/[id]/mandate/page.tsx`
+- `frontend/src/app/portfolio/[id]/page.tsx`
 
 ### Acceptance Criteria
-- All demo portfolios load from DSL files.
-- Rule documentation page in frontend.
-- Invalid DSL fails fast with clear errors.
-
----
-
-## Sprint 2 — Declarative Mandate DSL (Weeks 3–4)
-
-### Goal
-Replace hardcoded JSON/Python mandates with a versioned, regulator-reviewable rule language.
-
-### Schema sketch (YAML/JSON)
-```yaml
-version: "1.0"
-identity:
-  client_id: "C-001"
-  adviser: "Jane Doe"
-rules:
-  - type: max_asset_class_weight
-    asset_class: Equity
-    limit: 0.60
-  - type: max_sector_weight
-    sector: Technology
-    limit: 0.25
-  - type: max_single_holding
-    limit: 0.10
-  - type: min_cash
-    limit: 0.05
-  - type: approved_universe
-    tickers: [AAPL, MSFT, BHP, CBA, ...]
-  - type: esg_exclusions
-    tickers: [WEAP, COAL, ...]
-  - type: max_region_weight
-    region: Emerging Markets
-    limit: 0.15
-  - type: min_liquid_pct
-    limit: 0.80
-```
-
-### Tasks
-1. Implement `Mandate.from_yaml(path)` and `.to_yaml()`.
-2. Migrate demo data to DSL.
-3. Add rule documentation renderer (human-readable explanation per rule).
-4. Version mandates in the SQLite schema.
-
-### Acceptance Criteria
-- All demo portfolios load from DSL files.
-- Rule documentation page in frontend.
-- Invalid DSL fails fast with clear errors.
+- ✅ All demo portfolios load from DSL files (`test_templates_load_from_yaml`, `test_build_mandate_uses_yaml_template_base`).
+- ✅ Rule documentation page in frontend (`MandatePanel` + `/portfolio/[id]/mandate` built and typechecks).
+- ✅ Invalid DSL fails fast with clear errors (`parse_mandate` raises `ValueError` on unknown rule types).
+- ✅ Backend tests: 156 passed, 1 skipped.
+- ✅ Kernel tests: 32 passed, 1 skipped.
+- ✅ Frontend `npm run build` succeeds with the new mandate route.
 
 ---
 

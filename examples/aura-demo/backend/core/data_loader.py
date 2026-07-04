@@ -28,7 +28,7 @@ _conn_local = threading.local()
 _conn_lock = threading.Lock()
 _conn_override: Optional[sqlite3.Connection] = None  # test seam via set_conn
 _prices_cache: dict = {}  # (day, seed) -> {ticker: price}
-_mandate_cache: dict = {}  # mandate_id -> parsed spec dict
+_mandate_cache: dict = {}  # mandate_id -> full mandates row dict
 
 
 def get_conn_cached() -> sqlite3.Connection:
@@ -112,13 +112,30 @@ def current_prices() -> dict:
 
 
 def _mandate(conn: sqlite3.Connection, mandate_id: int) -> dict:
-    spec = _mandate_cache.get(mandate_id)
-    if spec is not None:
-        return spec
-    row = conn.execute("SELECT spec FROM mandates WHERE mandate_id=?", (mandate_id,)).fetchone()
-    spec = json.loads(row["spec"]) if row else {}
-    _mandate_cache[mandate_id] = spec
-    return spec
+    row = _mandate_cache.get(mandate_id)
+    if row is not None:
+        return json.loads(row["spec"])
+    row = conn.execute("SELECT * FROM mandates WHERE mandate_id=?", (mandate_id,)).fetchone()
+    if row is None:
+        return {}
+    _mandate_cache[mandate_id] = row
+    return json.loads(row["spec"])
+
+
+def _mandate_full(conn: sqlite3.Connection, mandate_id: int) -> dict:
+    """Return mandate metadata including version, DSL YAML, source path and hash."""
+    row = conn.execute("SELECT * FROM mandates WHERE mandate_id=?", (mandate_id,)).fetchone()
+    if row is None:
+        return {}
+    return {
+        "mandate_id": row["mandate_id"],
+        "spec": json.loads(row["spec"]) if row["spec"] else {},
+        "version": row["version"] or "1.0.0",
+        "dsl": row["dsl"] or "",
+        "source_path": row["source_path"] or "",
+        "created_ts": row["created_ts"] or "",
+        "spec_hash": row["spec_hash"] or "",
+    }
 
 
 def get_portfolio(client_id: str) -> Optional[dict]:
@@ -143,7 +160,7 @@ def get_portfolio(client_id: str) -> Optional[dict]:
         })
     return {
         "client_id": p["client_id"], "client_name": p["client_name"], "adviser": p["adviser"],
-        "fum": p["fum"], "holdings": holdings, "cash": p["cash"],
+        "fum": p["fum"], "mandate_id": p["mandate_id"], "holdings": holdings, "cash": p["cash"],
         "mandate": _mandate(conn, p["mandate_id"]),
     }
 
@@ -189,7 +206,8 @@ def list_portfolios(limit: int = 500, offset: int = 0) -> list[dict]:
     return [
         {
             "client_id": p["client_id"], "client_name": p["client_name"], "adviser": p["adviser"],
-            "fum": p["fum"], "holdings": holdings_by_client[p["client_id"]], "cash": p["cash"],
+            "fum": p["fum"], "mandate_id": p["mandate_id"],
+            "holdings": holdings_by_client[p["client_id"]], "cash": p["cash"],
             "mandate": mandates[p["mandate_id"]],
         }
         for p in portfolio_rows

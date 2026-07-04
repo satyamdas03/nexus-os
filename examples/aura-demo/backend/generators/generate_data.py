@@ -15,11 +15,13 @@ breach; orange injects a drift watch (over target + tolerance, under the hard
 cap) funded from cash headroom. Day-0 prices are written from
 generators/market.prices_for_day(0).
 """
+import hashlib
 import json
 import math
 import random
 import sqlite3
 
+from assure_kernel import dumps_mandate, parse_mandate
 from generators import universe as U
 from generators import mandates as M
 from generators import market as MK
@@ -57,14 +59,27 @@ def _fum(rng):
     return round(rng.lognormvariate(math.log(800_000), 1.7), 2)
 
 
-def _mandate_for(rng, mandate_ids, spec_to_id, template_idx):
+def _mandate_for(rng, mandate_rows, spec_to_id, template_idx):
+    """Build a mandate instance and return its id + legacy dict.
+
+    Mandates are deduplicated by a SHA-256 hash of the canonical JSON spec.
+    Each unique mandate row stores the legacy spec, the DSL YAML, version,
+    source template path, creation timestamp, and hash.
+    """
     m = M.build_mandate(rng, template_idx)
     key = json.dumps(m, sort_keys=True)
-    if key in spec_to_id:
-        return spec_to_id[key], m
+    spec_hash = hashlib.sha256(key.encode("utf-8")).hexdigest()
+    if spec_hash in spec_to_id:
+        return spec_to_id[spec_hash], m
+
     mid = len(spec_to_id) + 1
-    mandate_ids.append((mid, key))
-    spec_to_id[key] = mid
+    mandate = parse_mandate(m)
+    dsl = dumps_mandate(mandate)
+    source_path = f"data/mandates/t{template_idx % M.template_count()}.yaml"
+    # Fixed synthetic creation timestamp so book generation stays deterministic.
+    created_ts = "2026-07-03T00:00:00+00:00"
+    mandate_rows.append((mid, key, mandate.version, dsl, source_path, created_ts, spec_hash))
+    spec_to_id[spec_hash] = mid
     return mid, m
 
 
@@ -356,11 +371,11 @@ def build_book(conn: sqlite3.Connection, n: int = 34000, seed: int = 42, market_
     # pre-build one mandate per template so 34k portfolios share ~8 mandate rows
     # (build_mandate jitters every call, so dedup-by-spec only fires when each
     # template is built exactly once).
-    mandate_ids: list = []
+    mandate_rows: list = []
     spec_to_id: dict = {}
     mandates_by_idx: dict = {}
     for tidx in range(M.template_count()):
-        mid, m = _mandate_for(rng, mandate_ids, spec_to_id, tidx)
+        mid, m = _mandate_for(rng, mandate_rows, spec_to_id, tidx)
         mandates_by_idx[tidx] = (mid, m)
 
     # pre-check which templates can actually produce a green portfolio given
@@ -440,7 +455,11 @@ def build_book(conn: sqlite3.Connection, n: int = 34000, seed: int = 42, market_
             if h["units"] > 0:
                 holding_rows.append((client_id, h["ticker"], h["units"]))
 
-    conn.executemany("INSERT INTO mandates (mandate_id, spec) VALUES (?,?)", mandate_ids)
+    conn.executemany(
+        "INSERT INTO mandates (mandate_id, spec, version, dsl, source_path, created_ts, spec_hash) "
+        "VALUES (?,?,?,?,?,?,?)",
+        mandate_rows,
+    )
     conn.executemany("INSERT INTO portfolios (client_id, client_name, adviser, fum, mandate_id, cash) VALUES (?,?,?,?,?,?)", port_rows)
     conn.executemany("INSERT INTO holdings (client_id, ticker, units) VALUES (?,?,?)", holding_rows)
     conn.executemany(

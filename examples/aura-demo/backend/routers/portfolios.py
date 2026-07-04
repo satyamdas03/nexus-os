@@ -2,7 +2,8 @@ from collections import Counter
 
 from fastapi import APIRouter, HTTPException, Query
 
-from core.data_loader import list_portfolios, get_portfolio, summary, get_conn_cached
+from assure_kernel import describe_mandate, parse_mandate
+from core.data_loader import list_portfolios, get_portfolio, summary, get_conn_cached, _mandate_full
 from core.effective import get_effective
 from core.rules_engine import check
 from agents.summarize import summarize_book
@@ -111,3 +112,25 @@ def portfolios_top(limit: int = Query(200, ge=1, le=1000)):
     dom = Counter(r["status"] for r in rest_rows).most_common(1)
     dominant = dom[0][0] if dom else "green"
     return {"top": top, "rest": {"count": rest_count, "fum": rest_fum, "dominant_status": dominant}}
+
+@router.get("/portfolio/{client_id}/mandate")
+def portfolio_mandate(client_id: str):
+    """Return the portfolio's mandate as a versioned DSL document plus human-readable rule docs."""
+    p = get_portfolio(client_id)
+    if not p:
+        raise HTTPException(404, "portfolio not found")
+    conn = get_conn_cached()
+    full = _mandate_full(conn, p["mandate_id"])
+    if not full:
+        raise HTTPException(404, "mandate not found")
+    mandate = parse_mandate(full["spec"])
+    return {
+        "client_id": client_id,
+        "mandate_id": mandate.id,
+        "version": full["version"],
+        "source_path": full["source_path"],
+        "created_ts": full["created_ts"],
+        "spec_hash": full["spec_hash"],
+        "dsl": full["dsl"],
+        "docs": describe_mandate(mandate),
+    }

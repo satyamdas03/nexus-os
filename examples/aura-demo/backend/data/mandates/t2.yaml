@@ -1,0 +1,43 @@
+mandate:
+  id: aggressive-growth
+  name: Aggressive Growth
+  version: 1.0.0
+  metadata:
+    sector_cap_base: 0.4
+    approved_n: 20
+    allow_crypto: true
+    excl_k: 1
+  rules:
+  - type: asset_class_weight
+    parameters:
+      max_weights:
+        Equity: 0.95
+        Bonds: 0.15
+        Commodity: 0.15
+        Crypto: 0.15
+        Cash: 1.0
+  - type: region_weight
+    parameters:
+      max_weights:
+        US: 0.6
+        ExUS: 0.4
+        EM: 0.25
+  - type: single_holding
+    parameters:
+      max_weight: 0.2
+  - type: minimum_cash
+    parameters:
+      min_weight: 0.02
+  - type: target_allocation
+    parameters:
+      targets:
+        Equity: 0.85
+        Bonds: 0.1
+      drift_tolerance: 0.12
+  - type: top_n_concentration
+    parameters:
+      n: 5
+      max_weight: 0.7
+  - type: minimum_liquidity
+    parameters:
+      min_liquid_pct: 0.25

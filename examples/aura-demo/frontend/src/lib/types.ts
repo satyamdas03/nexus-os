@@ -41,8 +41,38 @@ export interface RulesResult {
   per_rule: RuleResult[];
 }
 
+export interface RuleDoc {
+  type: string;
+  title: string;
+  summary: string;
+  description: string;
+  parameters: Record<string, any>;
+  enabled: boolean;
+  severity?: "hard breach" | "soft breach" | "watch" | null;
+  message?: string | null;
+}
+
+export interface MandateDetail {
+  client_id: string;
+  mandate_id: string;
+  version: string;
+  source_path: string;
+  created_ts: string;
+  spec_hash: string;
+  dsl: string;
+  docs: {
+    id?: string;
+    name?: string;
+    version: string;
+    rule_count: number;
+    enabled_rule_count: number;
+    rules: RuleDoc[];
+  };
+}
+
 export interface Portfolio {
   client_id: string; client_name: string; adviser: string; fum: number;
+  mandate_id?: number;
   holdings: Holding[]; cash: number; mandate: Mandate;
   rules_result?: RulesResult;
 }

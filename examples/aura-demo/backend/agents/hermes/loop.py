@@ -13,10 +13,11 @@ touches mandate rules or rules_engine.py.
 """
 import json
 from datetime import datetime, timezone
+from typing import Optional
 
 from core import data_loader, effective, rules_engine
 from core.trades import apply_trades
-from core.hermes_store import get_hermes_store
+from core.hermes_store import get_hermes_store, HermesStore
 
 from agents.hermes import HEARTBEAT_PATH
 from agents.hermes.proposer import propose
@@ -24,17 +25,25 @@ from agents.hermes.strategy_io import load_strategy
 from agents.hermes import score as _score
 
 _SEV_WEIGHT = {"red": 3, "orange": 2, "green": 0}
-_store = get_hermes_store()
+_store_override: Optional[HermesStore] = None
 
 
 def _severity(rr: dict) -> str:
     return rr.get("status", "green")
 
 
+def _active_store() -> HermesStore:
+    """Return the test-injected store override, or the process-wide store.
+
+    This lets `set_hermes_store` swaps in tests take effect without requiring
+    every test to also call loop._set_store."""
+    return _store_override if _store_override is not None else get_hermes_store()
+
+
 def _set_store(store) -> None:
     """Test seam so hermes loop can run against a temp store."""
-    global _store
-    _store = store
+    global _store_override
+    _store_override = store
 
 
 def _confidence(post_rr: dict) -> float:
@@ -134,7 +143,7 @@ def _scan_ids(ids: list[str], strategy: dict, day, counts: dict,
             "post_rules_result": post_rr, "_trades_obj": trades,
         })
     if write and queue_rows:
-        _store.insert_queue_rows(queue_rows)
+        _active_store().insert_queue_rows(queue_rows)
     # Highest fum x severity first (deterministic: rank_score is a float, sort is stable).
     queue_rows.sort(key=lambda q: q["rank_score"], reverse=True)
     return queue_rows
@@ -152,7 +161,7 @@ def scan_book_paged(cursor=0, batch=500, subset=None, day=None, clear=False) -> 
     Returns {queue_page (top 50), next_cursor, counts, misses}.
     """
     if clear:
-        _store.clear_queue(day=day)
+        _active_store().clear_queue(day=day)
     if subset is not None:
         ids = list(subset)
         next_cursor = None
@@ -201,7 +210,7 @@ def scan_book() -> dict:
     score = _score_from_counts(counts, all_queue, total)
     heartbeat = {"counts": counts, "queue_size": counts["remediated"],
                  "miss_count": len(misses), "score": score, "top_misses": misses[:5]}
-    _store.write_heartbeat(heartbeat)
+    _active_store().write_heartbeat(heartbeat)
     # Keep the file heartbeat as a fallback / dev convenience.
     HEARTBEAT_PATH.parent.mkdir(parents=True, exist_ok=True)
     HEARTBEAT_PATH.write_text(json.dumps(heartbeat, indent=2))

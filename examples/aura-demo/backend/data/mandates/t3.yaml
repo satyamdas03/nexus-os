@@ -1,0 +1,43 @@
+mandate:
+  id: esg-strict
+  name: ESG Strict
+  version: 1.0.0
+  metadata:
+    sector_cap_base: 0.25
+    approved_n: 16
+    allow_crypto: false
+    excl_k: 6
+  rules:
+  - type: asset_class_weight
+    parameters:
+      max_weights:
+        Equity: 0.75
+        Bonds: 0.35
+        Commodity: 0.1
+        Crypto: 0.0
+        Cash: 1.0
+  - type: region_weight
+    parameters:
+      max_weights:
+        US: 0.75
+        ExUS: 0.4
+        EM: 0.05
+  - type: single_holding
+    parameters:
+      max_weight: 0.12
+  - type: minimum_cash
+    parameters:
+      min_weight: 0.06
+  - type: target_allocation
+    parameters:
+      targets:
+        Equity: 0.6
+        Bonds: 0.3
+      drift_tolerance: 0.07
+  - type: top_n_concentration
+    parameters:
+      n: 5
+      max_weight: 0.5
+  - type: minimum_liquidity
+    parameters:
+      min_liquid_pct: 0.5

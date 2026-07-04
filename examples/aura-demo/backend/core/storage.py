@@ -13,7 +13,7 @@ import sqlite3
 from typing import Optional
 
 DB_PATH = os.environ.get("PORTFOLIOS_DB", os.path.join("data", "portfolios.db"))
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 
 _SCHEMA = """
 CREATE TABLE IF NOT EXISTS portfolios (
@@ -22,7 +22,12 @@ CREATE TABLE IF NOT EXISTS portfolios (
 );
 CREATE TABLE IF NOT EXISTS mandates (
   mandate_id INTEGER PRIMARY KEY,
-  spec TEXT
+  spec TEXT,
+  version TEXT DEFAULT '1.0.0',
+  dsl TEXT,
+  source_path TEXT,
+  created_ts TEXT,
+  spec_hash TEXT
 );
 CREATE TABLE IF NOT EXISTS holdings (
   client_id TEXT, ticker TEXT, units REAL,
@@ -83,8 +88,33 @@ def get_conn(path: Optional[str] = None) -> sqlite3.Connection:
     return conn
 
 
+def _columns(conn: sqlite3.Connection, table: str) -> set[str]:
+    return {row[1] for row in conn.execute(f"PRAGMA table_info({table})")}
+
+
+def _migrate_mandates_table(conn: sqlite3.Connection) -> None:
+    """Idempotent migration from v1 mandates table to v2 schema."""
+    cols = _columns(conn, "mandates")
+    if "version" not in cols:
+        conn.execute("ALTER TABLE mandates ADD COLUMN version TEXT DEFAULT '1.0.0'")
+    if "dsl" not in cols:
+        conn.execute("ALTER TABLE mandates ADD COLUMN dsl TEXT")
+    if "source_path" not in cols:
+        conn.execute("ALTER TABLE mandates ADD COLUMN source_path TEXT")
+    if "created_ts" not in cols:
+        conn.execute("ALTER TABLE mandates ADD COLUMN created_ts TEXT")
+    if "spec_hash" not in cols:
+        conn.execute("ALTER TABLE mandates ADD COLUMN spec_hash TEXT")
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_mandates_hash ON mandates(spec_hash)")
+    conn.execute(
+        "UPDATE mandates SET version = COALESCE(version, '1.0.0'), "
+        "created_ts = COALESCE(created_ts, datetime('now')) WHERE version IS NULL OR created_ts IS NULL"
+    )
+
+
 def init_schema(conn: sqlite3.Connection) -> None:
     conn.executescript(_SCHEMA)
+    _migrate_mandates_table(conn)
     conn.commit()
 
 

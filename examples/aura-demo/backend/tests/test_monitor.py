@@ -9,48 +9,64 @@ from generators import generate_data
 from agents.hermes import monitor
 
 
-def _setup(n=400):
-    fd, path = tempfile.mkstemp(suffix=".db"); os.close(fd)
-    conn = storage.get_conn(path); storage.init_schema(conn); storage.migrate(conn)
+@pytest.fixture(autouse=True)
+def _reset_data_loader_cache():
+    """Ensure each test starts and ends with a clean data_loader cache so
+    set_conn() in one test never leaks into other test modules."""
+    data_loader.reset_cache()
+    yield
+    data_loader.reset_cache()
+
+
+@pytest.fixture
+def book_conn(tmp_path):
+    """Create a temporary book DB, yield the connection, then close and delete it."""
+    path = tmp_path / "book.db"
+    conn = storage.get_conn(str(path))
+    storage.init_schema(conn)
+    storage.migrate(conn)
+    yield conn
+    conn.close()
+
+
+def _build(conn, n=400):
     generate_data.build_book(conn, n=n, seed=42, market_seed=42)
     data_loader.set_conn(conn)
-    return conn
 
 
-def test_monitor_day0_writes_history_and_summary():
-    conn = _setup()
+def test_monitor_day0_writes_history_and_summary(book_conn):
+    _build(book_conn, n=400)
     res = monitor.run(0)
     assert res["counts"]["green"] + res["counts"]["orange"] + res["counts"]["red"] == 400
-    rows = conn.execute("SELECT count(*) FROM status_history WHERE day=0").fetchone()[0]
+    rows = book_conn.execute("SELECT count(*) FROM status_history WHERE day=0").fetchone()[0]
     assert rows == 400
-    s = conn.execute("SELECT * FROM book_summary WHERE id=1").fetchone()
+    s = book_conn.execute("SELECT * FROM book_summary WHERE id=1").fetchone()
     assert s["total"] == 400
     assert s["green"] == res["counts"]["green"]
 
 
-def test_monitor_summary_matches_recomputed():
-    conn = _setup()
+def test_monitor_summary_matches_recomputed(book_conn):
+    _build(book_conn, n=400)
     monitor.run(0)
-    s = conn.execute("SELECT * FROM book_summary WHERE id=1").fetchone()
-    c = Counter(r["status"] for r in conn.execute("SELECT status FROM status_history WHERE day=0"))
+    s = book_conn.execute("SELECT * FROM book_summary WHERE id=1").fetchone()
+    c = Counter(r["status"] for r in book_conn.execute("SELECT status FROM status_history WHERE day=0"))
     assert s["green"] == c["green"] and s["orange"] == c["orange"] and s["red"] == c["red"]
 
 
-def test_monitor_detects_drift_after_tick():
-    _setup(n=1500)
+def test_monitor_detects_drift_after_tick(book_conn):
+    _build(book_conn, n=1500)
     monitor.run(0)
     market.advance(8, run_monitor=False)   # move prices 8 days, no per-tick monitor
     res = monitor.run(market.get_clock()["day"])
     # with prices moving for 8 days, at least some status should differ day0 -> day8
-    conn = data_loader.get_conn_cached()
-    drifts = conn.execute("SELECT count(*) FROM drift_events").fetchone()[0]
+    drifts = book_conn.execute("SELECT count(*) FROM drift_events").fetchone()[0]
     # not guaranteed on every seed, so assert the history row exists + counts reconcile
     assert res["counts"]["green"] + res["counts"]["orange"] + res["counts"]["red"] == 1500
-    assert conn.execute("SELECT count(*) FROM status_history WHERE day=?", (market.get_clock()["day"],)).fetchone()[0] == 1500
+    assert book_conn.execute("SELECT count(*) FROM status_history WHERE day=?", (market.get_clock()["day"],)).fetchone()[0] == 1500
 
 
-def test_monitor_auto_fix_triggers_delta_scan_when_drift(monkeypatch):
-    _setup(n=1500)
+def test_monitor_auto_fix_triggers_delta_scan_when_drift(monkeypatch, book_conn):
+    _build(book_conn, n=1500)
     market.set_auto_fix(True)
     monitor.run(0)
     market.advance(6, run_monitor=False)
@@ -76,8 +92,8 @@ def test_monitor_auto_fix_triggers_delta_scan_when_drift(monkeypatch):
     market.set_auto_fix(False)
 
 
-def test_monitor_no_delta_scan_when_auto_fix_off():
-    conn = _setup(n=400)
+def test_monitor_no_delta_scan_when_auto_fix_off(book_conn):
+    _build(book_conn, n=400)
     # auto_fix defaults to 0; run twice (day 0 and day 1) — newly_non_green list
     # is returned but delta_scan is never called (no ImportError path triggered).
     res0 = monitor.run(0)
@@ -88,10 +104,10 @@ def test_monitor_no_delta_scan_when_auto_fix_off():
     assert market.get_clock()["auto_fix"] == 0
 
 
-def test_monitor_delta_scan_runtime_error_propagates(monkeypatch):
+def test_monitor_delta_scan_runtime_error_propagates(monkeypatch, book_conn):
     """Carry-forward: once delta_scan is real, its runtime errors must NOT be
     silently swallowed by the monitor's import guard (narrowed in Task 6c)."""
-    _setup(n=1500)
+    _build(book_conn, n=1500)
     market.set_auto_fix(True)
     monitor.run(0)
     market.advance(5, run_monitor=False)
@@ -103,10 +119,9 @@ def test_monitor_delta_scan_runtime_error_propagates(monkeypatch):
     from agents.hermes import loop as _loop
     monkeypatch.setattr(_loop, "delta_scan", _boom)
     # Force every day-5 status to green so day-6 non-greens look newly-non-green.
-    conn = data_loader.get_conn_cached()
-    conn.execute("UPDATE status_history SET status='green' WHERE day=?",
+    book_conn.execute("UPDATE status_history SET status='green' WHERE day=?",
                  (market.get_clock()["day"],))
-    conn.commit()
+    book_conn.commit()
     market.advance(1, run_monitor=False)
     try:
         with pytest.raises(RuntimeError, match="delta_scan boom"):
@@ -115,8 +130,8 @@ def test_monitor_delta_scan_runtime_error_propagates(monkeypatch):
         market.set_auto_fix(False)
 
 
-def test_monitor_drift_event_row_shape_when_transition():
-    conn = _setup(n=400)
+def test_monitor_drift_event_row_shape_when_transition(book_conn):
+    _build(book_conn, n=400)
     monitor.run(0)
     # force a synthetic transition: flip one client's day-0 status_history row to
     # green, then re-run monitor at day 0 — that client's real status (if not
@@ -125,7 +140,7 @@ def test_monitor_drift_event_row_shape_when_transition():
     # drift_events row has the right columns populated.
     market.advance(12, run_monitor=False)
     monitor.run(market.get_clock()["day"])
-    rows = conn.execute(
+    rows = book_conn.execute(
         "SELECT day, client_id, from_status, to_status, ts FROM drift_events"
     ).fetchall()
     for r in rows:
@@ -135,11 +150,11 @@ def test_monitor_drift_event_row_shape_when_transition():
         assert r["ts"]
 
 
-def test_monitor_is_deterministic_same_day_rerun():
-    conn = _setup(n=400)
+def test_monitor_is_deterministic_same_day_rerun(book_conn):
+    _build(book_conn, n=400)
     r1 = monitor.run(0)
     r2 = monitor.run(0)
     assert r1["counts"] == r2["counts"]
     assert r1["breach_count"] == r2["breach_count"]
     # status_history row count stable (INSERT OR REPLACE, no duplicates)
-    assert conn.execute("SELECT count(*) FROM status_history WHERE day=0").fetchone()[0] == 400
+    assert book_conn.execute("SELECT count(*) FROM status_history WHERE day=0").fetchone()[0] == 400

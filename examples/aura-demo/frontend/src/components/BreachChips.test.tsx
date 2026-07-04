@@ -4,8 +4,8 @@ import { BreachChips } from "./BreachChips";
 import type { Breach } from "@/lib/types";
 
 const breaches: Breach[] = [
-  { rule: "max_single_holding", plain: "Single holding > 10%", severity: "red", offending_holdings: ["AAPL"] },
-  { rule: "min_cash", plain: "Cash below minimum", severity: "orange", offending_holdings: [] },
+  { rule: "max_single_holding", plain: "Single holding > 10%", severity: "red", offending_holdings: ["AAPL"], current: 15, limit: 10 },
+  { rule: "min_cash", plain: "Cash below minimum", severity: "orange", offending_holdings: [], current: 2, limit: 5 },
 ];
 
 describe("BreachChips", () => {

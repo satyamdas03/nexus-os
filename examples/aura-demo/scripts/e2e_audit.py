@@ -2,26 +2,36 @@
 
 Run:
     cd backend && .venv/Scripts/python.exe ../scripts/e2e_audit.py
+
+Env:
+    AURA_BASE_URL - target base URL (default https://aura-demo-rho.vercel.app)
 """
 import json
+import os
 import sys
 import time
+import urllib.parse
 import urllib.request
 from urllib.error import HTTPError
 from pathlib import Path
 
-BASE = "https://aura-demo-rho.vercel.app"
+BASE = os.environ.get("AURA_BASE_URL", "https://aura-demo-rho.vercel.app").rstrip("/")
 API = f"{BASE}/api"
 
 
-def call(method, path, body=None, retries=1):
-    url = f"{API}{path}"
+def call(method, path, body=None, query=None, retries=1):
+    url_parts = [API, path]
+    if query:
+        url_parts.append("?")
+        url_parts.append(urllib.parse.urlencode(query))
+    url = "".join(url_parts)
     data = None
     headers = {"Accept": "application/json"}
     if body is not None:
         data = json.dumps(body).encode()
         headers["Content-Type"] = "application/json"
     req = urllib.request.Request(url, data=data, headers=headers, method=method)
+    last_err = None
     for attempt in range(retries + 1):
         try:
             with urllib.request.urlopen(req, timeout=45) as resp:
@@ -33,13 +43,19 @@ def call(method, path, body=None, retries=1):
             except json.JSONDecodeError:
                 return e.code, {"error": text}
         except Exception as e:
+            last_err = e
             if attempt == retries:
                 return None, {"error": str(e)}
-            time.sleep(2)
+            time.sleep(2 ** attempt)
+    return None, {"error": str(last_err)}
 
 
-def html_fetch(path):
-    url = f"{BASE}{path}"
+def html_fetch(path, query=None):
+    url_parts = [BASE, path]
+    if query:
+        url_parts.append("?")
+        url_parts.append(urllib.parse.urlencode(query))
+    url = "".join(url_parts)
     req = urllib.request.Request(url, headers={"Accept": "text/html"})
     try:
         with urllib.request.urlopen(req, timeout=30) as resp:
@@ -76,7 +92,7 @@ def main():
     check("/api/admin/reset", status, str(data), lambda s: s == 200 and data.get("ok"), findings)
 
     # 4. Top portfolios
-    status, data = call("GET", "/portfolios/top?limit=50")
+    status, data = call("GET", "/portfolios/top", query={"limit": "50"})
     print("top:", status, len(data.get("top", [])))
     check("/api/portfolios/top", status, f"{len(data.get('top', []))} rows", lambda s: s == 200 and len(data.get("top", [])) > 0, findings)
 
@@ -160,7 +176,7 @@ def main():
     queue_items = []
     if job_id:
         for _ in range(18):
-            status, q = call("GET", "/hermes/queue?limit=100")
+            status, q = call("GET", "/hermes/queue", query={"limit": "100"})
             queue_items = q.get("rows", [])
             if queue_items:
                 break

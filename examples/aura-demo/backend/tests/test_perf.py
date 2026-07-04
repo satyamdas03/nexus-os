@@ -6,24 +6,28 @@ from generators import generate_data
 
 
 @pytest.fixture(scope="module")
-def big_book():
-    fd, path = tempfile.mkstemp(suffix=".db"); os.close(fd)
-    conn = storage.get_conn(path); storage.init_schema(conn); storage.migrate(conn)
+def big_book(tmp_path_factory):
+    path = tmp_path_factory.mktemp("perf") / "book.db"
+    conn = storage.get_conn(str(path))
+    storage.init_schema(conn)
+    storage.migrate(conn)
     generate_data.build_book(conn, n=34000, seed=42, market_seed=42)
     data_loader.set_conn(conn)
     market.set_auto_fix(False)  # benchmark re-check only
     yield conn
-    conn.close(); os.remove(path)
+    conn.close()
 
 
-def test_generation_under_60s(big_book):
+def test_generation_under_60s(tmp_path):
     # build_book already ran in the fixture; re-time a fresh build to assert
-    fd, path = tempfile.mkstemp(suffix=".db"); os.close(fd)
-    conn = storage.get_conn(path); storage.init_schema(conn); storage.migrate(conn)
+    path = tmp_path / "gen.db"
+    conn = storage.get_conn(str(path))
+    storage.init_schema(conn)
+    storage.migrate(conn)
     t0 = time.perf_counter()
     generate_data.build_book(conn, n=34000, seed=42, market_seed=42)
     dt = time.perf_counter() - t0
-    conn.close(); os.remove(path)
+    conn.close()
     assert dt < 60.0, f"generation took {dt:.1f}s (>60s)"
 
 

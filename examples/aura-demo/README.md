@@ -42,7 +42,7 @@ ASSURE’s answer:
 
 | Layer | What it is | Where it lives | Changeable? | Example |
 |---|---|---|---|---|
-| **Mandate rules = LAW** | Hard compliance limits per portfolio | `backend/core/rules_engine.py` + seeded mandate specs | No. Immutable. | Max single holding ≤ 10% |
+| **Mandate rules = LAW** | Hard compliance limits per portfolio | `packages/assure-kernel/` (mounted via `backend/core/rules_engine.py` shim) + seeded mandate specs | No. Immutable. | Max single holding ≤ 10% |
 | **Remediation strategy = JUDGMENT** | How Hermes chooses to fix breaches | `backend/agents/hermes/strategy.yaml` | Yes, via human-gated adopt | “Trim the largest offender first” vs “trim proportionally” |
 
 The rules engine enforces **10 rule categories**:
@@ -90,7 +90,8 @@ Next.js 14 (App Router) frontend + FastAPI backend, monorepo.
 
 Key backend modules:
 
-- `backend/core/rules_engine.py` — deterministic source of truth; `check(portfolio, mandate) -> RulesResult`.
+- `packages/assure-kernel/` — standalone, reusable deterministic rules engine (`assure_kernel.evaluate_portfolio`).
+- `backend/core/rules_engine.py` — backward-compatibility shim; `check(portfolio, mandate) -> RulesResult`.
 - `backend/core/effective.py` — shadow/effective state: seed holdings + approved trades.
 - `backend/agents/evidence.py` — read-only assembler for per-portfolio Evidence Packs.
 - `backend/agents/hermes/loop.py` — paged book-wide scan; gate-green proposals only.

@@ -7,6 +7,20 @@ on:
     branches: [main, master]
 
 jobs:
+  assure-kernel:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./packages/assure-kernel
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+      - run: pip install -e ".[dev]"
+      - run: pytest --tb=short
+
   backend:
     runs-on: ubuntu-latest
     defaults:

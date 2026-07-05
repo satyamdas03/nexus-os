@@ -111,6 +111,27 @@ export interface ExplainResult {
   metric?: string;
 }
 
+export interface ChatResponse {
+  intent: string;
+  answer: string;
+  citations: Record<string, any>[];
+  suggested_followups: string[];
+  grounded: boolean;
+}
+
+export interface VoiceStatus {
+  configured: boolean;
+  message: string;
+}
+
+export interface VoiceToken {
+  token: string;
+  url: string;
+  room: string;
+  identity: string;
+  configured: boolean;
+}
+
 export interface SummaryAiResult {
   narrative: string;
   aggregate: {

@@ -28,6 +28,28 @@ npm run dev   # http://localhost:3000
 
 With no `ANTHROPIC_API_KEY` set the backend uses `MockLLM` (deterministic, offline). Set the key for real Claude narratives.
 
+## Voice — Conversational Assurance
+
+Open any portfolio and click **Ask ASSURE**.
+
+- **Browser fallback:** the microphone button captures your question with the browser's SpeechRecognition API and reads the grounded answer with SpeechSynthesis. No credentials needed.
+- **LiveKit upgrade:** set `LIVEKIT_URL`, `LIVEKIT_API_KEY`, and `LIVEKIT_API_SECRET` in the backend environment. The drawer will show a headset icon. Click it to join the real-time room.
+
+To run the server-side voice agent (handles speech bi-directionally):
+
+```bash
+cd backend
+export LIVEKIT_URL=wss://your-project.livekit.cloud
+export LIVEKIT_API_KEY=...
+export LIVEKIT_API_SECRET=...
+export DEEPGRAM_API_KEY=...   # STT
+export OPENAI_API_KEY=...     # TTS
+export ASSURE_API_BASE=http://127.0.0.1:8000
+python -m agents.livekit_assistant --client-id <CLIENT_ID>
+```
+
+The agent joins the same room the frontend entered, transcribes the user's speech, calls `/portfolio/{client_id}/chat`, and speaks the grounded answer.
+
 ---
 
 # Phase 2 — Hermes, the self-improving assurance engine (demo path)

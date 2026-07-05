@@ -22,7 +22,7 @@ app.add_middleware(
 )
 
 
-from routers import portfolios, audit, actions, admin, hermes, market, evidence
+from routers import portfolios, audit, actions, admin, hermes, market, evidence, chat, voice
 
 app.include_router(portfolios.router)
 app.include_router(audit.router)
@@ -31,6 +31,8 @@ app.include_router(admin.router)
 app.include_router(hermes.router)
 app.include_router(market.router)
 app.include_router(evidence.router)
+app.include_router(chat.router)
+app.include_router(voice.router)
 
 
 @app.on_event("startup")

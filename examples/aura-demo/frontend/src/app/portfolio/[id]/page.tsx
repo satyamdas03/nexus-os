@@ -15,12 +15,14 @@ import { SectionHeader } from "@/components/ui/SectionHeader";
 import { AboutPopover } from "@/components/guide/AboutPopover";
 import { LoadingOverlay } from "@/components/ui/LoadingOverlay";
 import { EvidencePackButton } from "@/components/evidence/EvidencePackButton";
+import { ChatDrawer } from "@/components/ChatDrawer";
 
 export default function Diagnosis({ params }: { params: { id: string } }) {
   const { id } = params;
   const [p, setP] = useState<Portfolio | null>(null);
   const [hl, setHl] = useState<string[]>([]);
   const [err, setErr] = useState(false);
+  const [chatOpen, setChatOpen] = useState(false);
 
   useEffect(() => {
     api.getPortfolio(id).then((portfolio) => {
@@ -89,8 +91,17 @@ export default function Diagnosis({ params }: { params: { id: string } }) {
             View Mandate
           </Link>
           <EvidencePackButton clientId={id} />
+          <button
+            onClick={() => setChatOpen(true)}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded border border-aura-border text-aura-navy font-mono text-sm font-medium hover:bg-aura-surface transition-colors"
+          >
+            <span className="material-symbols-outlined text-[18px]">chat</span>
+            Ask ASSURE
+          </button>
         </div>
       </div>
+
+      {chatOpen && <ChatDrawer clientId={id} clientName={p?.client_name} open={chatOpen} onClose={() => setChatOpen(false)} />}
 
       <NarrativePanel clientId={id} rules_result={rr} />
 

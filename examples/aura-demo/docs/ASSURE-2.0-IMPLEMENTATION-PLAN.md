@@ -243,9 +243,14 @@ Add a grounded, voice/text-capable explainer to aura-demo.
 - "Can I increase tech exposure?" → checks mandate and explains constraint.
 
 ### Acceptance Criteria
-- Voice input works in supported browsers.
-- LLM cannot hallucinate rules; all claims linked to engine output.
-- Eval set of 50 questions with expected grounded answers.
+- [x] Text chat drawer works on portfolio detail page.
+- [x] Grounded answers cite exact `per_rule` rows and breaches.
+- [x] What-if trade explanation calls `/verify` and explains result.
+- [x] Browser voice input/output works in supported browsers.
+- [x] LiveKit token endpoint ready for real-time room upgrade.
+- [x] Frontend can join a LiveKit room when credentials are configured.
+- [ ] Server-side LiveKit agent deployed and answering with grounded speech.
+- [ ] Eval set of 50 questions with expected grounded answers.
 
 ---
 

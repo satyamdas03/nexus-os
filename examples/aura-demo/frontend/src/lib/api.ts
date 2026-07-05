@@ -102,4 +102,15 @@ export const api = {
     portfolio: (clientId: string) => j<EvidencePack>(`/evidence/portfolio/${clientId}`),
     portfolioHtmlUrl: (clientId: string) => `${base()}/evidence/portfolio/${clientId}/html`,
   },
+
+  // Conversational Assurance — grounded chat + optional LiveKit voice transport.
+  chat: (clientId: string, query: string, signal?: AbortSignal) =>
+    j<import("./types").ChatResponse>(`/portfolio/${clientId}/chat`, {
+      method: "POST",
+      body: JSON.stringify({ query }),
+      signal,
+    }),
+  voiceStatus: () => j<import("./types").VoiceStatus>("/voice/status"),
+  voiceToken: (clientId: string) =>
+    j<import("./types").VoiceToken>(`/voice/token/${clientId}`, { method: "POST" }),
 };

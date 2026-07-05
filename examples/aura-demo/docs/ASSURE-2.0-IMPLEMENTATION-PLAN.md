@@ -249,7 +249,7 @@ Add a grounded, voice/text-capable explainer to aura-demo.
 - [x] Browser voice input/output works in supported browsers.
 - [x] LiveKit token endpoint ready for real-time room upgrade.
 - [x] Frontend can join a LiveKit room when credentials are configured.
-- [ ] Server-side LiveKit agent deployed and answering with grounded speech.
+- [x] Server-side LiveKit agent deployed and answering with grounded speech.
 - [ ] Eval set of 50 questions with expected grounded answers.
 
 ---

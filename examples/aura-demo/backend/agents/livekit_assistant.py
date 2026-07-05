@@ -133,7 +133,24 @@ def run_agent(client_id: str) -> None:
         raise RuntimeError("OPENAI_API_KEY is not set.")
 
     os.environ["ASSURE_CLIENT_ID"] = client_id
-    cli.run_app(WorkerOptions(entrypoint_fnc=_entrypoint))
+    # livekit-agents' own CLI parses sys.argv and needs a subcommand like
+    # `start` or `dev`. We already consumed --client-id, so reconstruct argv
+    # to contain only the program name plus the default subcommand.
+    original_argv = sys.argv
+    subcommand = "start"
+    if len(original_argv) > 1 and original_argv[-1] in (
+        "start",
+        "dev",
+        "console",
+        "connect",
+        "download-files",
+    ):
+        subcommand = original_argv[-1]
+    sys.argv = [original_argv[0], subcommand]
+    try:
+        cli.run_app(WorkerOptions(entrypoint_fnc=_entrypoint))
+    finally:
+        sys.argv = original_argv
 
 
 if __name__ == "__main__":

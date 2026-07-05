@@ -10,6 +10,7 @@ from assure_kernel.dsl import (
 )
 from assure_kernel.engine import check, evaluate_portfolio
 from assure_kernel.evidence import build_evidence
+from assure_kernel.synthetic import PortfolioGenerator, generate_portfolios
 from assure_kernel.models import (
     Holding,
     Mandate,
@@ -50,4 +51,6 @@ __all__ = [
     "describe_mandate",
     "rule_type_metadata",
     "build_evidence",
+    "PortfolioGenerator",
+    "generate_portfolios",
 ]

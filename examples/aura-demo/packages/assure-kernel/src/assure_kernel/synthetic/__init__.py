@@ -8,8 +8,20 @@ from assure_kernel.synthetic.generator import (
     PortfolioGenerator,
     generate_portfolios,
 )
+from assure_kernel.synthetic.scenarios import (
+    Scenario,
+    ShockMap,
+    get_scenario,
+    list_scenarios,
+    stress_portfolio,
+)
 
 __all__ = [
     "PortfolioGenerator",
     "generate_portfolios",
+    "Scenario",
+    "ShockMap",
+    "get_scenario",
+    "list_scenarios",
+    "stress_portfolio",
 ]

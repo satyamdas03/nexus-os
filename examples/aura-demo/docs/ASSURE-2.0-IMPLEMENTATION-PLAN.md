@@ -213,12 +213,13 @@ packages/assure-kernel/
 
 ### Capabilities
 1. ✅ Generate 10,000 portfolios matching real-world distributions (`synthetic/generator.py`).
-2. ⬜ Apply historical and synthetic stress regimes (`synthetic/scenarios.py`).
+2. ✅ Apply historical and synthetic stress regimes (`synthetic/scenarios.py`) — 7 built-in scenarios (baseline, equity crash, rate shock, crypto winter, inflation spike, tech selloff, EM contagion).
 3. ⬜ Run AI remediation agent against every breach; record resolution rate (`synthetic/adversary.py`).
 4. ⬜ Detect divergence between engine verdicts and agent claims (`synthetic/report.py`).
 
 ### Acceptance Criteria
 - ✅ `PortfolioGenerator(seed=...).generate(10_000)` produces valid `Portfolio` objects deterministically.
+- ✅ `stress_portfolio(p, scenario_id, seed=...)` returns an immutable, stressed copy with deterministic noise.
 - ⬜ CI runs synthetic suite on every PR.
 - ⬜ Report shows breach type distribution and agent resolution rate.
 - ⬜ Any regression in engine/agent agreement blocks merge.

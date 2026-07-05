@@ -10,7 +10,15 @@ from assure_kernel.dsl import (
 )
 from assure_kernel.engine import check, evaluate_portfolio
 from assure_kernel.evidence import build_evidence
-from assure_kernel.synthetic import PortfolioGenerator, generate_portfolios
+from assure_kernel.synthetic import (
+    PortfolioGenerator,
+    Scenario,
+    ShockMap,
+    generate_portfolios,
+    get_scenario,
+    list_scenarios,
+    stress_portfolio,
+)
 from assure_kernel.models import (
     Holding,
     Mandate,
@@ -53,4 +61,9 @@ __all__ = [
     "build_evidence",
     "PortfolioGenerator",
     "generate_portfolios",
+    "Scenario",
+    "ShockMap",
+    "list_scenarios",
+    "get_scenario",
+    "stress_portfolio",
 ]

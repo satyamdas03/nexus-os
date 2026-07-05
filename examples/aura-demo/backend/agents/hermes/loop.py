@@ -302,7 +302,7 @@ def _scan_prevent_ids(ids: list[str], strategy: dict, day: int,
 
 
 def prevent_scan_paged(cursor=0, batch=500, subset=None, day=None,
-                       clear=False) -> dict:
+                       clear=False, strategy: Optional[dict] = None) -> dict:
     """One paged prevent-scan batch.
 
     Scans currently-green portfolios, projects them forward, and queues
@@ -319,14 +319,14 @@ def prevent_scan_paged(cursor=0, batch=500, subset=None, day=None,
             "SELECT client_id FROM portfolios ORDER BY client_id LIMIT ? OFFSET ?",
             (batch, cursor))]
         next_cursor = cursor + batch if len(ids) == batch else None
-    strategy = load_strategy()
+    strategy = strategy if strategy is not None else load_strategy()
     counts = {"scanned": 0, "green": 0, "remediated": 0, "missed": 0, "skipped": 0}
     page = _scan_prevent_ids(ids, strategy, day, counts, write=True)
     return {"queue_page": page[:50], "next_cursor": next_cursor,
             "counts": counts}
 
 
-def prevent_scan() -> dict:
+def prevent_scan(strategy: Optional[dict] = None) -> dict:
     """Full paged prevent scan to completion. Clears prevent queue, returns top 50."""
     conn = data_loader.get_conn_cached()
     total = conn.execute("SELECT count(*) FROM portfolios").fetchone()[0]
@@ -336,7 +336,7 @@ def prevent_scan() -> dict:
     cursor = 0
     first = True
     while True:
-        res = prevent_scan_paged(cursor=cursor, batch=500, day=day, clear=first)
+        res = prevent_scan_paged(cursor=cursor, batch=500, day=day, clear=first, strategy=strategy)
         first = False
         for k in counts:
             counts[k] += res["counts"][k]
@@ -349,7 +349,8 @@ def prevent_scan() -> dict:
 
 
 def simulate_book(days: int = 100, mode: str = "reactive",
-                  seed: Optional[int] = None) -> dict:
+                  seed: Optional[int] = None,
+                  strategy: Optional[dict] = None) -> dict:
     """Run a virtual 100-day simulation on a cloned book without mutating prod state.
 
     Modes:
@@ -414,7 +415,7 @@ def simulate_book(days: int = 100, mode: str = "reactive",
         for d in range(1, days + 1):
             if mode == "prevent":
                 # Proactive: scan green portfolios and auto-approve low-risk trades.
-                res = prevent_scan()
+                res = prevent_scan(strategy=strategy)
                 for row in res.get("queue", []):
                     trades = row.get("_trades_obj") or json.loads(row["trades"])
                     if _low_risk_trades(trades, sim_conn):

@@ -28,6 +28,8 @@ from agents.hermes import HEARTBEAT_PATH, HISTORY_DIR
 from agents.hermes.loop import scan_book, prevent_scan, simulate_book
 from agents.hermes.reflect import reflect
 from agents.hermes.strategy_io import load_strategy, adopt_proposal, restore_version
+from agents.hermes.generator import generate_diff
+from agents.hermes.test_generator import run_generated_test
 from routers.audit import append_audit
 
 _hstore = get_hermes_store()
@@ -64,6 +66,15 @@ class SimulateBody(BaseModel):
     days: int = 100
     mode: str = "reactive"  # "reactive" | "prevent"
     seed: Optional[int] = None
+
+
+class GenerateBody(BaseModel):
+    days: int = 7
+    seed: int = 42
+
+
+class RunTestBody(BaseModel):
+    source: str
 
 
 def _log(client_id: str, action_type: str, actor: str, tier: str, payload: dict, rationale: str = ""):
@@ -172,6 +183,26 @@ def hermes_adopt(body: AdoptBody, _user=Depends(require_mutation)):
                   "action_type": "hermes_adopt", "actor": "human",
                   "payload": result, "rationale": body.rationale})
     return result
+
+
+@router.post("/hermes/generate")
+def hermes_generate(body: GenerateBody = None, _user=Depends(require_mutation)):
+    """Synthetic Reality → Strategy Diff + Regression Test.
+
+    Runs a short prevent-mode simulation against the current strategy, then
+    tests each tunable variable one-at-a-time. If a perturbation reduces
+    projected breach incidence by at least 5%, returns the diff and a generated
+    pytest regression test.
+    """
+    if body is None:
+        body = GenerateBody()
+    return generate_diff(days=body.days, seed=body.seed)
+
+
+@router.post("/hermes/run-test")
+def hermes_run_test(body: RunTestBody, _user=Depends(require_mutation)):
+    """Run a generated pytest regression test in a sandboxed subprocess."""
+    return run_generated_test(body.source)
 
 
 @router.get("/hermes/heartbeat")

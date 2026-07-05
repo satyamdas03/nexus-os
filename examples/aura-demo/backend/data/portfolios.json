@@ -1,0 +1,4075 @@
+[
+  {
+    "client_id": "c012",
+    "client_name": "Yarrow Wealth",
+    "adviser": "Pat Quinn",
+    "fum": 12145498.44,
+    "holdings": [
+      {
+        "ticker": "SPY",
+        "name": "S&P 500 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 3643.6495,
+        "price": 500.0,
+        "market_value": 1821824.77
+      },
+      {
+        "ticker": "QQQ",
+        "name": "Nasdaq 100 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 4337.678,
+        "price": 420.0,
+        "market_value": 1821824.77
+      },
+      {
+        "ticker": "XLV",
+        "name": "Healthcare ETF",
+        "asset_class": "Equity",
+        "sector": "Healthcare",
+        "units": 12564.3088,
+        "price": 145.0,
+        "market_value": 1821824.77
+      },
+      {
+        "ticker": "XLF",
+        "name": "Financials ETF",
+        "asset_class": "Equity",
+        "sector": "Financials",
+        "units": 40484.9949,
+        "price": 45.0,
+        "market_value": 1821824.77
+      },
+      {
+        "ticker": "TLT",
+        "name": "20+ Yr Treasury",
+        "asset_class": "Bonds",
+        "sector": "Govt",
+        "units": 31961.838,
+        "price": 95.0,
+        "market_value": 3036374.61
+      },
+      {
+        "ticker": "GLD",
+        "name": "Gold ETF",
+        "asset_class": "Commodity",
+        "sector": "Metals",
+        "units": 2530.3122,
+        "price": 240.0,
+        "market_value": 607274.92
+      }
+    ],
+    "cash": 607274.92,
+    "mandate": {
+      "max_asset_class_weight": {
+        "Equity": 0.8,
+        "Bonds": 0.4,
+        "Crypto": 0.1,
+        "Commodity": 0.15,
+        "Cash": 0.3
+      },
+      "max_sector_weight": {
+        "Technology": 0.25,
+        "Healthcare": 0.3,
+        "Financials": 0.3,
+        "Consumer": 0.25,
+        "Broad": 1.0,
+        "Govt": 1.0,
+        "Metals": 0.2,
+        "Crypto": 0.1
+      },
+      "approved_universe": [
+        "SPY",
+        "QQQ",
+        "AAPL",
+        "MSFT",
+        "NVDA",
+        "AMZN",
+        "XLK",
+        "XLV",
+        "XLF",
+        "TLT",
+        "GLD",
+        "BTC",
+        "ETH",
+        "AVAX"
+      ],
+      "max_single_holding": 0.35,
+      "min_cash": 0.02,
+      "target_allocation": {
+        "Equity": 0.6,
+        "Bonds": 0.3,
+        "Commodity": 0.05,
+        "Cash": 0.05
+      },
+      "drift_tolerance": 0.08
+    }
+  },
+  {
+    "client_id": "c000",
+    "client_name": "Bluecrest Capital",
+    "adviser": "Aaron Wright",
+    "fum": 9663516.62,
+    "holdings": [
+      {
+        "ticker": "NVDA",
+        "name": "NVIDIA Corp",
+        "asset_class": "Equity",
+        "sector": "Technology",
+        "units": 16353.6435,
+        "price": 130.0,
+        "market_value": 2125973.66
+      },
+      {
+        "ticker": "MSFT",
+        "name": "Microsoft Corp",
+        "asset_class": "Equity",
+        "sector": "Technology",
+        "units": 3221.1722,
+        "price": 420.0,
+        "market_value": 1352892.33
+      },
+      {
+        "ticker": "XLV",
+        "name": "Healthcare ETF",
+        "asset_class": "Equity",
+        "sector": "Healthcare",
+        "units": 19993.4827,
+        "price": 145.0,
+        "market_value": 2899054.99
+      },
+      {
+        "ticker": "TLT",
+        "name": "20+ Yr Treasury",
+        "asset_class": "Bonds",
+        "sector": "Govt",
+        "units": 29499.156,
+        "price": 95.0,
+        "market_value": 2802419.82
+      }
+    ],
+    "cash": 483175.83,
+    "mandate": {
+      "max_asset_class_weight": {
+        "Equity": 0.8,
+        "Bonds": 0.4,
+        "Crypto": 0.0,
+        "Commodity": 0.15,
+        "Cash": 0.3
+      },
+      "max_sector_weight": {
+        "Technology": 0.25,
+        "Healthcare": 0.3,
+        "Financials": 0.3,
+        "Consumer": 0.25,
+        "Broad": 1.0,
+        "Govt": 1.0,
+        "Metals": 0.2,
+        "Crypto": 0.1
+      },
+      "approved_universe": [
+        "SPY",
+        "QQQ",
+        "AAPL",
+        "MSFT",
+        "NVDA",
+        "AMZN",
+        "XLK",
+        "XLV",
+        "XLF",
+        "TLT",
+        "GLD"
+      ],
+      "max_single_holding": 0.35,
+      "min_cash": 0.02,
+      "target_allocation": {
+        "Equity": 0.6,
+        "Bonds": 0.3,
+        "Commodity": 0.05,
+        "Cash": 0.05
+      },
+      "drift_tolerance": 0.08
+    }
+  },
+  {
+    "client_id": "c039",
+    "client_name": "Cedar Wealth",
+    "adviser": "Aaron Wright",
+    "fum": 1250697.67,
+    "holdings": [
+      {
+        "ticker": "SPY",
+        "name": "S&P 500 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 375.2093,
+        "price": 500.0,
+        "market_value": 187604.65
+      },
+      {
+        "ticker": "QQQ",
+        "name": "Nasdaq 100 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 446.6777,
+        "price": 420.0,
+        "market_value": 187604.65
+      },
+      {
+        "ticker": "XLV",
+        "name": "Healthcare ETF",
+        "asset_class": "Equity",
+        "sector": "Healthcare",
+        "units": 1293.8252,
+        "price": 145.0,
+        "market_value": 187604.65
+      },
+      {
+        "ticker": "XLF",
+        "name": "Financials ETF",
+        "asset_class": "Equity",
+        "sector": "Financials",
+        "units": 4168.9922,
+        "price": 45.0,
+        "market_value": 187604.65
+      },
+      {
+        "ticker": "TLT",
+        "name": "20+ Yr Treasury",
+        "asset_class": "Bonds",
+        "sector": "Govt",
+        "units": 3291.3097,
+        "price": 95.0,
+        "market_value": 312674.42
+      },
+      {
+        "ticker": "GLD",
+        "name": "Gold ETF",
+        "asset_class": "Commodity",
+        "sector": "Metals",
+        "units": 260.562,
+        "price": 240.0,
+        "market_value": 62534.88
+      }
+    ],
+    "cash": 62534.88,
+    "mandate": {
+      "max_asset_class_weight": {
+        "Equity": 0.8,
+        "Bonds": 0.4,
+        "Crypto": 0.0,
+        "Commodity": 0.15,
+        "Cash": 0.3
+      },
+      "max_sector_weight": {
+        "Technology": 0.25,
+        "Healthcare": 0.3,
+        "Financials": 0.3,
+        "Consumer": 0.25,
+        "Broad": 1.0,
+        "Govt": 1.0,
+        "Metals": 0.2,
+        "Crypto": 0.1
+      },
+      "approved_universe": [
+        "SPY",
+        "QQQ",
+        "XLK",
+        "XLV",
+        "XLF",
+        "TLT",
+        "GLD"
+      ],
+      "max_single_holding": 0.35,
+      "min_cash": 0.02,
+      "target_allocation": {
+        "Equity": 0.6,
+        "Bonds": 0.3,
+        "Commodity": 0.05,
+        "Cash": 0.05
+      },
+      "drift_tolerance": 0.08
+    }
+  },
+  {
+    "client_id": "c002",
+    "client_name": "Indigo Capital",
+    "adviser": "Pat Quinn",
+    "fum": 10215152.41,
+    "holdings": [
+      {
+        "ticker": "NVDA",
+        "name": "NVIDIA Corp",
+        "asset_class": "Equity",
+        "sector": "Technology",
+        "units": 17287.181,
+        "price": 130.0,
+        "market_value": 2247333.53
+      },
+      {
+        "ticker": "MSFT",
+        "name": "Microsoft Corp",
+        "asset_class": "Equity",
+        "sector": "Technology",
+        "units": 3405.0508,
+        "price": 420.0,
+        "market_value": 1430121.34
+      },
+      {
+        "ticker": "XLV",
+        "name": "Healthcare ETF",
+        "asset_class": "Equity",
+        "sector": "Healthcare",
+        "units": 21134.7981,
+        "price": 145.0,
+        "market_value": 3064545.72
+      },
+      {
+        "ticker": "TLT",
+        "name": "20+ Yr Treasury",
+        "asset_class": "Bonds",
+        "sector": "Govt",
+        "units": 31183.0968,
+        "price": 95.0,
+        "market_value": 2962394.2
+      }
+    ],
+    "cash": 510757.62,
+    "mandate": {
+      "max_asset_class_weight": {
+        "Equity": 0.8,
+        "Bonds": 0.4,
+        "Crypto": 0.0,
+        "Commodity": 0.15,
+        "Cash": 0.3
+      },
+      "max_sector_weight": {
+        "Technology": 0.25,
+        "Healthcare": 0.3,
+        "Financials": 0.3,
+        "Consumer": 0.25,
+        "Broad": 1.0,
+        "Govt": 1.0,
+        "Metals": 0.2,
+        "Crypto": 0.1
+      },
+      "approved_universe": [
+        "SPY",
+        "QQQ",
+        "AAPL",
+        "MSFT",
+        "NVDA",
+        "AMZN",
+        "XLK",
+        "XLV",
+        "XLF",
+        "TLT",
+        "GLD"
+      ],
+      "max_single_holding": 0.35,
+      "min_cash": 0.02,
+      "target_allocation": {
+        "Equity": 0.6,
+        "Bonds": 0.3,
+        "Commodity": 0.05,
+        "Cash": 0.05
+      },
+      "drift_tolerance": 0.08
+    }
+  },
+  {
+    "client_id": "c018",
+    "client_name": "Orchid Wealth",
+    "adviser": "Aaron Wright",
+    "fum": 4195227.84,
+    "holdings": [
+      {
+        "ticker": "SPY",
+        "name": "S&P 500 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 1258.5684,
+        "price": 500.0,
+        "market_value": 629284.18
+      },
+      {
+        "ticker": "QQQ",
+        "name": "Nasdaq 100 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 1498.2957,
+        "price": 420.0,
+        "market_value": 629284.18
+      },
+      {
+        "ticker": "XLV",
+        "name": "Healthcare ETF",
+        "asset_class": "Equity",
+        "sector": "Healthcare",
+        "units": 4339.8909,
+        "price": 145.0,
+        "market_value": 629284.18
+      },
+      {
+        "ticker": "XLF",
+        "name": "Financials ETF",
+        "asset_class": "Equity",
+        "sector": "Financials",
+        "units": 13984.0929,
+        "price": 45.0,
+        "market_value": 629284.18
+      },
+      {
+        "ticker": "TLT",
+        "name": "20+ Yr Treasury",
+        "asset_class": "Bonds",
+        "sector": "Govt",
+        "units": 11040.0733,
+        "price": 95.0,
+        "market_value": 1048806.96
+      },
+      {
+        "ticker": "GLD",
+        "name": "Gold ETF",
+        "asset_class": "Commodity",
+        "sector": "Metals",
+        "units": 874.0058,
+        "price": 240.0,
+        "market_value": 209761.39
+      }
+    ],
+    "cash": 209761.39,
+    "mandate": {
+      "max_asset_class_weight": {
+        "Equity": 0.8,
+        "Bonds": 0.4,
+        "Crypto": 0.1,
+        "Commodity": 0.15,
+        "Cash": 0.3
+      },
+      "max_sector_weight": {
+        "Technology": 0.25,
+        "Healthcare": 0.3,
+        "Financials": 0.3,
+        "Consumer": 0.25,
+        "Broad": 1.0,
+        "Govt": 1.0,
+        "Metals": 0.2,
+        "Crypto": 0.1
+      },
+      "approved_universe": [
+        "SPY",
+        "QQQ",
+        "AAPL",
+        "MSFT",
+        "NVDA",
+        "AMZN",
+        "XLK",
+        "XLV",
+        "XLF",
+        "TLT",
+        "GLD",
+        "BTC",
+        "ETH",
+        "AVAX"
+      ],
+      "max_single_holding": 0.35,
+      "min_cash": 0.02,
+      "target_allocation": {
+        "Equity": 0.6,
+        "Bonds": 0.3,
+        "Commodity": 0.05,
+        "Cash": 0.05
+      },
+      "drift_tolerance": 0.08
+    }
+  },
+  {
+    "client_id": "c033",
+    "client_name": "Fjord Capital",
+    "adviser": "Pat Quinn",
+    "fum": 13194542.07,
+    "holdings": [
+      {
+        "ticker": "SPY",
+        "name": "S&P 500 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 3958.3626,
+        "price": 500.0,
+        "market_value": 1979181.31
+      },
+      {
+        "ticker": "QQQ",
+        "name": "Nasdaq 100 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 4712.3365,
+        "price": 420.0,
+        "market_value": 1979181.31
+      },
+      {
+        "ticker": "XLV",
+        "name": "Healthcare ETF",
+        "asset_class": "Equity",
+        "sector": "Healthcare",
+        "units": 13649.5263,
+        "price": 145.0,
+        "market_value": 1979181.31
+      },
+      {
+        "ticker": "XLF",
+        "name": "Financials ETF",
+        "asset_class": "Equity",
+        "sector": "Financials",
+        "units": 43981.8069,
+        "price": 45.0,
+        "market_value": 1979181.31
+      },
+      {
+        "ticker": "TLT",
+        "name": "20+ Yr Treasury",
+        "asset_class": "Bonds",
+        "sector": "Govt",
+        "units": 34722.4792,
+        "price": 95.0,
+        "market_value": 3298635.52
+      },
+      {
+        "ticker": "GLD",
+        "name": "Gold ETF",
+        "asset_class": "Commodity",
+        "sector": "Metals",
+        "units": 2748.8629,
+        "price": 240.0,
+        "market_value": 659727.1
+      }
+    ],
+    "cash": 659727.1,
+    "mandate": {
+      "max_asset_class_weight": {
+        "Equity": 0.8,
+        "Bonds": 0.4,
+        "Crypto": 0.1,
+        "Commodity": 0.15,
+        "Cash": 0.3
+      },
+      "max_sector_weight": {
+        "Technology": 0.25,
+        "Healthcare": 0.3,
+        "Financials": 0.3,
+        "Consumer": 0.25,
+        "Broad": 1.0,
+        "Govt": 1.0,
+        "Metals": 0.2,
+        "Crypto": 0.1
+      },
+      "approved_universe": [
+        "SPY",
+        "QQQ",
+        "XLK",
+        "XLV",
+        "XLF",
+        "TLT",
+        "GLD",
+        "BTC",
+        "ETH",
+        "AVAX"
+      ],
+      "max_single_holding": 0.35,
+      "min_cash": 0.02,
+      "target_allocation": {
+        "Equity": 0.6,
+        "Bonds": 0.3,
+        "Commodity": 0.05,
+        "Cash": 0.05
+      },
+      "drift_tolerance": 0.08
+    }
+  },
+  {
+    "client_id": "c019",
+    "client_name": "Cedar Wealth",
+    "adviser": "Aaron Wright",
+    "fum": 12674208.42,
+    "holdings": [
+      {
+        "ticker": "SPY",
+        "name": "S&P 500 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 3802.2625,
+        "price": 500.0,
+        "market_value": 1901131.26
+      },
+      {
+        "ticker": "QQQ",
+        "name": "Nasdaq 100 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 4526.503,
+        "price": 420.0,
+        "market_value": 1901131.26
+      },
+      {
+        "ticker": "XLV",
+        "name": "Healthcare ETF",
+        "asset_class": "Equity",
+        "sector": "Healthcare",
+        "units": 13111.2501,
+        "price": 145.0,
+        "market_value": 1901131.26
+      },
+      {
+        "ticker": "XLF",
+        "name": "Financials ETF",
+        "asset_class": "Equity",
+        "sector": "Financials",
+        "units": 42247.3613,
+        "price": 45.0,
+        "market_value": 1901131.26
+      },
+      {
+        "ticker": "TLT",
+        "name": "20+ Yr Treasury",
+        "asset_class": "Bonds",
+        "sector": "Govt",
+        "units": 33353.18,
+        "price": 95.0,
+        "market_value": 3168552.1
+      },
+      {
+        "ticker": "GLD",
+        "name": "Gold ETF",
+        "asset_class": "Commodity",
+        "sector": "Metals",
+        "units": 2640.4601,
+        "price": 240.0,
+        "market_value": 633710.42
+      }
+    ],
+    "cash": 633710.42,
+    "mandate": {
+      "max_asset_class_weight": {
+        "Equity": 0.8,
+        "Bonds": 0.4,
+        "Crypto": 0.1,
+        "Commodity": 0.15,
+        "Cash": 0.3
+      },
+      "max_sector_weight": {
+        "Technology": 0.25,
+        "Healthcare": 0.3,
+        "Financials": 0.3,
+        "Consumer": 0.25,
+        "Broad": 1.0,
+        "Govt": 1.0,
+        "Metals": 0.2,
+        "Crypto": 0.1
+      },
+      "approved_universe": [
+        "SPY",
+        "QQQ",
+        "XLK",
+        "XLV",
+        "XLF",
+        "TLT",
+        "GLD",
+        "BTC",
+        "ETH",
+        "AVAX"
+      ],
+      "max_single_holding": 0.35,
+      "min_cash": 0.02,
+      "target_allocation": {
+        "Equity": 0.6,
+        "Bonds": 0.3,
+        "Commodity": 0.05,
+        "Cash": 0.05
+      },
+      "drift_tolerance": 0.08
+    }
+  },
+  {
+    "client_id": "c007",
+    "client_name": "Laurel Trust",
+    "adviser": "Aaron Wright",
+    "fum": 2360318.1,
+    "holdings": [
+      {
+        "ticker": "SPY",
+        "name": "S&P 500 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 660.8891,
+        "price": 500.0,
+        "market_value": 330444.53
+      },
+      {
+        "ticker": "QQQ",
+        "name": "Nasdaq 100 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 786.7727,
+        "price": 420.0,
+        "market_value": 330444.53
+      },
+      {
+        "ticker": "XLV",
+        "name": "Healthcare ETF",
+        "asset_class": "Equity",
+        "sector": "Healthcare",
+        "units": 2278.9278,
+        "price": 145.0,
+        "market_value": 330444.53
+      },
+      {
+        "ticker": "XLF",
+        "name": "Financials ETF",
+        "asset_class": "Equity",
+        "sector": "Financials",
+        "units": 7343.2118,
+        "price": 45.0,
+        "market_value": 330444.53
+      },
+      {
+        "ticker": "XLK",
+        "name": "Tech Sector ETF",
+        "asset_class": "Equity",
+        "sector": "Technology",
+        "units": 1502.0206,
+        "price": 220.0,
+        "market_value": 330444.53
+      },
+      {
+        "ticker": "TLT",
+        "name": "20+ Yr Treasury",
+        "asset_class": "Bonds",
+        "sector": "Govt",
+        "units": 6211.3634,
+        "price": 95.0,
+        "market_value": 590079.52
+      }
+    ],
+    "cash": 118015.9,
+    "mandate": {
+      "max_asset_class_weight": {
+        "Equity": 0.8,
+        "Bonds": 0.4,
+        "Crypto": 0.0,
+        "Commodity": 0.15,
+        "Cash": 0.3
+      },
+      "max_sector_weight": {
+        "Technology": 0.25,
+        "Healthcare": 0.3,
+        "Financials": 0.3,
+        "Consumer": 0.25,
+        "Broad": 1.0,
+        "Govt": 1.0,
+        "Metals": 0.2,
+        "Crypto": 0.1
+      },
+      "approved_universe": [
+        "SPY",
+        "QQQ",
+        "AAPL",
+        "MSFT",
+        "NVDA",
+        "AMZN",
+        "XLK",
+        "XLV",
+        "XLF",
+        "TLT",
+        "GLD"
+      ],
+      "max_single_holding": 0.35,
+      "min_cash": 0.02,
+      "target_allocation": {
+        "Equity": 0.6,
+        "Bonds": 0.3,
+        "Commodity": 0.05,
+        "Cash": 0.05
+      },
+      "drift_tolerance": 0.08
+    }
+  },
+  {
+    "client_id": "c009",
+    "client_name": "Verdant Wealth",
+    "adviser": "Aaron Wright",
+    "fum": 7041766.07,
+    "holdings": [
+      {
+        "ticker": "SPY",
+        "name": "S&P 500 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 1971.6945,
+        "price": 500.0,
+        "market_value": 985847.25
+      },
+      {
+        "ticker": "QQQ",
+        "name": "Nasdaq 100 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 2347.2554,
+        "price": 420.0,
+        "market_value": 985847.25
+      },
+      {
+        "ticker": "XLV",
+        "name": "Healthcare ETF",
+        "asset_class": "Equity",
+        "sector": "Healthcare",
+        "units": 6798.9466,
+        "price": 145.0,
+        "market_value": 985847.25
+      },
+      {
+        "ticker": "XLF",
+        "name": "Financials ETF",
+        "asset_class": "Equity",
+        "sector": "Financials",
+        "units": 21907.7167,
+        "price": 45.0,
+        "market_value": 985847.25
+      },
+      {
+        "ticker": "XLK",
+        "name": "Tech Sector ETF",
+        "asset_class": "Equity",
+        "sector": "Technology",
+        "units": 4481.1239,
+        "price": 220.0,
+        "market_value": 985847.25
+      },
+      {
+        "ticker": "TLT",
+        "name": "20+ Yr Treasury",
+        "asset_class": "Bonds",
+        "sector": "Govt",
+        "units": 18530.9634,
+        "price": 95.0,
+        "market_value": 1760441.52
+      }
+    ],
+    "cash": 352088.3,
+    "mandate": {
+      "max_asset_class_weight": {
+        "Equity": 0.8,
+        "Bonds": 0.4,
+        "Crypto": 0.0,
+        "Commodity": 0.15,
+        "Cash": 0.3
+      },
+      "max_sector_weight": {
+        "Technology": 0.25,
+        "Healthcare": 0.3,
+        "Financials": 0.3,
+        "Consumer": 0.25,
+        "Broad": 1.0,
+        "Govt": 1.0,
+        "Metals": 0.2,
+        "Crypto": 0.1
+      },
+      "approved_universe": [
+        "SPY",
+        "QQQ",
+        "AAPL",
+        "MSFT",
+        "NVDA",
+        "AMZN",
+        "XLK",
+        "XLV",
+        "XLF",
+        "TLT",
+        "GLD"
+      ],
+      "max_single_holding": 0.35,
+      "min_cash": 0.02,
+      "target_allocation": {
+        "Equity": 0.6,
+        "Bonds": 0.3,
+        "Commodity": 0.05,
+        "Cash": 0.05
+      },
+      "drift_tolerance": 0.08
+    }
+  },
+  {
+    "client_id": "c010",
+    "client_name": "Verdant Wealth",
+    "adviser": "Pat Quinn",
+    "fum": 1723699.1,
+    "holdings": [
+      {
+        "ticker": "SPY",
+        "name": "S&P 500 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 482.6357,
+        "price": 500.0,
+        "market_value": 241317.87
+      },
+      {
+        "ticker": "QQQ",
+        "name": "Nasdaq 100 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 574.5664,
+        "price": 420.0,
+        "market_value": 241317.87
+      },
+      {
+        "ticker": "XLV",
+        "name": "Healthcare ETF",
+        "asset_class": "Equity",
+        "sector": "Healthcare",
+        "units": 1664.2612,
+        "price": 145.0,
+        "market_value": 241317.87
+      },
+      {
+        "ticker": "XLF",
+        "name": "Financials ETF",
+        "asset_class": "Equity",
+        "sector": "Financials",
+        "units": 5362.6193,
+        "price": 45.0,
+        "market_value": 241317.87
+      },
+      {
+        "ticker": "XLK",
+        "name": "Tech Sector ETF",
+        "asset_class": "Equity",
+        "sector": "Technology",
+        "units": 1096.8994,
+        "price": 220.0,
+        "market_value": 241317.87
+      },
+      {
+        "ticker": "TLT",
+        "name": "20+ Yr Treasury",
+        "asset_class": "Bonds",
+        "sector": "Govt",
+        "units": 4536.0502,
+        "price": 95.0,
+        "market_value": 430924.77
+      }
+    ],
+    "cash": 86184.95,
+    "mandate": {
+      "max_asset_class_weight": {
+        "Equity": 0.8,
+        "Bonds": 0.4,
+        "Crypto": 0.0,
+        "Commodity": 0.15,
+        "Cash": 0.3
+      },
+      "max_sector_weight": {
+        "Technology": 0.25,
+        "Healthcare": 0.3,
+        "Financials": 0.3,
+        "Consumer": 0.25,
+        "Broad": 1.0,
+        "Govt": 1.0,
+        "Metals": 0.2,
+        "Crypto": 0.1
+      },
+      "approved_universe": [
+        "SPY",
+        "QQQ",
+        "AAPL",
+        "MSFT",
+        "NVDA",
+        "AMZN",
+        "XLK",
+        "XLV",
+        "XLF",
+        "TLT",
+        "GLD"
+      ],
+      "max_single_holding": 0.35,
+      "min_cash": 0.02,
+      "target_allocation": {
+        "Equity": 0.6,
+        "Bonds": 0.3,
+        "Commodity": 0.05,
+        "Cash": 0.05
+      },
+      "drift_tolerance": 0.08
+    }
+  },
+  {
+    "client_id": "c016",
+    "client_name": "Eldon Partners",
+    "adviser": "Grant Hale",
+    "fum": 2607280.64,
+    "holdings": [
+      {
+        "ticker": "SPY",
+        "name": "S&P 500 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 782.1842,
+        "price": 500.0,
+        "market_value": 391092.1
+      },
+      {
+        "ticker": "QQQ",
+        "name": "Nasdaq 100 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 931.1717,
+        "price": 420.0,
+        "market_value": 391092.1
+      },
+      {
+        "ticker": "XLV",
+        "name": "Healthcare ETF",
+        "asset_class": "Equity",
+        "sector": "Healthcare",
+        "units": 2697.1869,
+        "price": 145.0,
+        "market_value": 391092.1
+      },
+      {
+        "ticker": "XLF",
+        "name": "Financials ETF",
+        "asset_class": "Equity",
+        "sector": "Financials",
+        "units": 8690.9356,
+        "price": 45.0,
+        "market_value": 391092.1
+      },
+      {
+        "ticker": "TLT",
+        "name": "20+ Yr Treasury",
+        "asset_class": "Bonds",
+        "sector": "Govt",
+        "units": 6861.2648,
+        "price": 95.0,
+        "market_value": 651820.16
+      },
+      {
+        "ticker": "GLD",
+        "name": "Gold ETF",
+        "asset_class": "Commodity",
+        "sector": "Metals",
+        "units": 543.1835,
+        "price": 240.0,
+        "market_value": 130364.03
+      }
+    ],
+    "cash": 130364.03,
+    "mandate": {
+      "max_asset_class_weight": {
+        "Equity": 0.8,
+        "Bonds": 0.4,
+        "Crypto": 0.0,
+        "Commodity": 0.15,
+        "Cash": 0.3
+      },
+      "max_sector_weight": {
+        "Technology": 0.25,
+        "Healthcare": 0.3,
+        "Financials": 0.3,
+        "Consumer": 0.25,
+        "Broad": 1.0,
+        "Govt": 1.0,
+        "Metals": 0.2,
+        "Crypto": 0.1
+      },
+      "approved_universe": [
+        "SPY",
+        "QQQ",
+        "AAPL",
+        "MSFT",
+        "NVDA",
+        "AMZN",
+        "XLK",
+        "XLV",
+        "XLF",
+        "TLT",
+        "GLD"
+      ],
+      "max_single_holding": 0.35,
+      "min_cash": 0.02,
+      "target_allocation": {
+        "Equity": 0.6,
+        "Bonds": 0.3,
+        "Commodity": 0.05,
+        "Cash": 0.05
+      },
+      "drift_tolerance": 0.08
+    }
+  },
+  {
+    "client_id": "c029",
+    "client_name": "Thistle Capital",
+    "adviser": "Grant Hale",
+    "fum": 11477040.55,
+    "holdings": [
+      {
+        "ticker": "SPY",
+        "name": "S&P 500 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 3443.1122,
+        "price": 500.0,
+        "market_value": 1721556.08
+      },
+      {
+        "ticker": "QQQ",
+        "name": "Nasdaq 100 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 4098.943,
+        "price": 420.0,
+        "market_value": 1721556.08
+      },
+      {
+        "ticker": "XLV",
+        "name": "Healthcare ETF",
+        "asset_class": "Equity",
+        "sector": "Healthcare",
+        "units": 11872.8006,
+        "price": 145.0,
+        "market_value": 1721556.08
+      },
+      {
+        "ticker": "XLF",
+        "name": "Financials ETF",
+        "asset_class": "Equity",
+        "sector": "Financials",
+        "units": 38256.8018,
+        "price": 45.0,
+        "market_value": 1721556.08
+      },
+      {
+        "ticker": "TLT",
+        "name": "20+ Yr Treasury",
+        "asset_class": "Bonds",
+        "sector": "Govt",
+        "units": 30202.7383,
+        "price": 95.0,
+        "market_value": 2869260.14
+      },
+      {
+        "ticker": "GLD",
+        "name": "Gold ETF",
+        "asset_class": "Commodity",
+        "sector": "Metals",
+        "units": 2391.0501,
+        "price": 240.0,
+        "market_value": 573852.03
+      }
+    ],
+    "cash": 573852.03,
+    "mandate": {
+      "max_asset_class_weight": {
+        "Equity": 0.8,
+        "Bonds": 0.4,
+        "Crypto": 0.0,
+        "Commodity": 0.15,
+        "Cash": 0.3
+      },
+      "max_sector_weight": {
+        "Technology": 0.25,
+        "Healthcare": 0.3,
+        "Financials": 0.3,
+        "Consumer": 0.25,
+        "Broad": 1.0,
+        "Govt": 1.0,
+        "Metals": 0.2,
+        "Crypto": 0.1
+      },
+      "approved_universe": [
+        "SPY",
+        "QQQ",
+        "XLK",
+        "XLV",
+        "XLF",
+        "TLT",
+        "GLD"
+      ],
+      "max_single_holding": 0.35,
+      "min_cash": 0.02,
+      "target_allocation": {
+        "Equity": 0.6,
+        "Bonds": 0.3,
+        "Commodity": 0.05,
+        "Cash": 0.05
+      },
+      "drift_tolerance": 0.08
+    }
+  },
+  {
+    "client_id": "c005",
+    "client_name": "Jade Partners",
+    "adviser": "Renee Cole",
+    "fum": 6099783.54,
+    "holdings": [
+      {
+        "ticker": "SPY",
+        "name": "S&P 500 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 1707.9394,
+        "price": 500.0,
+        "market_value": 853969.7
+      },
+      {
+        "ticker": "QQQ",
+        "name": "Nasdaq 100 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 2033.2612,
+        "price": 420.0,
+        "market_value": 853969.7
+      },
+      {
+        "ticker": "XLV",
+        "name": "Healthcare ETF",
+        "asset_class": "Equity",
+        "sector": "Healthcare",
+        "units": 5889.4462,
+        "price": 145.0,
+        "market_value": 853969.7
+      },
+      {
+        "ticker": "XLF",
+        "name": "Financials ETF",
+        "asset_class": "Equity",
+        "sector": "Financials",
+        "units": 18977.1044,
+        "price": 45.0,
+        "market_value": 853969.7
+      },
+      {
+        "ticker": "XLK",
+        "name": "Tech Sector ETF",
+        "asset_class": "Equity",
+        "sector": "Technology",
+        "units": 3881.6805,
+        "price": 220.0,
+        "market_value": 853969.7
+      },
+      {
+        "ticker": "TLT",
+        "name": "20+ Yr Treasury",
+        "asset_class": "Bonds",
+        "sector": "Govt",
+        "units": 16052.062,
+        "price": 95.0,
+        "market_value": 1524945.89
+      }
+    ],
+    "cash": 304989.18,
+    "mandate": {
+      "max_asset_class_weight": {
+        "Equity": 0.8,
+        "Bonds": 0.4,
+        "Crypto": 0.0,
+        "Commodity": 0.15,
+        "Cash": 0.3
+      },
+      "max_sector_weight": {
+        "Technology": 0.25,
+        "Healthcare": 0.3,
+        "Financials": 0.3,
+        "Consumer": 0.25,
+        "Broad": 1.0,
+        "Govt": 1.0,
+        "Metals": 0.2,
+        "Crypto": 0.1
+      },
+      "approved_universe": [
+        "SPY",
+        "QQQ",
+        "AAPL",
+        "MSFT",
+        "NVDA",
+        "AMZN",
+        "XLK",
+        "XLV",
+        "XLF",
+        "TLT",
+        "GLD"
+      ],
+      "max_single_holding": 0.35,
+      "min_cash": 0.02,
+      "target_allocation": {
+        "Equity": 0.6,
+        "Bonds": 0.3,
+        "Commodity": 0.05,
+        "Cash": 0.05
+      },
+      "drift_tolerance": 0.08
+    }
+  },
+  {
+    "client_id": "c023",
+    "client_name": "Iris Capital",
+    "adviser": "Grant Hale",
+    "fum": 6540820.64,
+    "holdings": [
+      {
+        "ticker": "SPY",
+        "name": "S&P 500 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 1962.2462,
+        "price": 500.0,
+        "market_value": 981123.1
+      },
+      {
+        "ticker": "QQQ",
+        "name": "Nasdaq 100 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 2336.0074,
+        "price": 420.0,
+        "market_value": 981123.1
+      },
+      {
+        "ticker": "XLV",
+        "name": "Healthcare ETF",
+        "asset_class": "Equity",
+        "sector": "Healthcare",
+        "units": 6766.3662,
+        "price": 145.0,
+        "market_value": 981123.1
+      },
+      {
+        "ticker": "XLF",
+        "name": "Financials ETF",
+        "asset_class": "Equity",
+        "sector": "Financials",
+        "units": 21802.7356,
+        "price": 45.0,
+        "market_value": 981123.1
+      },
+      {
+        "ticker": "TLT",
+        "name": "20+ Yr Treasury",
+        "asset_class": "Bonds",
+        "sector": "Govt",
+        "units": 17212.6859,
+        "price": 95.0,
+        "market_value": 1635205.16
+      },
+      {
+        "ticker": "GLD",
+        "name": "Gold ETF",
+        "asset_class": "Commodity",
+        "sector": "Metals",
+        "units": 1362.671,
+        "price": 240.0,
+        "market_value": 327041.03
+      }
+    ],
+    "cash": 327041.03,
+    "mandate": {
+      "max_asset_class_weight": {
+        "Equity": 0.8,
+        "Bonds": 0.4,
+        "Crypto": 0.0,
+        "Commodity": 0.15,
+        "Cash": 0.3
+      },
+      "max_sector_weight": {
+        "Technology": 0.25,
+        "Healthcare": 0.3,
+        "Financials": 0.3,
+        "Consumer": 0.25,
+        "Broad": 1.0,
+        "Govt": 1.0,
+        "Metals": 0.2,
+        "Crypto": 0.1
+      },
+      "approved_universe": [
+        "SPY",
+        "QQQ",
+        "AAPL",
+        "MSFT",
+        "NVDA",
+        "AMZN",
+        "XLK",
+        "XLV",
+        "XLF",
+        "TLT",
+        "GLD"
+      ],
+      "max_single_holding": 0.35,
+      "min_cash": 0.02,
+      "target_allocation": {
+        "Equity": 0.6,
+        "Bonds": 0.3,
+        "Commodity": 0.05,
+        "Cash": 0.05
+      },
+      "drift_tolerance": 0.08
+    }
+  },
+  {
+    "client_id": "c026",
+    "client_name": "Acme Holdings",
+    "adviser": "Pat Quinn",
+    "fum": 14942596.43,
+    "holdings": [
+      {
+        "ticker": "SPY",
+        "name": "S&P 500 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 4482.7789,
+        "price": 500.0,
+        "market_value": 2241389.46
+      },
+      {
+        "ticker": "QQQ",
+        "name": "Nasdaq 100 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 5336.6416,
+        "price": 420.0,
+        "market_value": 2241389.46
+      },
+      {
+        "ticker": "XLV",
+        "name": "Healthcare ETF",
+        "asset_class": "Equity",
+        "sector": "Healthcare",
+        "units": 15457.8583,
+        "price": 145.0,
+        "market_value": 2241389.46
+      },
+      {
+        "ticker": "XLF",
+        "name": "Financials ETF",
+        "asset_class": "Equity",
+        "sector": "Financials",
+        "units": 49808.6547,
+        "price": 45.0,
+        "market_value": 2241389.46
+      },
+      {
+        "ticker": "TLT",
+        "name": "20+ Yr Treasury",
+        "asset_class": "Bonds",
+        "sector": "Govt",
+        "units": 39322.6222,
+        "price": 95.0,
+        "market_value": 3735649.11
+      },
+      {
+        "ticker": "GLD",
+        "name": "Gold ETF",
+        "asset_class": "Commodity",
+        "sector": "Metals",
+        "units": 3113.0409,
+        "price": 240.0,
+        "market_value": 747129.82
+      }
+    ],
+    "cash": 747129.82,
+    "mandate": {
+      "max_asset_class_weight": {
+        "Equity": 0.8,
+        "Bonds": 0.4,
+        "Crypto": 0.0,
+        "Commodity": 0.15,
+        "Cash": 0.3
+      },
+      "max_sector_weight": {
+        "Technology": 0.25,
+        "Healthcare": 0.3,
+        "Financials": 0.3,
+        "Consumer": 0.25,
+        "Broad": 1.0,
+        "Govt": 1.0,
+        "Metals": 0.2,
+        "Crypto": 0.1
+      },
+      "approved_universe": [
+        "SPY",
+        "QQQ",
+        "AAPL",
+        "MSFT",
+        "NVDA",
+        "AMZN",
+        "XLK",
+        "XLV",
+        "XLF",
+        "TLT",
+        "GLD"
+      ],
+      "max_single_holding": 0.35,
+      "min_cash": 0.02,
+      "target_allocation": {
+        "Equity": 0.6,
+        "Bonds": 0.3,
+        "Commodity": 0.05,
+        "Cash": 0.05
+      },
+      "drift_tolerance": 0.08
+    }
+  },
+  {
+    "client_id": "c036",
+    "client_name": "Zephyr Partners",
+    "adviser": "Aaron Wright",
+    "fum": 11377924.91,
+    "holdings": [
+      {
+        "ticker": "SPY",
+        "name": "S&P 500 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 3413.3775,
+        "price": 500.0,
+        "market_value": 1706688.74
+      },
+      {
+        "ticker": "QQQ",
+        "name": "Nasdaq 100 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 4063.5446,
+        "price": 420.0,
+        "market_value": 1706688.74
+      },
+      {
+        "ticker": "XLV",
+        "name": "Healthcare ETF",
+        "asset_class": "Equity",
+        "sector": "Healthcare",
+        "units": 11770.2672,
+        "price": 145.0,
+        "market_value": 1706688.74
+      },
+      {
+        "ticker": "XLF",
+        "name": "Financials ETF",
+        "asset_class": "Equity",
+        "sector": "Financials",
+        "units": 37926.4164,
+        "price": 45.0,
+        "market_value": 1706688.74
+      },
+      {
+        "ticker": "TLT",
+        "name": "20+ Yr Treasury",
+        "asset_class": "Bonds",
+        "sector": "Govt",
+        "units": 29941.9077,
+        "price": 95.0,
+        "market_value": 2844481.23
+      },
+      {
+        "ticker": "GLD",
+        "name": "Gold ETF",
+        "asset_class": "Commodity",
+        "sector": "Metals",
+        "units": 2370.401,
+        "price": 240.0,
+        "market_value": 568896.25
+      }
+    ],
+    "cash": 568896.25,
+    "mandate": {
+      "max_asset_class_weight": {
+        "Equity": 0.8,
+        "Bonds": 0.4,
+        "Crypto": 0.0,
+        "Commodity": 0.15,
+        "Cash": 0.3
+      },
+      "max_sector_weight": {
+        "Technology": 0.25,
+        "Healthcare": 0.3,
+        "Financials": 0.3,
+        "Consumer": 0.25,
+        "Broad": 1.0,
+        "Govt": 1.0,
+        "Metals": 0.2,
+        "Crypto": 0.1
+      },
+      "approved_universe": [
+        "SPY",
+        "QQQ",
+        "AAPL",
+        "MSFT",
+        "NVDA",
+        "AMZN",
+        "XLK",
+        "XLV",
+        "XLF",
+        "TLT",
+        "GLD"
+      ],
+      "max_single_holding": 0.35,
+      "min_cash": 0.02,
+      "target_allocation": {
+        "Equity": 0.6,
+        "Bonds": 0.3,
+        "Commodity": 0.05,
+        "Cash": 0.05
+      },
+      "drift_tolerance": 0.08
+    }
+  },
+  {
+    "client_id": "c024",
+    "client_name": "Juniper Trust",
+    "adviser": "Renee Cole",
+    "fum": 7504034.36,
+    "holdings": [
+      {
+        "ticker": "SPY",
+        "name": "S&P 500 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 2251.2103,
+        "price": 500.0,
+        "market_value": 1125605.15
+      },
+      {
+        "ticker": "QQQ",
+        "name": "Nasdaq 100 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 2680.0123,
+        "price": 420.0,
+        "market_value": 1125605.15
+      },
+      {
+        "ticker": "XLV",
+        "name": "Healthcare ETF",
+        "asset_class": "Equity",
+        "sector": "Healthcare",
+        "units": 7762.7941,
+        "price": 145.0,
+        "market_value": 1125605.15
+      },
+      {
+        "ticker": "XLF",
+        "name": "Financials ETF",
+        "asset_class": "Equity",
+        "sector": "Financials",
+        "units": 25013.4478,
+        "price": 45.0,
+        "market_value": 1125605.15
+      },
+      {
+        "ticker": "TLT",
+        "name": "20+ Yr Treasury",
+        "asset_class": "Bonds",
+        "sector": "Govt",
+        "units": 19747.4588,
+        "price": 95.0,
+        "market_value": 1876008.59
+      },
+      {
+        "ticker": "GLD",
+        "name": "Gold ETF",
+        "asset_class": "Commodity",
+        "sector": "Metals",
+        "units": 1563.3405,
+        "price": 240.0,
+        "market_value": 375201.72
+      }
+    ],
+    "cash": 375201.72,
+    "mandate": {
+      "max_asset_class_weight": {
+        "Equity": 0.8,
+        "Bonds": 0.4,
+        "Crypto": 0.1,
+        "Commodity": 0.15,
+        "Cash": 0.3
+      },
+      "max_sector_weight": {
+        "Technology": 0.25,
+        "Healthcare": 0.3,
+        "Financials": 0.3,
+        "Consumer": 0.25,
+        "Broad": 1.0,
+        "Govt": 1.0,
+        "Metals": 0.2,
+        "Crypto": 0.1
+      },
+      "approved_universe": [
+        "SPY",
+        "QQQ",
+        "AAPL",
+        "MSFT",
+        "NVDA",
+        "AMZN",
+        "XLK",
+        "XLV",
+        "XLF",
+        "TLT",
+        "GLD",
+        "BTC",
+        "ETH",
+        "AVAX"
+      ],
+      "max_single_holding": 0.35,
+      "min_cash": 0.02,
+      "target_allocation": {
+        "Equity": 0.6,
+        "Bonds": 0.3,
+        "Commodity": 0.05,
+        "Cash": 0.05
+      },
+      "drift_tolerance": 0.08
+    }
+  },
+  {
+    "client_id": "c001",
+    "client_name": "Iris Capital",
+    "adviser": "Pat Quinn",
+    "fum": 3824399.44,
+    "holdings": [
+      {
+        "ticker": "NVDA",
+        "name": "NVIDIA Corp",
+        "asset_class": "Equity",
+        "sector": "Technology",
+        "units": 6472.0606,
+        "price": 130.0,
+        "market_value": 841367.88
+      },
+      {
+        "ticker": "MSFT",
+        "name": "Microsoft Corp",
+        "asset_class": "Equity",
+        "sector": "Technology",
+        "units": 1274.7998,
+        "price": 420.0,
+        "market_value": 535415.92
+      },
+      {
+        "ticker": "XLV",
+        "name": "Healthcare ETF",
+        "asset_class": "Equity",
+        "sector": "Healthcare",
+        "units": 7912.5506,
+        "price": 145.0,
+        "market_value": 1147319.83
+      },
+      {
+        "ticker": "TLT",
+        "name": "20+ Yr Treasury",
+        "asset_class": "Bonds",
+        "sector": "Govt",
+        "units": 11674.4825,
+        "price": 95.0,
+        "market_value": 1109075.84
+      }
+    ],
+    "cash": 191219.97,
+    "mandate": {
+      "max_asset_class_weight": {
+        "Equity": 0.8,
+        "Bonds": 0.4,
+        "Crypto": 0.0,
+        "Commodity": 0.15,
+        "Cash": 0.3
+      },
+      "max_sector_weight": {
+        "Technology": 0.25,
+        "Healthcare": 0.3,
+        "Financials": 0.3,
+        "Consumer": 0.25,
+        "Broad": 1.0,
+        "Govt": 1.0,
+        "Metals": 0.2,
+        "Crypto": 0.1
+      },
+      "approved_universe": [
+        "SPY",
+        "QQQ",
+        "AAPL",
+        "MSFT",
+        "NVDA",
+        "AMZN",
+        "XLK",
+        "XLV",
+        "XLF",
+        "TLT",
+        "GLD"
+      ],
+      "max_single_holding": 0.35,
+      "min_cash": 0.02,
+      "target_allocation": {
+        "Equity": 0.6,
+        "Bonds": 0.3,
+        "Commodity": 0.05,
+        "Cash": 0.05
+      },
+      "drift_tolerance": 0.08
+    }
+  },
+  {
+    "client_id": "c014",
+    "client_name": "Silverstone Wealth",
+    "adviser": "Pat Quinn",
+    "fum": 3045871.14,
+    "holdings": [
+      {
+        "ticker": "SPY",
+        "name": "S&P 500 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 913.7613,
+        "price": 500.0,
+        "market_value": 456880.67
+      },
+      {
+        "ticker": "QQQ",
+        "name": "Nasdaq 100 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 1087.8111,
+        "price": 420.0,
+        "market_value": 456880.67
+      },
+      {
+        "ticker": "XLV",
+        "name": "Healthcare ETF",
+        "asset_class": "Equity",
+        "sector": "Healthcare",
+        "units": 3150.9012,
+        "price": 145.0,
+        "market_value": 456880.67
+      },
+      {
+        "ticker": "XLF",
+        "name": "Financials ETF",
+        "asset_class": "Equity",
+        "sector": "Financials",
+        "units": 10152.9038,
+        "price": 45.0,
+        "market_value": 456880.67
+      },
+      {
+        "ticker": "TLT",
+        "name": "20+ Yr Treasury",
+        "asset_class": "Bonds",
+        "sector": "Govt",
+        "units": 8015.4503,
+        "price": 95.0,
+        "market_value": 761467.78
+      },
+      {
+        "ticker": "GLD",
+        "name": "Gold ETF",
+        "asset_class": "Commodity",
+        "sector": "Metals",
+        "units": 634.5565,
+        "price": 240.0,
+        "market_value": 152293.56
+      }
+    ],
+    "cash": 152293.56,
+    "mandate": {
+      "max_asset_class_weight": {
+        "Equity": 0.8,
+        "Bonds": 0.4,
+        "Crypto": 0.0,
+        "Commodity": 0.15,
+        "Cash": 0.3
+      },
+      "max_sector_weight": {
+        "Technology": 0.25,
+        "Healthcare": 0.3,
+        "Financials": 0.3,
+        "Consumer": 0.25,
+        "Broad": 1.0,
+        "Govt": 1.0,
+        "Metals": 0.2,
+        "Crypto": 0.1
+      },
+      "approved_universe": [
+        "SPY",
+        "QQQ",
+        "AAPL",
+        "MSFT",
+        "NVDA",
+        "AMZN",
+        "XLK",
+        "XLV",
+        "XLF",
+        "TLT",
+        "GLD"
+      ],
+      "max_single_holding": 0.35,
+      "min_cash": 0.02,
+      "target_allocation": {
+        "Equity": 0.6,
+        "Bonds": 0.3,
+        "Commodity": 0.05,
+        "Cash": 0.05
+      },
+      "drift_tolerance": 0.08
+    }
+  },
+  {
+    "client_id": "c020",
+    "client_name": "Knot Wealth",
+    "adviser": "Aaron Wright",
+    "fum": 6137238.85,
+    "holdings": [
+      {
+        "ticker": "SPY",
+        "name": "S&P 500 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 1841.1717,
+        "price": 500.0,
+        "market_value": 920585.83
+      },
+      {
+        "ticker": "QQQ",
+        "name": "Nasdaq 100 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 2191.871,
+        "price": 420.0,
+        "market_value": 920585.83
+      },
+      {
+        "ticker": "XLV",
+        "name": "Healthcare ETF",
+        "asset_class": "Equity",
+        "sector": "Healthcare",
+        "units": 6348.8678,
+        "price": 145.0,
+        "market_value": 920585.83
+      },
+      {
+        "ticker": "XLF",
+        "name": "Financials ETF",
+        "asset_class": "Equity",
+        "sector": "Financials",
+        "units": 20457.4629,
+        "price": 45.0,
+        "market_value": 920585.83
+      },
+      {
+        "ticker": "TLT",
+        "name": "20+ Yr Treasury",
+        "asset_class": "Bonds",
+        "sector": "Govt",
+        "units": 16150.6285,
+        "price": 95.0,
+        "market_value": 1534309.71
+      },
+      {
+        "ticker": "GLD",
+        "name": "Gold ETF",
+        "asset_class": "Commodity",
+        "sector": "Metals",
+        "units": 1278.5914,
+        "price": 240.0,
+        "market_value": 306861.94
+      }
+    ],
+    "cash": 306861.94,
+    "mandate": {
+      "max_asset_class_weight": {
+        "Equity": 0.8,
+        "Bonds": 0.4,
+        "Crypto": 0.0,
+        "Commodity": 0.15,
+        "Cash": 0.3
+      },
+      "max_sector_weight": {
+        "Technology": 0.25,
+        "Healthcare": 0.3,
+        "Financials": 0.3,
+        "Consumer": 0.25,
+        "Broad": 1.0,
+        "Govt": 1.0,
+        "Metals": 0.2,
+        "Crypto": 0.1
+      },
+      "approved_universe": [
+        "SPY",
+        "QQQ",
+        "AAPL",
+        "MSFT",
+        "NVDA",
+        "AMZN",
+        "XLK",
+        "XLV",
+        "XLF",
+        "TLT",
+        "GLD"
+      ],
+      "max_single_holding": 0.35,
+      "min_cash": 0.02,
+      "target_allocation": {
+        "Equity": 0.6,
+        "Bonds": 0.3,
+        "Commodity": 0.05,
+        "Cash": 0.05
+      },
+      "drift_tolerance": 0.08
+    }
+  },
+  {
+    "client_id": "c022",
+    "client_name": "Quill Partners",
+    "adviser": "Grant Hale",
+    "fum": 4120226.46,
+    "holdings": [
+      {
+        "ticker": "SPY",
+        "name": "S&P 500 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 1236.0679,
+        "price": 500.0,
+        "market_value": 618033.97
+      },
+      {
+        "ticker": "QQQ",
+        "name": "Nasdaq 100 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 1471.5095,
+        "price": 420.0,
+        "market_value": 618033.97
+      },
+      {
+        "ticker": "XLV",
+        "name": "Healthcare ETF",
+        "asset_class": "Equity",
+        "sector": "Healthcare",
+        "units": 4262.3032,
+        "price": 145.0,
+        "market_value": 618033.97
+      },
+      {
+        "ticker": "XLF",
+        "name": "Financials ETF",
+        "asset_class": "Equity",
+        "sector": "Financials",
+        "units": 13734.0882,
+        "price": 45.0,
+        "market_value": 618033.97
+      },
+      {
+        "ticker": "TLT",
+        "name": "20+ Yr Treasury",
+        "asset_class": "Bonds",
+        "sector": "Govt",
+        "units": 10842.7013,
+        "price": 95.0,
+        "market_value": 1030056.62
+      },
+      {
+        "ticker": "GLD",
+        "name": "Gold ETF",
+        "asset_class": "Commodity",
+        "sector": "Metals",
+        "units": 858.3805,
+        "price": 240.0,
+        "market_value": 206011.32
+      }
+    ],
+    "cash": 206011.32,
+    "mandate": {
+      "max_asset_class_weight": {
+        "Equity": 0.8,
+        "Bonds": 0.4,
+        "Crypto": 0.0,
+        "Commodity": 0.15,
+        "Cash": 0.3
+      },
+      "max_sector_weight": {
+        "Technology": 0.25,
+        "Healthcare": 0.3,
+        "Financials": 0.3,
+        "Consumer": 0.25,
+        "Broad": 1.0,
+        "Govt": 1.0,
+        "Metals": 0.2,
+        "Crypto": 0.1
+      },
+      "approved_universe": [
+        "SPY",
+        "QQQ",
+        "AAPL",
+        "MSFT",
+        "NVDA",
+        "AMZN",
+        "XLK",
+        "XLV",
+        "XLF",
+        "TLT",
+        "GLD"
+      ],
+      "max_single_holding": 0.35,
+      "min_cash": 0.02,
+      "target_allocation": {
+        "Equity": 0.6,
+        "Bonds": 0.3,
+        "Commodity": 0.05,
+        "Cash": 0.05
+      },
+      "drift_tolerance": 0.08
+    }
+  },
+  {
+    "client_id": "c011",
+    "client_name": "Moss Capital",
+    "adviser": "Aaron Wright",
+    "fum": 1572638.48,
+    "holdings": [
+      {
+        "ticker": "SPY",
+        "name": "S&P 500 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 471.7915,
+        "price": 500.0,
+        "market_value": 235895.77
+      },
+      {
+        "ticker": "QQQ",
+        "name": "Nasdaq 100 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 561.6566,
+        "price": 420.0,
+        "market_value": 235895.77
+      },
+      {
+        "ticker": "XLV",
+        "name": "Healthcare ETF",
+        "asset_class": "Equity",
+        "sector": "Healthcare",
+        "units": 1626.8674,
+        "price": 145.0,
+        "market_value": 235895.77
+      },
+      {
+        "ticker": "XLF",
+        "name": "Financials ETF",
+        "asset_class": "Equity",
+        "sector": "Financials",
+        "units": 5242.1282,
+        "price": 45.0,
+        "market_value": 235895.77
+      },
+      {
+        "ticker": "TLT",
+        "name": "20+ Yr Treasury",
+        "asset_class": "Bonds",
+        "sector": "Govt",
+        "units": 4138.5223,
+        "price": 95.0,
+        "market_value": 393159.62
+      },
+      {
+        "ticker": "GLD",
+        "name": "Gold ETF",
+        "asset_class": "Commodity",
+        "sector": "Metals",
+        "units": 327.633,
+        "price": 240.0,
+        "market_value": 78631.92
+      }
+    ],
+    "cash": 78631.92,
+    "mandate": {
+      "max_asset_class_weight": {
+        "Equity": 0.8,
+        "Bonds": 0.4,
+        "Crypto": 0.0,
+        "Commodity": 0.15,
+        "Cash": 0.3
+      },
+      "max_sector_weight": {
+        "Technology": 0.25,
+        "Healthcare": 0.3,
+        "Financials": 0.3,
+        "Consumer": 0.25,
+        "Broad": 1.0,
+        "Govt": 1.0,
+        "Metals": 0.2,
+        "Crypto": 0.1
+      },
+      "approved_universe": [
+        "SPY",
+        "QQQ",
+        "AAPL",
+        "MSFT",
+        "NVDA",
+        "AMZN",
+        "XLK",
+        "XLV",
+        "XLF",
+        "TLT",
+        "GLD"
+      ],
+      "max_single_holding": 0.35,
+      "min_cash": 0.02,
+      "target_allocation": {
+        "Equity": 0.6,
+        "Bonds": 0.3,
+        "Commodity": 0.05,
+        "Cash": 0.05
+      },
+      "drift_tolerance": 0.08
+    }
+  },
+  {
+    "client_id": "c027",
+    "client_name": "Verdant Wealth",
+    "adviser": "Pat Quinn",
+    "fum": 10289313.46,
+    "holdings": [
+      {
+        "ticker": "SPY",
+        "name": "S&P 500 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 3086.794,
+        "price": 500.0,
+        "market_value": 1543397.02
+      },
+      {
+        "ticker": "QQQ",
+        "name": "Nasdaq 100 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 3674.7548,
+        "price": 420.0,
+        "market_value": 1543397.02
+      },
+      {
+        "ticker": "XLV",
+        "name": "Healthcare ETF",
+        "asset_class": "Equity",
+        "sector": "Healthcare",
+        "units": 10644.1174,
+        "price": 145.0,
+        "market_value": 1543397.02
+      },
+      {
+        "ticker": "XLF",
+        "name": "Financials ETF",
+        "asset_class": "Equity",
+        "sector": "Financials",
+        "units": 34297.7116,
+        "price": 45.0,
+        "market_value": 1543397.02
+      },
+      {
+        "ticker": "TLT",
+        "name": "20+ Yr Treasury",
+        "asset_class": "Bonds",
+        "sector": "Govt",
+        "units": 27077.1407,
+        "price": 95.0,
+        "market_value": 2572328.37
+      },
+      {
+        "ticker": "GLD",
+        "name": "Gold ETF",
+        "asset_class": "Commodity",
+        "sector": "Metals",
+        "units": 2143.607,
+        "price": 240.0,
+        "market_value": 514465.67
+      }
+    ],
+    "cash": 514465.67,
+    "mandate": {
+      "max_asset_class_weight": {
+        "Equity": 0.8,
+        "Bonds": 0.4,
+        "Crypto": 0.0,
+        "Commodity": 0.15,
+        "Cash": 0.3
+      },
+      "max_sector_weight": {
+        "Technology": 0.25,
+        "Healthcare": 0.3,
+        "Financials": 0.3,
+        "Consumer": 0.25,
+        "Broad": 1.0,
+        "Govt": 1.0,
+        "Metals": 0.2,
+        "Crypto": 0.1
+      },
+      "approved_universe": [
+        "SPY",
+        "QQQ",
+        "XLK",
+        "XLV",
+        "XLF",
+        "TLT",
+        "GLD"
+      ],
+      "max_single_holding": 0.35,
+      "min_cash": 0.02,
+      "target_allocation": {
+        "Equity": 0.6,
+        "Bonds": 0.3,
+        "Commodity": 0.05,
+        "Cash": 0.05
+      },
+      "drift_tolerance": 0.08
+    }
+  },
+  {
+    "client_id": "c021",
+    "client_name": "Driftwood Wealth",
+    "adviser": "Renee Cole",
+    "fum": 3346872.85,
+    "holdings": [
+      {
+        "ticker": "SPY",
+        "name": "S&P 500 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 1004.0619,
+        "price": 500.0,
+        "market_value": 502030.93
+      },
+      {
+        "ticker": "QQQ",
+        "name": "Nasdaq 100 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 1195.3117,
+        "price": 420.0,
+        "market_value": 502030.93
+      },
+      {
+        "ticker": "XLV",
+        "name": "Healthcare ETF",
+        "asset_class": "Equity",
+        "sector": "Healthcare",
+        "units": 3462.2823,
+        "price": 145.0,
+        "market_value": 502030.93
+      },
+      {
+        "ticker": "XLF",
+        "name": "Financials ETF",
+        "asset_class": "Equity",
+        "sector": "Financials",
+        "units": 11156.2429,
+        "price": 45.0,
+        "market_value": 502030.93
+      },
+      {
+        "ticker": "TLT",
+        "name": "20+ Yr Treasury",
+        "asset_class": "Bonds",
+        "sector": "Govt",
+        "units": 8807.5601,
+        "price": 95.0,
+        "market_value": 836718.21
+      },
+      {
+        "ticker": "GLD",
+        "name": "Gold ETF",
+        "asset_class": "Commodity",
+        "sector": "Metals",
+        "units": 697.2652,
+        "price": 240.0,
+        "market_value": 167343.64
+      }
+    ],
+    "cash": 167343.64,
+    "mandate": {
+      "max_asset_class_weight": {
+        "Equity": 0.8,
+        "Bonds": 0.4,
+        "Crypto": 0.0,
+        "Commodity": 0.15,
+        "Cash": 0.3
+      },
+      "max_sector_weight": {
+        "Technology": 0.25,
+        "Healthcare": 0.3,
+        "Financials": 0.3,
+        "Consumer": 0.25,
+        "Broad": 1.0,
+        "Govt": 1.0,
+        "Metals": 0.2,
+        "Crypto": 0.1
+      },
+      "approved_universe": [
+        "SPY",
+        "QQQ",
+        "AAPL",
+        "MSFT",
+        "NVDA",
+        "AMZN",
+        "XLK",
+        "XLV",
+        "XLF",
+        "TLT",
+        "GLD"
+      ],
+      "max_single_holding": 0.35,
+      "min_cash": 0.02,
+      "target_allocation": {
+        "Equity": 0.6,
+        "Bonds": 0.3,
+        "Commodity": 0.05,
+        "Cash": 0.05
+      },
+      "drift_tolerance": 0.08
+    }
+  },
+  {
+    "client_id": "c028",
+    "client_name": "Quill Partners",
+    "adviser": "Grant Hale",
+    "fum": 4543801.9,
+    "holdings": [
+      {
+        "ticker": "SPY",
+        "name": "S&P 500 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 1363.1406,
+        "price": 500.0,
+        "market_value": 681570.29
+      },
+      {
+        "ticker": "QQQ",
+        "name": "Nasdaq 100 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 1622.7864,
+        "price": 420.0,
+        "market_value": 681570.29
+      },
+      {
+        "ticker": "XLV",
+        "name": "Healthcare ETF",
+        "asset_class": "Equity",
+        "sector": "Healthcare",
+        "units": 4700.4848,
+        "price": 145.0,
+        "market_value": 681570.29
+      },
+      {
+        "ticker": "XLF",
+        "name": "Financials ETF",
+        "asset_class": "Equity",
+        "sector": "Financials",
+        "units": 15146.0064,
+        "price": 45.0,
+        "market_value": 681570.29
+      },
+      {
+        "ticker": "TLT",
+        "name": "20+ Yr Treasury",
+        "asset_class": "Bonds",
+        "sector": "Govt",
+        "units": 11957.3735,
+        "price": 95.0,
+        "market_value": 1135950.48
+      },
+      {
+        "ticker": "GLD",
+        "name": "Gold ETF",
+        "asset_class": "Commodity",
+        "sector": "Metals",
+        "units": 946.6254,
+        "price": 240.0,
+        "market_value": 227190.1
+      }
+    ],
+    "cash": 227190.1,
+    "mandate": {
+      "max_asset_class_weight": {
+        "Equity": 0.8,
+        "Bonds": 0.4,
+        "Crypto": 0.0,
+        "Commodity": 0.15,
+        "Cash": 0.3
+      },
+      "max_sector_weight": {
+        "Technology": 0.25,
+        "Healthcare": 0.3,
+        "Financials": 0.3,
+        "Consumer": 0.25,
+        "Broad": 1.0,
+        "Govt": 1.0,
+        "Metals": 0.2,
+        "Crypto": 0.1
+      },
+      "approved_universe": [
+        "SPY",
+        "QQQ",
+        "XLK",
+        "XLV",
+        "XLF",
+        "TLT",
+        "GLD"
+      ],
+      "max_single_holding": 0.35,
+      "min_cash": 0.02,
+      "target_allocation": {
+        "Equity": 0.6,
+        "Bonds": 0.3,
+        "Commodity": 0.05,
+        "Cash": 0.05
+      },
+      "drift_tolerance": 0.08
+    }
+  },
+  {
+    "client_id": "c003",
+    "client_name": "Cedar Wealth",
+    "adviser": "Pat Quinn",
+    "fum": 8939289.18,
+    "holdings": [
+      {
+        "ticker": "NVDA",
+        "name": "NVIDIA Corp",
+        "asset_class": "Equity",
+        "sector": "Technology",
+        "units": 15128.0278,
+        "price": 130.0,
+        "market_value": 1966643.62
+      },
+      {
+        "ticker": "MSFT",
+        "name": "Microsoft Corp",
+        "asset_class": "Equity",
+        "sector": "Technology",
+        "units": 2979.7631,
+        "price": 420.0,
+        "market_value": 1251500.49
+      },
+      {
+        "ticker": "XLV",
+        "name": "Healthcare ETF",
+        "asset_class": "Equity",
+        "sector": "Healthcare",
+        "units": 18495.0811,
+        "price": 145.0,
+        "market_value": 2681786.76
+      },
+      {
+        "ticker": "TLT",
+        "name": "20+ Yr Treasury",
+        "asset_class": "Bonds",
+        "sector": "Govt",
+        "units": 27288.3564,
+        "price": 95.0,
+        "market_value": 2592393.86
+      }
+    ],
+    "cash": 446964.46,
+    "mandate": {
+      "max_asset_class_weight": {
+        "Equity": 0.8,
+        "Bonds": 0.4,
+        "Crypto": 0.0,
+        "Commodity": 0.15,
+        "Cash": 0.3
+      },
+      "max_sector_weight": {
+        "Technology": 0.25,
+        "Healthcare": 0.3,
+        "Financials": 0.3,
+        "Consumer": 0.25,
+        "Broad": 1.0,
+        "Govt": 1.0,
+        "Metals": 0.2,
+        "Crypto": 0.1
+      },
+      "approved_universe": [
+        "SPY",
+        "QQQ",
+        "AAPL",
+        "MSFT",
+        "NVDA",
+        "AMZN",
+        "XLK",
+        "XLV",
+        "XLF",
+        "TLT",
+        "GLD"
+      ],
+      "max_single_holding": 0.35,
+      "min_cash": 0.02,
+      "target_allocation": {
+        "Equity": 0.6,
+        "Bonds": 0.3,
+        "Commodity": 0.05,
+        "Cash": 0.05
+      },
+      "drift_tolerance": 0.08
+    }
+  },
+  {
+    "client_id": "c006",
+    "client_name": "Indigo Capital",
+    "adviser": "Mia Tan",
+    "fum": 7216992.21,
+    "holdings": [
+      {
+        "ticker": "SPY",
+        "name": "S&P 500 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 2020.7578,
+        "price": 500.0,
+        "market_value": 1010378.91
+      },
+      {
+        "ticker": "QQQ",
+        "name": "Nasdaq 100 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 2405.6641,
+        "price": 420.0,
+        "market_value": 1010378.91
+      },
+      {
+        "ticker": "XLV",
+        "name": "Healthcare ETF",
+        "asset_class": "Equity",
+        "sector": "Healthcare",
+        "units": 6968.1304,
+        "price": 145.0,
+        "market_value": 1010378.91
+      },
+      {
+        "ticker": "XLF",
+        "name": "Financials ETF",
+        "asset_class": "Equity",
+        "sector": "Financials",
+        "units": 22452.8647,
+        "price": 45.0,
+        "market_value": 1010378.91
+      },
+      {
+        "ticker": "XLK",
+        "name": "Tech Sector ETF",
+        "asset_class": "Equity",
+        "sector": "Technology",
+        "units": 4592.6314,
+        "price": 220.0,
+        "market_value": 1010378.91
+      },
+      {
+        "ticker": "TLT",
+        "name": "20+ Yr Treasury",
+        "asset_class": "Bonds",
+        "sector": "Govt",
+        "units": 18992.0847,
+        "price": 95.0,
+        "market_value": 1804248.05
+      }
+    ],
+    "cash": 360849.61,
+    "mandate": {
+      "max_asset_class_weight": {
+        "Equity": 0.8,
+        "Bonds": 0.4,
+        "Crypto": 0.0,
+        "Commodity": 0.15,
+        "Cash": 0.3
+      },
+      "max_sector_weight": {
+        "Technology": 0.25,
+        "Healthcare": 0.3,
+        "Financials": 0.3,
+        "Consumer": 0.25,
+        "Broad": 1.0,
+        "Govt": 1.0,
+        "Metals": 0.2,
+        "Crypto": 0.1
+      },
+      "approved_universe": [
+        "SPY",
+        "QQQ",
+        "AAPL",
+        "MSFT",
+        "NVDA",
+        "AMZN",
+        "XLK",
+        "XLV",
+        "XLF",
+        "TLT",
+        "GLD"
+      ],
+      "max_single_holding": 0.35,
+      "min_cash": 0.02,
+      "target_allocation": {
+        "Equity": 0.6,
+        "Bonds": 0.3,
+        "Commodity": 0.05,
+        "Cash": 0.05
+      },
+      "drift_tolerance": 0.08
+    }
+  },
+  {
+    "client_id": "c034",
+    "client_name": "Elm Partners",
+    "adviser": "Grant Hale",
+    "fum": 14674170.51,
+    "holdings": [
+      {
+        "ticker": "SPY",
+        "name": "S&P 500 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 4402.2512,
+        "price": 500.0,
+        "market_value": 2201125.58
+      },
+      {
+        "ticker": "QQQ",
+        "name": "Nasdaq 100 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 5240.7752,
+        "price": 420.0,
+        "market_value": 2201125.58
+      },
+      {
+        "ticker": "XLV",
+        "name": "Healthcare ETF",
+        "asset_class": "Equity",
+        "sector": "Healthcare",
+        "units": 15180.1764,
+        "price": 145.0,
+        "market_value": 2201125.58
+      },
+      {
+        "ticker": "XLF",
+        "name": "Financials ETF",
+        "asset_class": "Equity",
+        "sector": "Financials",
+        "units": 48913.9018,
+        "price": 45.0,
+        "market_value": 2201125.58
+      },
+      {
+        "ticker": "TLT",
+        "name": "20+ Yr Treasury",
+        "asset_class": "Bonds",
+        "sector": "Govt",
+        "units": 38616.2382,
+        "price": 95.0,
+        "market_value": 3668542.63
+      },
+      {
+        "ticker": "GLD",
+        "name": "Gold ETF",
+        "asset_class": "Commodity",
+        "sector": "Metals",
+        "units": 3057.1189,
+        "price": 240.0,
+        "market_value": 733708.53
+      }
+    ],
+    "cash": 733708.53,
+    "mandate": {
+      "max_asset_class_weight": {
+        "Equity": 0.8,
+        "Bonds": 0.4,
+        "Crypto": 0.0,
+        "Commodity": 0.15,
+        "Cash": 0.3
+      },
+      "max_sector_weight": {
+        "Technology": 0.25,
+        "Healthcare": 0.3,
+        "Financials": 0.3,
+        "Consumer": 0.25,
+        "Broad": 1.0,
+        "Govt": 1.0,
+        "Metals": 0.2,
+        "Crypto": 0.1
+      },
+      "approved_universe": [
+        "SPY",
+        "QQQ",
+        "XLK",
+        "XLV",
+        "XLF",
+        "TLT",
+        "GLD"
+      ],
+      "max_single_holding": 0.35,
+      "min_cash": 0.02,
+      "target_allocation": {
+        "Equity": 0.6,
+        "Bonds": 0.3,
+        "Commodity": 0.05,
+        "Cash": 0.05
+      },
+      "drift_tolerance": 0.08
+    }
+  },
+  {
+    "client_id": "c038",
+    "client_name": "Orchid Wealth",
+    "adviser": "Pat Quinn",
+    "fum": 5203666.32,
+    "holdings": [
+      {
+        "ticker": "SPY",
+        "name": "S&P 500 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 1561.0999,
+        "price": 500.0,
+        "market_value": 780549.95
+      },
+      {
+        "ticker": "QQQ",
+        "name": "Nasdaq 100 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 1858.4523,
+        "price": 420.0,
+        "market_value": 780549.95
+      },
+      {
+        "ticker": "XLV",
+        "name": "Healthcare ETF",
+        "asset_class": "Equity",
+        "sector": "Healthcare",
+        "units": 5383.1031,
+        "price": 145.0,
+        "market_value": 780549.95
+      },
+      {
+        "ticker": "XLF",
+        "name": "Financials ETF",
+        "asset_class": "Equity",
+        "sector": "Financials",
+        "units": 17345.5544,
+        "price": 45.0,
+        "market_value": 780549.95
+      },
+      {
+        "ticker": "TLT",
+        "name": "20+ Yr Treasury",
+        "asset_class": "Bonds",
+        "sector": "Govt",
+        "units": 13693.8587,
+        "price": 95.0,
+        "market_value": 1300916.58
+      },
+      {
+        "ticker": "GLD",
+        "name": "Gold ETF",
+        "asset_class": "Commodity",
+        "sector": "Metals",
+        "units": 1084.0972,
+        "price": 240.0,
+        "market_value": 260183.32
+      }
+    ],
+    "cash": 260183.32,
+    "mandate": {
+      "max_asset_class_weight": {
+        "Equity": 0.8,
+        "Bonds": 0.4,
+        "Crypto": 0.0,
+        "Commodity": 0.15,
+        "Cash": 0.3
+      },
+      "max_sector_weight": {
+        "Technology": 0.25,
+        "Healthcare": 0.3,
+        "Financials": 0.3,
+        "Consumer": 0.25,
+        "Broad": 1.0,
+        "Govt": 1.0,
+        "Metals": 0.2,
+        "Crypto": 0.1
+      },
+      "approved_universe": [
+        "SPY",
+        "QQQ",
+        "XLK",
+        "XLV",
+        "XLF",
+        "TLT",
+        "GLD"
+      ],
+      "max_single_holding": 0.35,
+      "min_cash": 0.02,
+      "target_allocation": {
+        "Equity": 0.6,
+        "Bonds": 0.3,
+        "Commodity": 0.05,
+        "Cash": 0.05
+      },
+      "drift_tolerance": 0.08
+    }
+  },
+  {
+    "client_id": "c035",
+    "client_name": "Northgate Capital",
+    "adviser": "Grant Hale",
+    "fum": 2643878.99,
+    "holdings": [
+      {
+        "ticker": "SPY",
+        "name": "S&P 500 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 793.1637,
+        "price": 500.0,
+        "market_value": 396581.85
+      },
+      {
+        "ticker": "QQQ",
+        "name": "Nasdaq 100 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 944.2425,
+        "price": 420.0,
+        "market_value": 396581.85
+      },
+      {
+        "ticker": "XLV",
+        "name": "Healthcare ETF",
+        "asset_class": "Equity",
+        "sector": "Healthcare",
+        "units": 2735.0472,
+        "price": 145.0,
+        "market_value": 396581.85
+      },
+      {
+        "ticker": "XLF",
+        "name": "Financials ETF",
+        "asset_class": "Equity",
+        "sector": "Financials",
+        "units": 8812.93,
+        "price": 45.0,
+        "market_value": 396581.85
+      },
+      {
+        "ticker": "TLT",
+        "name": "20+ Yr Treasury",
+        "asset_class": "Bonds",
+        "sector": "Govt",
+        "units": 6957.5763,
+        "price": 95.0,
+        "market_value": 660969.75
+      },
+      {
+        "ticker": "GLD",
+        "name": "Gold ETF",
+        "asset_class": "Commodity",
+        "sector": "Metals",
+        "units": 550.8081,
+        "price": 240.0,
+        "market_value": 132193.95
+      }
+    ],
+    "cash": 132193.95,
+    "mandate": {
+      "max_asset_class_weight": {
+        "Equity": 0.8,
+        "Bonds": 0.4,
+        "Crypto": 0.0,
+        "Commodity": 0.15,
+        "Cash": 0.3
+      },
+      "max_sector_weight": {
+        "Technology": 0.25,
+        "Healthcare": 0.3,
+        "Financials": 0.3,
+        "Consumer": 0.25,
+        "Broad": 1.0,
+        "Govt": 1.0,
+        "Metals": 0.2,
+        "Crypto": 0.1
+      },
+      "approved_universe": [
+        "SPY",
+        "QQQ",
+        "AAPL",
+        "MSFT",
+        "NVDA",
+        "AMZN",
+        "XLK",
+        "XLV",
+        "XLF",
+        "TLT",
+        "GLD"
+      ],
+      "max_single_holding": 0.35,
+      "min_cash": 0.02,
+      "target_allocation": {
+        "Equity": 0.6,
+        "Bonds": 0.3,
+        "Commodity": 0.05,
+        "Cash": 0.05
+      },
+      "drift_tolerance": 0.08
+    }
+  },
+  {
+    "client_id": "c025",
+    "client_name": "Yarrow Wealth",
+    "adviser": "Grant Hale",
+    "fum": 11922774.59,
+    "holdings": [
+      {
+        "ticker": "SPY",
+        "name": "S&P 500 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 3576.8324,
+        "price": 500.0,
+        "market_value": 1788416.19
+      },
+      {
+        "ticker": "QQQ",
+        "name": "Nasdaq 100 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 4258.1338,
+        "price": 420.0,
+        "market_value": 1788416.19
+      },
+      {
+        "ticker": "XLV",
+        "name": "Healthcare ETF",
+        "asset_class": "Equity",
+        "sector": "Healthcare",
+        "units": 12333.9048,
+        "price": 145.0,
+        "market_value": 1788416.19
+      },
+      {
+        "ticker": "XLF",
+        "name": "Financials ETF",
+        "asset_class": "Equity",
+        "sector": "Financials",
+        "units": 39742.582,
+        "price": 45.0,
+        "market_value": 1788416.19
+      },
+      {
+        "ticker": "TLT",
+        "name": "20+ Yr Treasury",
+        "asset_class": "Bonds",
+        "sector": "Govt",
+        "units": 31375.7226,
+        "price": 95.0,
+        "market_value": 2980693.65
+      },
+      {
+        "ticker": "GLD",
+        "name": "Gold ETF",
+        "asset_class": "Commodity",
+        "sector": "Metals",
+        "units": 2483.9114,
+        "price": 240.0,
+        "market_value": 596138.73
+      }
+    ],
+    "cash": 596138.73,
+    "mandate": {
+      "max_asset_class_weight": {
+        "Equity": 0.8,
+        "Bonds": 0.4,
+        "Crypto": 0.0,
+        "Commodity": 0.15,
+        "Cash": 0.3
+      },
+      "max_sector_weight": {
+        "Technology": 0.25,
+        "Healthcare": 0.3,
+        "Financials": 0.3,
+        "Consumer": 0.25,
+        "Broad": 1.0,
+        "Govt": 1.0,
+        "Metals": 0.2,
+        "Crypto": 0.1
+      },
+      "approved_universe": [
+        "SPY",
+        "QQQ",
+        "XLK",
+        "XLV",
+        "XLF",
+        "TLT",
+        "GLD"
+      ],
+      "max_single_holding": 0.35,
+      "min_cash": 0.02,
+      "target_allocation": {
+        "Equity": 0.6,
+        "Bonds": 0.3,
+        "Commodity": 0.05,
+        "Cash": 0.05
+      },
+      "drift_tolerance": 0.08
+    }
+  },
+  {
+    "client_id": "c037",
+    "client_name": "Orchid Wealth",
+    "adviser": "Pat Quinn",
+    "fum": 6683881.24,
+    "holdings": [
+      {
+        "ticker": "SPY",
+        "name": "S&P 500 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 2005.1644,
+        "price": 500.0,
+        "market_value": 1002582.19
+      },
+      {
+        "ticker": "QQQ",
+        "name": "Nasdaq 100 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 2387.1005,
+        "price": 420.0,
+        "market_value": 1002582.19
+      },
+      {
+        "ticker": "XLV",
+        "name": "Healthcare ETF",
+        "asset_class": "Equity",
+        "sector": "Healthcare",
+        "units": 6914.3599,
+        "price": 145.0,
+        "market_value": 1002582.19
+      },
+      {
+        "ticker": "XLF",
+        "name": "Financials ETF",
+        "asset_class": "Equity",
+        "sector": "Financials",
+        "units": 22279.6042,
+        "price": 45.0,
+        "market_value": 1002582.19
+      },
+      {
+        "ticker": "TLT",
+        "name": "20+ Yr Treasury",
+        "asset_class": "Bonds",
+        "sector": "Govt",
+        "units": 17589.1612,
+        "price": 95.0,
+        "market_value": 1670970.31
+      },
+      {
+        "ticker": "GLD",
+        "name": "Gold ETF",
+        "asset_class": "Commodity",
+        "sector": "Metals",
+        "units": 1392.4752,
+        "price": 240.0,
+        "market_value": 334194.06
+      }
+    ],
+    "cash": 334194.06,
+    "mandate": {
+      "max_asset_class_weight": {
+        "Equity": 0.8,
+        "Bonds": 0.4,
+        "Crypto": 0.0,
+        "Commodity": 0.15,
+        "Cash": 0.3
+      },
+      "max_sector_weight": {
+        "Technology": 0.25,
+        "Healthcare": 0.3,
+        "Financials": 0.3,
+        "Consumer": 0.25,
+        "Broad": 1.0,
+        "Govt": 1.0,
+        "Metals": 0.2,
+        "Crypto": 0.1
+      },
+      "approved_universe": [
+        "SPY",
+        "QQQ",
+        "XLK",
+        "XLV",
+        "XLF",
+        "TLT",
+        "GLD"
+      ],
+      "max_single_holding": 0.35,
+      "min_cash": 0.02,
+      "target_allocation": {
+        "Equity": 0.6,
+        "Bonds": 0.3,
+        "Commodity": 0.05,
+        "Cash": 0.05
+      },
+      "drift_tolerance": 0.08
+    }
+  },
+  {
+    "client_id": "c030",
+    "client_name": "Indigo Capital",
+    "adviser": "Grant Hale",
+    "fum": 9212759.13,
+    "holdings": [
+      {
+        "ticker": "SPY",
+        "name": "S&P 500 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 2763.8277,
+        "price": 500.0,
+        "market_value": 1381913.87
+      },
+      {
+        "ticker": "QQQ",
+        "name": "Nasdaq 100 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 3290.2711,
+        "price": 420.0,
+        "market_value": 1381913.87
+      },
+      {
+        "ticker": "XLV",
+        "name": "Healthcare ETF",
+        "asset_class": "Equity",
+        "sector": "Healthcare",
+        "units": 9530.4405,
+        "price": 145.0,
+        "market_value": 1381913.87
+      },
+      {
+        "ticker": "XLF",
+        "name": "Financials ETF",
+        "asset_class": "Equity",
+        "sector": "Financials",
+        "units": 30709.1971,
+        "price": 45.0,
+        "market_value": 1381913.87
+      },
+      {
+        "ticker": "TLT",
+        "name": "20+ Yr Treasury",
+        "asset_class": "Bonds",
+        "sector": "Govt",
+        "units": 24244.1029,
+        "price": 95.0,
+        "market_value": 2303189.78
+      },
+      {
+        "ticker": "GLD",
+        "name": "Gold ETF",
+        "asset_class": "Commodity",
+        "sector": "Metals",
+        "units": 1919.3248,
+        "price": 240.0,
+        "market_value": 460637.96
+      }
+    ],
+    "cash": 460637.96,
+    "mandate": {
+      "max_asset_class_weight": {
+        "Equity": 0.8,
+        "Bonds": 0.4,
+        "Crypto": 0.0,
+        "Commodity": 0.15,
+        "Cash": 0.3
+      },
+      "max_sector_weight": {
+        "Technology": 0.25,
+        "Healthcare": 0.3,
+        "Financials": 0.3,
+        "Consumer": 0.25,
+        "Broad": 1.0,
+        "Govt": 1.0,
+        "Metals": 0.2,
+        "Crypto": 0.1
+      },
+      "approved_universe": [
+        "SPY",
+        "QQQ",
+        "AAPL",
+        "MSFT",
+        "NVDA",
+        "AMZN",
+        "XLK",
+        "XLV",
+        "XLF",
+        "TLT",
+        "GLD"
+      ],
+      "max_single_holding": 0.35,
+      "min_cash": 0.02,
+      "target_allocation": {
+        "Equity": 0.6,
+        "Bonds": 0.3,
+        "Commodity": 0.05,
+        "Cash": 0.05
+      },
+      "drift_tolerance": 0.08
+    }
+  },
+  {
+    "client_id": "c008",
+    "client_name": "Acme Holdings",
+    "adviser": "Renee Cole",
+    "fum": 8132418.48,
+    "holdings": [
+      {
+        "ticker": "SPY",
+        "name": "S&P 500 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 2277.0772,
+        "price": 500.0,
+        "market_value": 1138538.59
+      },
+      {
+        "ticker": "QQQ",
+        "name": "Nasdaq 100 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 2710.8062,
+        "price": 420.0,
+        "market_value": 1138538.59
+      },
+      {
+        "ticker": "XLV",
+        "name": "Healthcare ETF",
+        "asset_class": "Equity",
+        "sector": "Healthcare",
+        "units": 7851.9903,
+        "price": 145.0,
+        "market_value": 1138538.59
+      },
+      {
+        "ticker": "XLF",
+        "name": "Financials ETF",
+        "asset_class": "Equity",
+        "sector": "Financials",
+        "units": 25300.8576,
+        "price": 45.0,
+        "market_value": 1138538.59
+      },
+      {
+        "ticker": "XLK",
+        "name": "Tech Sector ETF",
+        "asset_class": "Equity",
+        "sector": "Technology",
+        "units": 5175.1754,
+        "price": 220.0,
+        "market_value": 1138538.59
+      },
+      {
+        "ticker": "TLT",
+        "name": "20+ Yr Treasury",
+        "asset_class": "Bonds",
+        "sector": "Govt",
+        "units": 21401.1013,
+        "price": 95.0,
+        "market_value": 2033104.62
+      }
+    ],
+    "cash": 406620.92,
+    "mandate": {
+      "max_asset_class_weight": {
+        "Equity": 0.8,
+        "Bonds": 0.4,
+        "Crypto": 0.0,
+        "Commodity": 0.15,
+        "Cash": 0.3
+      },
+      "max_sector_weight": {
+        "Technology": 0.25,
+        "Healthcare": 0.3,
+        "Financials": 0.3,
+        "Consumer": 0.25,
+        "Broad": 1.0,
+        "Govt": 1.0,
+        "Metals": 0.2,
+        "Crypto": 0.1
+      },
+      "approved_universe": [
+        "SPY",
+        "QQQ",
+        "AAPL",
+        "MSFT",
+        "NVDA",
+        "AMZN",
+        "XLK",
+        "XLV",
+        "XLF",
+        "TLT",
+        "GLD"
+      ],
+      "max_single_holding": 0.35,
+      "min_cash": 0.02,
+      "target_allocation": {
+        "Equity": 0.6,
+        "Bonds": 0.3,
+        "Commodity": 0.05,
+        "Cash": 0.05
+      },
+      "drift_tolerance": 0.08
+    }
+  },
+  {
+    "client_id": "c013",
+    "client_name": "Xanadu Capital",
+    "adviser": "Grant Hale",
+    "fum": 8370201.34,
+    "holdings": [
+      {
+        "ticker": "SPY",
+        "name": "S&P 500 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 2511.0604,
+        "price": 500.0,
+        "market_value": 1255530.2
+      },
+      {
+        "ticker": "QQQ",
+        "name": "Nasdaq 100 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 2989.3576,
+        "price": 420.0,
+        "market_value": 1255530.2
+      },
+      {
+        "ticker": "XLV",
+        "name": "Healthcare ETF",
+        "asset_class": "Equity",
+        "sector": "Healthcare",
+        "units": 8658.829,
+        "price": 145.0,
+        "market_value": 1255530.2
+      },
+      {
+        "ticker": "XLF",
+        "name": "Financials ETF",
+        "asset_class": "Equity",
+        "sector": "Financials",
+        "units": 27900.6711,
+        "price": 45.0,
+        "market_value": 1255530.2
+      },
+      {
+        "ticker": "TLT",
+        "name": "20+ Yr Treasury",
+        "asset_class": "Bonds",
+        "sector": "Govt",
+        "units": 22026.8457,
+        "price": 95.0,
+        "market_value": 2092550.34
+      },
+      {
+        "ticker": "GLD",
+        "name": "Gold ETF",
+        "asset_class": "Commodity",
+        "sector": "Metals",
+        "units": 1743.792,
+        "price": 240.0,
+        "market_value": 418510.07
+      }
+    ],
+    "cash": 418510.07,
+    "mandate": {
+      "max_asset_class_weight": {
+        "Equity": 0.8,
+        "Bonds": 0.4,
+        "Crypto": 0.1,
+        "Commodity": 0.15,
+        "Cash": 0.3
+      },
+      "max_sector_weight": {
+        "Technology": 0.25,
+        "Healthcare": 0.3,
+        "Financials": 0.3,
+        "Consumer": 0.25,
+        "Broad": 1.0,
+        "Govt": 1.0,
+        "Metals": 0.2,
+        "Crypto": 0.1
+      },
+      "approved_universe": [
+        "SPY",
+        "QQQ",
+        "AAPL",
+        "MSFT",
+        "NVDA",
+        "AMZN",
+        "XLK",
+        "XLV",
+        "XLF",
+        "TLT",
+        "GLD",
+        "BTC",
+        "ETH",
+        "AVAX"
+      ],
+      "max_single_holding": 0.35,
+      "min_cash": 0.02,
+      "target_allocation": {
+        "Equity": 0.6,
+        "Bonds": 0.3,
+        "Commodity": 0.05,
+        "Cash": 0.05
+      },
+      "drift_tolerance": 0.08
+    }
+  },
+  {
+    "client_id": "c031",
+    "client_name": "Hawthorn Wealth",
+    "adviser": "Aaron Wright",
+    "fum": 13793703.72,
+    "holdings": [
+      {
+        "ticker": "SPY",
+        "name": "S&P 500 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 4138.1111,
+        "price": 500.0,
+        "market_value": 2069055.56
+      },
+      {
+        "ticker": "QQQ",
+        "name": "Nasdaq 100 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 4926.3228,
+        "price": 420.0,
+        "market_value": 2069055.56
+      },
+      {
+        "ticker": "XLV",
+        "name": "Healthcare ETF",
+        "asset_class": "Equity",
+        "sector": "Healthcare",
+        "units": 14269.3487,
+        "price": 145.0,
+        "market_value": 2069055.56
+      },
+      {
+        "ticker": "XLF",
+        "name": "Financials ETF",
+        "asset_class": "Equity",
+        "sector": "Financials",
+        "units": 45979.0124,
+        "price": 45.0,
+        "market_value": 2069055.56
+      },
+      {
+        "ticker": "TLT",
+        "name": "20+ Yr Treasury",
+        "asset_class": "Bonds",
+        "sector": "Govt",
+        "units": 36299.2203,
+        "price": 95.0,
+        "market_value": 3448425.93
+      },
+      {
+        "ticker": "GLD",
+        "name": "Gold ETF",
+        "asset_class": "Commodity",
+        "sector": "Metals",
+        "units": 2873.6883,
+        "price": 240.0,
+        "market_value": 689685.19
+      }
+    ],
+    "cash": 689685.19,
+    "mandate": {
+      "max_asset_class_weight": {
+        "Equity": 0.8,
+        "Bonds": 0.4,
+        "Crypto": 0.0,
+        "Commodity": 0.15,
+        "Cash": 0.3
+      },
+      "max_sector_weight": {
+        "Technology": 0.25,
+        "Healthcare": 0.3,
+        "Financials": 0.3,
+        "Consumer": 0.25,
+        "Broad": 1.0,
+        "Govt": 1.0,
+        "Metals": 0.2,
+        "Crypto": 0.1
+      },
+      "approved_universe": [
+        "SPY",
+        "QQQ",
+        "AAPL",
+        "MSFT",
+        "NVDA",
+        "AMZN",
+        "XLK",
+        "XLV",
+        "XLF",
+        "TLT",
+        "GLD"
+      ],
+      "max_single_holding": 0.35,
+      "min_cash": 0.02,
+      "target_allocation": {
+        "Equity": 0.6,
+        "Bonds": 0.3,
+        "Commodity": 0.05,
+        "Cash": 0.05
+      },
+      "drift_tolerance": 0.08
+    }
+  },
+  {
+    "client_id": "c017",
+    "client_name": "Driftwood Wealth",
+    "adviser": "Mia Tan",
+    "fum": 9597678.67,
+    "holdings": [
+      {
+        "ticker": "SPY",
+        "name": "S&P 500 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 2879.3036,
+        "price": 500.0,
+        "market_value": 1439651.8
+      },
+      {
+        "ticker": "QQQ",
+        "name": "Nasdaq 100 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 3427.7424,
+        "price": 420.0,
+        "market_value": 1439651.8
+      },
+      {
+        "ticker": "XLV",
+        "name": "Healthcare ETF",
+        "asset_class": "Equity",
+        "sector": "Healthcare",
+        "units": 9928.6331,
+        "price": 145.0,
+        "market_value": 1439651.8
+      },
+      {
+        "ticker": "XLF",
+        "name": "Financials ETF",
+        "asset_class": "Equity",
+        "sector": "Financials",
+        "units": 31992.2622,
+        "price": 45.0,
+        "market_value": 1439651.8
+      },
+      {
+        "ticker": "TLT",
+        "name": "20+ Yr Treasury",
+        "asset_class": "Bonds",
+        "sector": "Govt",
+        "units": 25257.0492,
+        "price": 95.0,
+        "market_value": 2399419.67
+      },
+      {
+        "ticker": "GLD",
+        "name": "Gold ETF",
+        "asset_class": "Commodity",
+        "sector": "Metals",
+        "units": 1999.5164,
+        "price": 240.0,
+        "market_value": 479883.93
+      }
+    ],
+    "cash": 479883.93,
+    "mandate": {
+      "max_asset_class_weight": {
+        "Equity": 0.8,
+        "Bonds": 0.4,
+        "Crypto": 0.0,
+        "Commodity": 0.15,
+        "Cash": 0.3
+      },
+      "max_sector_weight": {
+        "Technology": 0.25,
+        "Healthcare": 0.3,
+        "Financials": 0.3,
+        "Consumer": 0.25,
+        "Broad": 1.0,
+        "Govt": 1.0,
+        "Metals": 0.2,
+        "Crypto": 0.1
+      },
+      "approved_universe": [
+        "SPY",
+        "QQQ",
+        "XLK",
+        "XLV",
+        "XLF",
+        "TLT",
+        "GLD"
+      ],
+      "max_single_holding": 0.35,
+      "min_cash": 0.02,
+      "target_allocation": {
+        "Equity": 0.6,
+        "Bonds": 0.3,
+        "Commodity": 0.05,
+        "Cash": 0.05
+      },
+      "drift_tolerance": 0.08
+    }
+  },
+  {
+    "client_id": "c015",
+    "client_name": "Driftwood Wealth",
+    "adviser": "Aaron Wright",
+    "fum": 12858702.27,
+    "holdings": [
+      {
+        "ticker": "SPY",
+        "name": "S&P 500 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 3857.6107,
+        "price": 500.0,
+        "market_value": 1928805.34
+      },
+      {
+        "ticker": "QQQ",
+        "name": "Nasdaq 100 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 4592.3937,
+        "price": 420.0,
+        "market_value": 1928805.34
+      },
+      {
+        "ticker": "XLV",
+        "name": "Healthcare ETF",
+        "asset_class": "Equity",
+        "sector": "Healthcare",
+        "units": 13302.1058,
+        "price": 145.0,
+        "market_value": 1928805.34
+      },
+      {
+        "ticker": "XLF",
+        "name": "Financials ETF",
+        "asset_class": "Equity",
+        "sector": "Financials",
+        "units": 42862.3409,
+        "price": 45.0,
+        "market_value": 1928805.34
+      },
+      {
+        "ticker": "TLT",
+        "name": "20+ Yr Treasury",
+        "asset_class": "Bonds",
+        "sector": "Govt",
+        "units": 33838.6902,
+        "price": 95.0,
+        "market_value": 3214675.57
+      },
+      {
+        "ticker": "GLD",
+        "name": "Gold ETF",
+        "asset_class": "Commodity",
+        "sector": "Metals",
+        "units": 2678.8963,
+        "price": 240.0,
+        "market_value": 642935.11
+      }
+    ],
+    "cash": 642935.11,
+    "mandate": {
+      "max_asset_class_weight": {
+        "Equity": 0.8,
+        "Bonds": 0.4,
+        "Crypto": 0.1,
+        "Commodity": 0.15,
+        "Cash": 0.3
+      },
+      "max_sector_weight": {
+        "Technology": 0.25,
+        "Healthcare": 0.3,
+        "Financials": 0.3,
+        "Consumer": 0.25,
+        "Broad": 1.0,
+        "Govt": 1.0,
+        "Metals": 0.2,
+        "Crypto": 0.1
+      },
+      "approved_universe": [
+        "SPY",
+        "QQQ",
+        "AAPL",
+        "MSFT",
+        "NVDA",
+        "AMZN",
+        "XLK",
+        "XLV",
+        "XLF",
+        "TLT",
+        "GLD",
+        "BTC",
+        "ETH",
+        "AVAX"
+      ],
+      "max_single_holding": 0.35,
+      "min_cash": 0.02,
+      "target_allocation": {
+        "Equity": 0.6,
+        "Bonds": 0.3,
+        "Commodity": 0.05,
+        "Cash": 0.05
+      },
+      "drift_tolerance": 0.08
+    }
+  },
+  {
+    "client_id": "c032",
+    "client_name": "Dover Trust",
+    "adviser": "Renee Cole",
+    "fum": 13205083.79,
+    "holdings": [
+      {
+        "ticker": "SPY",
+        "name": "S&P 500 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 3961.5251,
+        "price": 500.0,
+        "market_value": 1980762.57
+      },
+      {
+        "ticker": "QQQ",
+        "name": "Nasdaq 100 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 4716.1014,
+        "price": 420.0,
+        "market_value": 1980762.57
+      },
+      {
+        "ticker": "XLV",
+        "name": "Healthcare ETF",
+        "asset_class": "Equity",
+        "sector": "Healthcare",
+        "units": 13660.4315,
+        "price": 145.0,
+        "market_value": 1980762.57
+      },
+      {
+        "ticker": "XLF",
+        "name": "Financials ETF",
+        "asset_class": "Equity",
+        "sector": "Financials",
+        "units": 44016.946,
+        "price": 45.0,
+        "market_value": 1980762.57
+      },
+      {
+        "ticker": "TLT",
+        "name": "20+ Yr Treasury",
+        "asset_class": "Bonds",
+        "sector": "Govt",
+        "units": 34750.2205,
+        "price": 95.0,
+        "market_value": 3301270.95
+      },
+      {
+        "ticker": "GLD",
+        "name": "Gold ETF",
+        "asset_class": "Commodity",
+        "sector": "Metals",
+        "units": 2751.0591,
+        "price": 240.0,
+        "market_value": 660254.19
+      }
+    ],
+    "cash": 660254.19,
+    "mandate": {
+      "max_asset_class_weight": {
+        "Equity": 0.8,
+        "Bonds": 0.4,
+        "Crypto": 0.1,
+        "Commodity": 0.15,
+        "Cash": 0.3
+      },
+      "max_sector_weight": {
+        "Technology": 0.25,
+        "Healthcare": 0.3,
+        "Financials": 0.3,
+        "Consumer": 0.25,
+        "Broad": 1.0,
+        "Govt": 1.0,
+        "Metals": 0.2,
+        "Crypto": 0.1
+      },
+      "approved_universe": [
+        "SPY",
+        "QQQ",
+        "AAPL",
+        "MSFT",
+        "NVDA",
+        "AMZN",
+        "XLK",
+        "XLV",
+        "XLF",
+        "TLT",
+        "GLD",
+        "BTC",
+        "ETH",
+        "AVAX"
+      ],
+      "max_single_holding": 0.35,
+      "min_cash": 0.02,
+      "target_allocation": {
+        "Equity": 0.6,
+        "Bonds": 0.3,
+        "Commodity": 0.05,
+        "Cash": 0.05
+      },
+      "drift_tolerance": 0.08
+    }
+  },
+  {
+    "client_id": "c004",
+    "client_name": "Orchid Wealth",
+    "adviser": "Grant Hale",
+    "fum": 649737.15,
+    "holdings": [
+      {
+        "ticker": "SPY",
+        "name": "S&P 500 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 194.9211,
+        "price": 500.0,
+        "market_value": 97460.57
+      },
+      {
+        "ticker": "QQQ",
+        "name": "Nasdaq 100 ETF",
+        "asset_class": "Equity",
+        "sector": "Broad",
+        "units": 232.049,
+        "price": 420.0,
+        "market_value": 97460.57
+      },
+      {
+        "ticker": "XLV",
+        "name": "Healthcare ETF",
+        "asset_class": "Equity",
+        "sector": "Healthcare",
+        "units": 672.1419,
+        "price": 145.0,
+        "market_value": 97460.57
+      },
+      {
+        "ticker": "XLF",
+        "name": "Financials ETF",
+        "asset_class": "Equity",
+        "sector": "Financials",
+        "units": 2165.7904,
+        "price": 45.0,
+        "market_value": 97460.57
+      },
+      {
+        "ticker": "TLT",
+        "name": "20+ Yr Treasury",
+        "asset_class": "Bonds",
+        "sector": "Govt",
+        "units": 1709.8346,
+        "price": 95.0,
+        "market_value": 162434.29
+      },
+      {
+        "ticker": "GLD",
+        "name": "Gold ETF",
+        "asset_class": "Commodity",
+        "sector": "Metals",
+        "units": 135.3619,
+        "price": 240.0,
+        "market_value": 32486.86
+      },
+      {
+        "ticker": "AVAX",
+        "name": "Avalanche",
+        "asset_class": "Crypto",
+        "sector": "Crypto",
+        "units": 1082.8953,
+        "price": 30.0,
+        "market_value": 32486.86
+      }
+    ],
+    "cash": 12994.74,
+    "mandate": {
+      "max_asset_class_weight": {
+        "Equity": 0.8,
+        "Bonds": 0.4,
+        "Crypto": 0.0,
+        "Commodity": 0.15,
+        "Cash": 0.3
+      },
+      "max_sector_weight": {
+        "Technology": 0.25,
+        "Healthcare": 0.3,
+        "Financials": 0.3,
+        "Consumer": 0.25,
+        "Broad": 1.0,
+        "Govt": 1.0,
+        "Metals": 0.2,
+        "Crypto": 0.1
+      },
+      "approved_universe": [
+        "SPY",
+        "QQQ",
+        "XLK",
+        "XLV",
+        "XLF",
+        "TLT",
+        "GLD"
+      ],
+      "max_single_holding": 0.35,
+      "min_cash": 0.02,
+      "target_allocation": {
+        "Equity": 0.6,
+        "Bonds": 0.3,
+        "Commodity": 0.05,
+        "Cash": 0.05
+      },
+      "drift_tolerance": 0.08
+    }
+  }
+]

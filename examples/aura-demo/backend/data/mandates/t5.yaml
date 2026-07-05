@@ -1,0 +1,43 @@
+mandate:
+  id: high-conviction
+  name: High Conviction
+  version: 1.0.0
+  metadata:
+    sector_cap_base: 0.35
+    approved_n: 15
+    allow_crypto: true
+    excl_k: 0
+  rules:
+  - type: asset_class_weight
+    parameters:
+      max_weights:
+        Equity: 0.9
+        Bonds: 0.2
+        Commodity: 0.1
+        Crypto: 0.05
+        Cash: 1.0
+  - type: region_weight
+    parameters:
+      max_weights:
+        US: 0.65
+        ExUS: 0.35
+        EM: 0.2
+  - type: single_holding
+    parameters:
+      max_weight: 0.18
+  - type: minimum_cash
+    parameters:
+      min_weight: 0.03
+  - type: target_allocation
+    parameters:
+      targets:
+        Equity: 0.8
+        Bonds: 0.12
+      drift_tolerance: 0.1
+  - type: top_n_concentration
+    parameters:
+      n: 3
+      max_weight: 0.65
+  - type: minimum_liquidity
+    parameters:
+      min_liquid_pct: 0.3

@@ -1,0 +1,226 @@
+{
+  "day": 5,
+  "rows": [
+    {
+      "day": 5,
+      "client_id": "c12253",
+      "prior_status": "red",
+      "post_status": "green",
+      "fum": 83694454.92,
+      "trades": "[{\"ticker\": \"XLY\", \"action\": \"sell\", \"units\": 50227.8638, \"value\": 9262754.35, \"rationale\": \"trim XLY to address mandate breach\"}, {\"ticker\": \"SPY\", \"action\": \"buy\", \"units\": 3214.5582, \"value\": 1654645.86, \"rationale\": \"redeploy proceeds into SPY\"}]",
+      "rationale": "trim XLY to single-holding cap; redeploy into SPY",
+      "rank_score": 251083364.76,
+      "created_ts": "2026-06-20T02:13:09.734294+00:00"
+    },
+    {
+      "day": 5,
+      "client_id": "c26338",
+      "prior_status": "red",
+      "post_status": "green",
+      "fum": 6541045.4,
+      "trades": "[{\"ticker\": \"XLY\", \"action\": \"sell\", \"units\": 3935.66002, \"value\": 725793.4, \"rationale\": \"trim XLY to address mandate breach\"}, {\"ticker\": \"SPY\", \"action\": \"buy\", \"units\": 497.9709, \"value\": 256323.09, \"rationale\": \"redeploy proceeds into SPY\"}]",
+      "rationale": "trim XLY to single-holding cap; redeploy into SPY",
+      "rank_score": 19623136.200000003,
+      "created_ts": "2026-06-20T02:13:11.316396+00:00"
+    },
+    {
+      "day": 5,
+      "client_id": "c01184",
+      "prior_status": "red",
+      "post_status": "green",
+      "fum": 5837545.6,
+      "trades": "[{\"ticker\": \"XLF\", \"action\": \"sell\", \"units\": 13713.318965, \"value\": 616383.51, \"rationale\": \"trim XLF to address mandate breach\"}, {\"ticker\": \"SPY\", \"action\": \"buy\", \"units\": 386.5408, \"value\": 198966.13, \"rationale\": \"redeploy proceeds into SPY\"}]",
+      "rationale": "trim XLF to single-holding cap; redeploy into SPY",
+      "rank_score": 17512636.799999997,
+      "created_ts": "2026-06-20T02:13:08.500029+00:00"
+    },
+    {
+      "day": 5,
+      "client_id": "c01566",
+      "prior_status": "red",
+      "post_status": "green",
+      "fum": 4799528.12,
+      "trades": "[{\"ticker\": \"SPY\", \"action\": \"sell\", \"units\": 1037.839354, \"value\": 534212.31, \"rationale\": \"trim SPY to address mandate breach\"}, {\"ticker\": \"SPY\", \"action\": \"buy\", \"units\": 46.8072, \"value\": 24093.33, \"rationale\": \"redeploy proceeds into SPY\"}]",
+      "rationale": "trim SPY to single-holding cap; redeploy into SPY",
+      "rank_score": 14398584.36,
+      "created_ts": "2026-06-20T02:13:08.543304+00:00"
+    },
+    {
+      "day": 5,
+      "client_id": "c31726",
+      "prior_status": "red",
+      "post_status": "green",
+      "fum": 4797370.86,
+      "trades": "[{\"ticker\": \"BNDX\", \"action\": \"sell\", \"units\": 2919.126596, \"value\": 143878.02, \"rationale\": \"trim BNDX to address mandate breach\"}, {\"ticker\": \"IEF\", \"action\": \"sell\", \"units\": 5278.258071, \"value\": 492790.6, \"rationale\": \"trim IEF to address mandate breach\"}, {\"ticker\": \"LQD\", \"action\": \"sell\", \"units\": 1837.396585, \"value\": 202399.66, \"rationale\": \"trim LQD to address mandate breach\"}, {\"ticker\": \"TLT\", \"action\": \"sell\", \"units\": 1072.262793, \"value\": 98482.03, \"rationale\": \"trim TLT to address mandate breach\"}]",
+      "rationale": "trim Bonds to 25% cap",
+      "rank_score": 14392112.580000002,
+      "created_ts": "2026-06-20T02:13:11.926584+00:00"
+    },
+    {
+      "day": 5,
+      "client_id": "c25701",
+      "prior_status": "red",
+      "post_status": "green",
+      "fum": 4550048.7,
+      "trades": "[{\"ticker\": \"GLD\", \"action\": \"sell\", \"units\": 2669.390575, \"value\": 649578.44, \"rationale\": \"trim GLD to address mandate breach\"}, {\"ticker\": \"SPY\", \"action\": \"buy\", \"units\": 222.0432, \"value\": 114293.44, \"rationale\": \"redeploy proceeds into SPY\"}]",
+      "rationale": "trim Commodity to 10% cap; redeploy into SPY",
+      "rank_score": 13650146.100000001,
+      "created_ts": "2026-06-20T02:13:11.248369+00:00"
+    },
+    {
+      "day": 5,
+      "client_id": "c04566",
+      "prior_status": "red",
+      "post_status": "green",
+      "fum": 4072796.06,
+      "trades": "[{\"ticker\": \"XLE\", \"action\": \"sell\", \"units\": 4598.444183, \"value\": 397894.74, \"rationale\": \"trim XLE to address mandate breach\"}, {\"ticker\": \"SPY\", \"action\": \"buy\", \"units\": 13.6273, \"value\": 7014.47, \"rationale\": \"redeploy proceeds into SPY\"}]",
+      "rationale": "trim XLE to single-holding cap; redeploy into SPY",
+      "rank_score": 12218388.18,
+      "created_ts": "2026-06-20T02:13:08.876477+00:00"
+    },
+    {
+      "day": 5,
+      "client_id": "c22449",
+      "prior_status": "red",
+      "post_status": "green",
+      "fum": 3898341.35,
+      "trades": "[{\"ticker\": \"DBC\", \"action\": \"sell\", \"units\": 25404.688736, \"value\": 631649.94, \"rationale\": \"trim DBC to address mandate breach\"}, {\"ticker\": \"GLD\", \"action\": \"sell\", \"units\": 884.633773, \"value\": 215269.75, \"rationale\": \"trim GLD to address mandate breach\"}, {\"ticker\": \"SPY\", \"action\": \"buy\", \"units\": 904.8088, \"value\": 465736.84, \"rationale\": \"redeploy proceeds into SPY\"}]",
+      "rationale": "trim Commodity to 10% cap; redeploy into SPY",
+      "rank_score": 11695024.05,
+      "created_ts": "2026-06-20T02:13:10.878866+00:00"
+    },
+    {
+      "day": 5,
+      "client_id": "c04429",
+      "prior_status": "red",
+      "post_status": "green",
+      "fum": 3451151.11,
+      "trades": "[{\"ticker\": \"HYG\", \"action\": \"sell\", \"units\": 1221.890547, \"value\": 98181.87, \"rationale\": \"trim HYG to address mandate breach\"}, {\"ticker\": \"LQD\", \"action\": \"sell\", \"units\": 2067.571526, \"value\": 227754.73, \"rationale\": \"trim LQD to address mandate breach\"}, {\"ticker\": \"HYG\", \"action\": \"sell\", \"units\": 1716.925404, \"value\": 137959.12, \"rationale\": \"trim HYG to address mandate breach\"}, {\"ticker\": \"LQD\", \"action\": \"sell\", \"units\": 2905.224292, \"value\": 320026.93, \"rationale\": \"trim LQD to address mandate breach\"}]",
+      "rationale": "trim Corporate to 32% cap; trim Bonds to 19% cap",
+      "rank_score": 10353453.33,
+      "created_ts": "2026-06-20T02:13:08.854702+00:00"
+    },
+    {
+      "day": 5,
+      "client_id": "c15610",
+      "prior_status": "red",
+      "post_status": "green",
+      "fum": 2747185.99,
+      "trades": "[{\"ticker\": \"BTC\", \"action\": \"sell\", \"units\": 8.655934, \"value\": 539933.42, \"rationale\": \"trim BTC to address mandate breach\"}, {\"ticker\": \"SPY\", \"action\": \"buy\", \"units\": 158.5158, \"value\": 81593.67, \"rationale\": \"redeploy proceeds into SPY\"}]",
+      "rationale": "trim Crypto to 5% cap; redeploy into SPY",
+      "rank_score": 8241557.970000001,
+      "created_ts": "2026-06-20T02:13:10.112323+00:00"
+    },
+    {
+      "day": 5,
+      "client_id": "c13850",
+      "prior_status": "red",
+      "post_status": "green",
+      "fum": 2645927.55,
+      "trades": "[{\"ticker\": \"DBC\", \"action\": \"sell\", \"units\": 14913.410247, \"value\": 370799.84, \"rationale\": \"trim DBC to address mandate breach\"}, {\"ticker\": \"SPY\", \"action\": \"buy\", \"units\": 347.6877, \"value\": 178967.07, \"rationale\": \"redeploy proceeds into SPY\"}]",
+      "rationale": "trim Commodity to 10% cap; redeploy into SPY",
+      "rank_score": 7937782.649999999,
+      "created_ts": "2026-06-20T02:13:09.912648+00:00"
+    },
+    {
+      "day": 5,
+      "client_id": "c27442",
+      "prior_status": "red",
+      "post_status": "green",
+      "fum": 2384882.24,
+      "trades": "[{\"ticker\": \"SPY\", \"action\": \"sell\", \"units\": 516.874883, \"value\": 266053.63, \"rationale\": \"trim SPY to address mandate breach\"}, {\"ticker\": \"SPY\", \"action\": \"buy\", \"units\": 23.2119, \"value\": 11948.0, \"rationale\": \"redeploy proceeds into SPY\"}]",
+      "rationale": "trim SPY to single-holding cap; redeploy into SPY",
+      "rank_score": 7154646.720000001,
+      "created_ts": "2026-06-20T02:13:11.443698+00:00"
+    },
+    {
+      "day": 5,
+      "client_id": "c32969",
+      "prior_status": "red",
+      "post_status": "green",
+      "fum": 2211785.4,
+      "trades": "[{\"ticker\": \"GLD\", \"action\": \"sell\", \"units\": 502.592778, \"value\": 122302.61, \"rationale\": \"trim GLD to address mandate breach\"}, {\"ticker\": \"SLV\", \"action\": \"sell\", \"units\": 13878.204326, \"value\": 357371.45, \"rationale\": \"trim SLV to address mandate breach\"}, {\"ticker\": \"SPY\", \"action\": \"buy\", \"units\": 153.0738, \"value\": 78792.48, \"rationale\": \"redeploy proceeds into SPY\"}]",
+      "rationale": "trim Commodity to 10% cap; redeploy into SPY",
+      "rank_score": 6635356.199999999,
+      "created_ts": "2026-06-20T02:13:12.062539+00:00"
+    },
+    {
+      "day": 5,
+      "client_id": "c19536",
+      "prior_status": "red",
+      "post_status": "green",
+      "fum": 2040043.33,
+      "trades": "[{\"ticker\": \"BTC\", \"action\": \"sell\", \"units\": 6.436464, \"value\": 401489.0, \"rationale\": \"trim BTC to address mandate breach\"}, {\"ticker\": \"SPY\", \"action\": \"buy\", \"units\": 144.5977, \"value\": 74429.52, \"rationale\": \"redeploy proceeds into SPY\"}]",
+      "rationale": "trim Crypto to 5% cap; redeploy into SPY",
+      "rank_score": 6120129.99,
+      "created_ts": "2026-06-20T02:13:10.548143+00:00"
+    },
+    {
+      "day": 5,
+      "client_id": "c26389",
+      "prior_status": "red",
+      "post_status": "green",
+      "fum": 1991608.8,
+      "trades": "[{\"ticker\": \"GLD\", \"action\": \"sell\", \"units\": 1175.618856, \"value\": 286079.03, \"rationale\": \"trim GLD to address mandate breach\"}, {\"ticker\": \"SPY\", \"action\": \"buy\", \"units\": 97.7514, \"value\": 50316.1, \"rationale\": \"redeploy proceeds into SPY\"}]",
+      "rationale": "trim Commodity to 10% cap; redeploy into SPY",
+      "rank_score": 5974826.4,
+      "created_ts": "2026-06-20T02:13:11.321885+00:00"
+    },
+    {
+      "day": 5,
+      "client_id": "c23084",
+      "prior_status": "red",
+      "post_status": "green",
+      "fum": 1982454.9,
+      "trades": "[{\"ticker\": \"BTC\", \"action\": \"sell\", \"units\": 6.256381, \"value\": 390255.86, \"rationale\": \"trim BTC to address mandate breach\"}, {\"ticker\": \"SPY\", \"action\": \"buy\", \"units\": 87.5578, \"value\": 45069.08, \"rationale\": \"redeploy proceeds into SPY\"}]",
+      "rationale": "trim Crypto to 5% cap; redeploy into SPY",
+      "rank_score": 5947364.699999999,
+      "created_ts": "2026-06-20T02:13:10.952807+00:00"
+    },
+    {
+      "day": 5,
+      "client_id": "c14813",
+      "prior_status": "red",
+      "post_status": "green",
+      "fum": 1895963.09,
+      "trades": "[{\"ticker\": \"SPY\", \"action\": \"sell\", \"units\": 410.938669, \"value\": 211524.55, \"rationale\": \"trim SPY to address mandate breach\"}, {\"ticker\": \"SPY\", \"action\": \"buy\", \"units\": 18.4522, \"value\": 9498.02, \"rationale\": \"redeploy proceeds into SPY\"}]",
+      "rationale": "trim SPY to single-holding cap; redeploy into SPY",
+      "rank_score": 5687889.2700000005,
+      "created_ts": "2026-06-20T02:13:10.019986+00:00"
+    },
+    {
+      "day": 5,
+      "client_id": "c06587",
+      "prior_status": "red",
+      "post_status": "green",
+      "fum": 1851704.11,
+      "trades": "[{\"ticker\": \"HYG\", \"action\": \"sell\", \"units\": 490.817626, \"value\": 39438.39, \"rationale\": \"trim HYG to address mandate breach\"}, {\"ticker\": \"HYG\", \"action\": \"sell\", \"units\": 2574.661967, \"value\": 206880.33, \"rationale\": \"trim HYG to address mandate breach\"}, {\"ticker\": \"LQD\", \"action\": \"sell\", \"units\": 361.492962, \"value\": 39820.5, \"rationale\": \"trim LQD to address mandate breach\"}]",
+      "rationale": "trim Corporate to 32% cap; trim Bonds to 19% cap",
+      "rank_score": 5555112.33,
+      "created_ts": "2026-06-20T02:13:09.104934+00:00"
+    },
+    {
+      "day": 5,
+      "client_id": "c03842",
+      "prior_status": "red",
+      "post_status": "green",
+      "fum": 1717706.15,
+      "trades": "[{\"ticker\": \"XLF\", \"action\": \"sell\", \"units\": 4038.687526, \"value\": 181530.12, \"rationale\": \"trim XLF to address mandate breach\"}, {\"ticker\": \"SPY\", \"action\": \"buy\", \"units\": 1.0059, \"value\": 517.79, \"rationale\": \"redeploy proceeds into SPY\"}]",
+      "rationale": "trim XLF to single-holding cap; redeploy into SPY",
+      "rank_score": 5153118.449999999,
+      "created_ts": "2026-06-20T02:13:08.790168+00:00"
+    },
+    {
+      "day": 5,
+      "client_id": "c12336",
+      "prior_status": "red",
+      "post_status": "green",
+      "fum": 1689594.16,
+      "trades": "[{\"ticker\": \"HYG\", \"action\": \"sell\", \"units\": 2343.852575, \"value\": 188334.24, \"rationale\": \"trim HYG to address mandate breach\"}, {\"ticker\": \"IEF\", \"action\": \"sell\", \"units\": 876.298843, \"value\": 81813.32, \"rationale\": \"trim IEF to address mandate breach\"}, {\"ticker\": \"LQD\", \"action\": \"sell\", \"units\": 756.803525, \"value\": 83366.2, \"rationale\": \"trim LQD to address mandate breach\"}, {\"ticker\": \"TLT\", \"action\": \"sell\", \"units\": 198.173599, \"value\": 18201.26, \"rationale\": \"trim TLT to address mandate breach\"}]",
+      "rationale": "trim Bonds to 25% cap",
+      "rank_score": 5068782.4799999995,
+      "created_ts": "2026-06-20T02:13:09.743192+00:00"
+    }
+  ],
+  "next_cursor": 20
+}

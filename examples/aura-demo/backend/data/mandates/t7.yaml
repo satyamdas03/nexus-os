@@ -1,0 +1,43 @@
+mandate:
+  id: region-capped
+  name: Region Capped
+  version: 1.0.0
+  metadata:
+    sector_cap_base: 0.28
+    approved_n: 18
+    allow_crypto: true
+    excl_k: 1
+  rules:
+  - type: asset_class_weight
+    parameters:
+      max_weights:
+        Equity: 0.88
+        Bonds: 0.25
+        Commodity: 0.12
+        Crypto: 0.05
+        Cash: 1.0
+  - type: region_weight
+    parameters:
+      max_weights:
+        US: 0.45
+        ExUS: 0.45
+        EM: 0.3
+  - type: single_holding
+    parameters:
+      max_weight: 0.14
+  - type: minimum_cash
+    parameters:
+      min_weight: 0.05
+  - type: target_allocation
+    parameters:
+      targets:
+        Equity: 0.72
+        Bonds: 0.18
+      drift_tolerance: 0.09
+  - type: top_n_concentration
+    parameters:
+      n: 5
+      max_weight: 0.58
+  - type: minimum_liquidity
+    parameters:
+      min_liquid_pct: 0.4

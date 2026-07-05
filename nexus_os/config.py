@@ -9,18 +9,20 @@ from typing import Any
 from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+_NEXUS_ENV_FILE = Path(os.path.expanduser("~/.nexus-os/env"))
+
 
 class Settings(BaseSettings):
     """Application settings loaded from environment variables."""
 
     model_config = SettingsConfigDict(
         env_prefix="NEXUS_",
-        env_file="~/.nexus-os/env",
+        env_file=_NEXUS_ENV_FILE,
         env_file_encoding="utf-8",
         extra="ignore",
     )
 
-    anthropic_api_key: str | None = Field(default=None, alias="ANTHROPIC_API_KEY")
+    anthropic_api_key: str | None = Field(default=None)
     default_model: str = Field(default="claude-sonnet-5")
     vendor_dir: Path = Field(default=Path(__file__).resolve().parent.parent / "vendor" / "agency-agents")
     config_dir: Path = Field(default=Path.home() / ".nexus-os")

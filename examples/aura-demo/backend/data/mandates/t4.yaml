@@ -1,0 +1,43 @@
+mandate:
+  id: em-tilt
+  name: EM Tilt
+  version: 1.0.0
+  metadata:
+    sector_cap_base: 0.3
+    approved_n: 17
+    allow_crypto: true
+    excl_k: 1
+  rules:
+  - type: asset_class_weight
+    parameters:
+      max_weights:
+        Equity: 0.85
+        Bonds: 0.2
+        Commodity: 0.1
+        Crypto: 0.05
+        Cash: 1.0
+  - type: region_weight
+    parameters:
+      max_weights:
+        US: 0.5
+        ExUS: 0.3
+        EM: 0.35
+  - type: single_holding
+    parameters:
+      max_weight: 0.15
+  - type: minimum_cash
+    parameters:
+      min_weight: 0.04
+  - type: target_allocation
+    parameters:
+      targets:
+        Equity: 0.75
+        Bonds: 0.15
+      drift_tolerance: 0.1
+  - type: top_n_concentration
+    parameters:
+      n: 5
+      max_weight: 0.6
+  - type: minimum_liquidity
+    parameters:
+      min_liquid_pct: 0.35

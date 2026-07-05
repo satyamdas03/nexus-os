@@ -1,0 +1,58 @@
+# Assure Hermes remediation strategy — the JUDGMENT layer.
+#
+# Two-tier safety cage:
+#   MANDATE rules (per-portfolio `mandate` in the seeded SQLite DB) = LAW.
+#   Hermes never writes here. Only deterministic core/rules_engine.py enforces them.
+#   THIS FILE = judgment. Hermes reflection writes ONLY here (+ history/).
+#
+# Every variable has a value + a rationale so strategy changes are legible.
+# Reflection may mutate values + rationales; the rules engine still disposes.
+version: 4
+
+variables:
+  breach_priority_order:
+    value:
+      - approved_universe
+      - esg_exclusions
+      - max_region_weight
+      - max_sector_weight
+      - max_asset_class_weight
+      - max_single_holding
+      - max_top_n_concentration
+      - min_liquid_pct
+      - min_cash
+      - drift
+    rationale: "Remove forbidden holdings first, then trim hard geography/sector/asset caps, then concentration, liquidity and cash floors; drift watches are handled last."
+
+  preferred_trim_method:
+    value: liquidate
+    rationale: "Sell the largest offending holdings first until each cap is cleared; this produces fewer, larger trades that reliably pass the rules-engine gate."
+
+  replacement_preference:
+    value: SPY
+    rationale: "Redeploy sale proceeds into the broad S&P 500 ETF when it is mandate-approved; otherwise Hermes falls back to any approved tier-1 landing."
+
+  min_trade_size:
+    value: 0.006
+    rationale: "Skip trades smaller than 0.6% of portfolio value; this filters noisy micro-trades that do not move the compliance needle."
+
+  max_trades_per_portfolio:
+    value: 6
+    rationale: "Complex 34k portfolios often need 4-5 sells plus a tier-1 buy; 6 slots lets Hermes clear overlapping caps and still redeploy proceeds."
+
+  cash_buffer_target:
+    value: 0.03
+    rationale: "Hold ~3% cash buffer above the mandate minimum for redemption flexibility."
+
+  # ---- Hermes 2.0 proactive drift-prevention variables ----
+  prevent_horizon_days:
+    value: 14
+    rationale: "Look 14 trading days ahead when projecting breaches; long enough to be useful, short enough to avoid noise."
+
+  prevent_risk_threshold:
+    value: 0.5
+    rationale: "Queue preventive action when projected risk score reaches 0.5 (watch approaching breach)."
+
+  auto_approve_band:
+    value: 0.02
+    rationale: "Auto-approve preventive trades that keep every weight within 2% of current as low-risk housekeeping."

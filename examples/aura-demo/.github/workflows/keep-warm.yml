@@ -1,0 +1,19 @@
+name: Keep Render backend warm
+
+on:
+  schedule:
+    # Every 10 minutes. Render free tier spins down after ~15 min idle,
+    # so this cadence keeps the container warm without hitting rate limits.
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Render health endpoint
+        run: |
+          curl -fsS --max-time 30 "${{ secrets.RENDER_HEALTH_URL }}" \
+            -H "User-Agent: ASSURE-KeepWarm/1.0 (github-actions)" || true
+      - name: Log timestamp
+        run: echo "Keep-warm ping at $(date -u +%Y-%m-%dT%H:%M:%SZ)"

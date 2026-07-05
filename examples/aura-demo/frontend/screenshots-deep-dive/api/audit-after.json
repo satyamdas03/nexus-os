@@ -1,0 +1,1653 @@
+[
+  {
+    "timestamp": "2026-06-20T01:56:13.182208+00:00",
+    "client_id": "c01248",
+    "action_type": "approve",
+    "actor": "hermes_bulk",
+    "tier": "deterministic",
+    "payload": {
+      "trades": [
+        {
+          "ticker": "GLD",
+          "action": "sell",
+          "units": 1852.942378,
+          "value": 444706.17,
+          "rationale": "trim GLD to address mandate breach"
+        },
+        {
+          "ticker": "SPY",
+          "action": "buy",
+          "units": 404.2111,
+          "value": 202105.56,
+          "rationale": "redeploy proceeds into SPY"
+        }
+      ],
+      "prior_status": "red",
+      "new_status": "green",
+      "rationale": "trim Commodity to 10% cap; redeploy into SPY"
+    },
+    "rationale": "trim Commodity to 10% cap; redeploy into SPY",
+    "rules_check_result": null,
+    "version": "0.1.0"
+  },
+  {
+    "timestamp": "2026-06-20T01:56:13.184874+00:00",
+    "client_id": "c25764",
+    "action_type": "approve",
+    "actor": "hermes_bulk",
+    "tier": "deterministic",
+    "payload": {
+      "trades": [
+        {
+          "ticker": "IEF",
+          "action": "sell",
+          "units": 868.036038,
+          "value": 82463.42,
+          "rationale": "trim IEF to address mandate breach"
+        },
+        {
+          "ticker": "TLT",
+          "action": "sell",
+          "units": 348.87073,
+          "value": 33142.72,
+          "rationale": "trim TLT to address mandate breach"
+        },
+        {
+          "ticker": "IEF",
+          "action": "sell",
+          "units": 2600.273559,
+          "value": 247025.99,
+          "rationale": "trim IEF to address mandate breach"
+        },
+        {
+          "ticker": "SPY",
+          "action": "buy",
+          "units": 46.487,
+          "value": 23243.51,
+          "rationale": "redeploy proceeds into SPY"
+        }
+      ],
+      "prior_status": "red",
+      "new_status": "green",
+      "rationale": "trim Bonds to 29% cap; trim IEF to single-holding cap; redeploy into SPY"
+    },
+    "rationale": "trim Bonds to 29% cap; trim IEF to single-holding cap; redeploy into SPY",
+    "rules_check_result": null,
+    "version": "0.1.0"
+  },
+  {
+    "timestamp": "2026-06-20T01:56:13.186462+00:00",
+    "client_id": "c17673",
+    "action_type": "approve",
+    "actor": "hermes_bulk",
+    "tier": "deterministic",
+    "payload": {
+      "trades": [
+        {
+          "ticker": "BTC",
+          "action": "sell",
+          "units": 9.415494,
+          "value": 564929.65,
+          "rationale": "trim BTC to address mandate breach"
+        },
+        {
+          "ticker": "SPY",
+          "action": "buy",
+          "units": 229.3327,
+          "value": 114666.37,
+          "rationale": "redeploy proceeds into SPY"
+        }
+      ],
+      "prior_status": "red",
+      "new_status": "green",
+      "rationale": "trim Crypto to 5% cap; redeploy into SPY"
+    },
+    "rationale": "trim Crypto to 5% cap; redeploy into SPY",
+    "rules_check_result": null,
+    "version": "0.1.0"
+  },
+  {
+    "timestamp": "2026-06-20T01:56:13.188337+00:00",
+    "client_id": "c29400",
+    "action_type": "approve",
+    "actor": "hermes_bulk",
+    "tier": "deterministic",
+    "payload": {
+      "trades": [
+        {
+          "ticker": "XLK",
+          "action": "sell",
+          "units": 1367.207871,
+          "value": 300785.73,
+          "rationale": "trim XLK to address mandate breach"
+        },
+        {
+          "ticker": "SPY",
+          "action": "buy",
+          "units": 174.1326,
+          "value": 87066.3,
+          "rationale": "redeploy proceeds into SPY"
+        }
+      ],
+      "prior_status": "red",
+      "new_status": "green",
+      "rationale": "trim XLK to single-holding cap; redeploy into SPY"
+    },
+    "rationale": "trim XLK to single-holding cap; redeploy into SPY",
+    "rules_check_result": null,
+    "version": "0.1.0"
+  },
+  {
+    "timestamp": "2026-06-20T01:56:13.191013+00:00",
+    "client_id": "c13850",
+    "action_type": "approve",
+    "actor": "hermes_bulk",
+    "tier": "deterministic",
+    "payload": {
+      "trades": [
+        {
+          "ticker": "DBC",
+          "action": "sell",
+          "units": 14817.194009,
+          "value": 370429.85,
+          "rationale": "trim DBC to address mandate breach"
+        },
+        {
+          "ticker": "SPY",
+          "action": "buy",
+          "units": 336.6984,
+          "value": 168349.21,
+          "rationale": "redeploy proceeds into SPY"
+        }
+      ],
+      "prior_status": "red",
+      "new_status": "green",
+      "rationale": "trim Commodity to 10% cap; redeploy into SPY"
+    },
+    "rationale": "trim Commodity to 10% cap; redeploy into SPY",
+    "rules_check_result": null,
+    "version": "0.1.0"
+  },
+  {
+    "timestamp": "2026-06-20T01:56:13.192974+00:00",
+    "client_id": "c21948",
+    "action_type": "approve",
+    "actor": "hermes_bulk",
+    "tier": "deterministic",
+    "payload": {
+      "trades": [
+        {
+          "ticker": "XLE",
+          "action": "sell",
+          "units": 2800.101712,
+          "value": 252009.15,
+          "rationale": "trim XLE to address mandate breach"
+        },
+        {
+          "ticker": "SPY",
+          "action": "buy",
+          "units": 23.665,
+          "value": 11832.52,
+          "rationale": "redeploy proceeds into SPY"
+        }
+      ],
+      "prior_status": "red",
+      "new_status": "green",
+      "rationale": "trim XLE to single-holding cap; redeploy into SPY"
+    },
+    "rationale": "trim XLE to single-holding cap; redeploy into SPY",
+    "rules_check_result": null,
+    "version": "0.1.0"
+  },
+  {
+    "timestamp": "2026-06-20T01:56:13.195554+00:00",
+    "client_id": "c27442",
+    "action_type": "approve",
+    "actor": "hermes_bulk",
+    "tier": "deterministic",
+    "payload": {
+      "trades": [
+        {
+          "ticker": "SPY",
+          "action": "sell",
+          "units": 500.825278,
+          "value": 250412.64,
+          "rationale": "trim SPY to address mandate breach"
+        },
+        {
+          "ticker": "SPY",
+          "action": "buy",
+          "units": 23.8488,
+          "value": 11924.41,
+          "rationale": "redeploy proceeds into SPY"
+        }
+      ],
+      "prior_status": "red",
+      "new_status": "green",
+      "rationale": "trim SPY to single-holding cap; redeploy into SPY"
+    },
+    "rationale": "trim SPY to single-holding cap; redeploy into SPY",
+    "rules_check_result": null,
+    "version": "0.1.0"
+  },
+  {
+    "timestamp": "2026-06-20T01:56:13.197231+00:00",
+    "client_id": "c19536",
+    "action_type": "approve",
+    "actor": "hermes_bulk",
+    "tier": "deterministic",
+    "payload": {
+      "trades": [
+        {
+          "ticker": "BTC",
+          "action": "sell",
+          "units": 6.392136,
+          "value": 383528.16,
+          "rationale": "trim BTC to address mandate breach"
+        },
+        {
+          "ticker": "SPY",
+          "action": "buy",
+          "units": 155.6929,
+          "value": 77846.47,
+          "rationale": "redeploy proceeds into SPY"
+        }
+      ],
+      "prior_status": "red",
+      "new_status": "green",
+      "rationale": "trim Crypto to 5% cap; redeploy into SPY"
+    },
+    "rationale": "trim Crypto to 5% cap; redeploy into SPY",
+    "rules_check_result": null,
+    "version": "0.1.0"
+  },
+  {
+    "timestamp": "2026-06-20T01:56:13.199656+00:00",
+    "client_id": "c26389",
+    "action_type": "approve",
+    "actor": "hermes_bulk",
+    "tier": "deterministic",
+    "payload": {
+      "trades": [
+        {
+          "ticker": "GLD",
+          "action": "sell",
+          "units": 1161.771785,
+          "value": 278825.23,
+          "rationale": "trim GLD to address mandate breach"
+        },
+        {
+          "ticker": "SPY",
+          "action": "buy",
+          "units": 115.0516,
+          "value": 57525.8,
+          "rationale": "redeploy proceeds into SPY"
+        }
+      ],
+      "prior_status": "red",
+      "new_status": "green",
+      "rationale": "trim Commodity to 10% cap; redeploy into SPY"
+    },
+    "rationale": "trim Commodity to 10% cap; redeploy into SPY",
+    "rules_check_result": null,
+    "version": "0.1.0"
+  },
+  {
+    "timestamp": "2026-06-20T01:56:13.201511+00:00",
+    "client_id": "c23084",
+    "action_type": "approve",
+    "actor": "hermes_bulk",
+    "tier": "deterministic",
+    "payload": {
+      "trades": [
+        {
+          "ticker": "BTC",
+          "action": "sell",
+          "units": 6.211692,
+          "value": 372701.5,
+          "rationale": "trim BTC to address mandate breach"
+        },
+        {
+          "ticker": "SPY",
+          "action": "buy",
+          "units": 98.9349,
+          "value": 49467.45,
+          "rationale": "redeploy proceeds into SPY"
+        }
+      ],
+      "prior_status": "red",
+      "new_status": "green",
+      "rationale": "trim Crypto to 5% cap; redeploy into SPY"
+    },
+    "rationale": "trim Crypto to 5% cap; redeploy into SPY",
+    "rules_check_result": null,
+    "version": "0.1.0"
+  },
+  {
+    "timestamp": "2026-06-20T01:56:13.203546+00:00",
+    "client_id": "c14813",
+    "action_type": "approve",
+    "actor": "hermes_bulk",
+    "tier": "deterministic",
+    "payload": {
+      "trades": [
+        {
+          "ticker": "SPY",
+          "action": "sell",
+          "units": 398.152239,
+          "value": 199076.12,
+          "rationale": "trim SPY to address mandate breach"
+        },
+        {
+          "ticker": "SPY",
+          "action": "buy",
+          "units": 18.9596,
+          "value": 9479.82,
+          "rationale": "redeploy proceeds into SPY"
+        }
+      ],
+      "prior_status": "red",
+      "new_status": "green",
+      "rationale": "trim SPY to single-holding cap; redeploy into SPY"
+    },
+    "rationale": "trim SPY to single-holding cap; redeploy into SPY",
+    "rules_check_result": null,
+    "version": "0.1.0"
+  },
+  {
+    "timestamp": "2026-06-20T01:56:13.205567+00:00",
+    "client_id": "c06587",
+    "action_type": "approve",
+    "actor": "hermes_bulk",
+    "tier": "deterministic",
+    "payload": {
+      "trades": [
+        {
+          "ticker": "HYG",
+          "action": "sell",
+          "units": 477.261181,
+          "value": 38180.89,
+          "rationale": "trim HYG to address mandate breach"
+        },
+        {
+          "ticker": "HYG",
+          "action": "sell",
+          "units": 2580.314134,
+          "value": 206425.13,
+          "rationale": "trim HYG to address mandate breach"
+        },
+        {
+          "ticker": "LQD",
+          "action": "sell",
+          "units": 362.286549,
+          "value": 39851.52,
+          "rationale": "trim LQD to address mandate breach"
+        }
+      ],
+      "prior_status": "red",
+      "new_status": "green",
+      "rationale": "trim Corporate to 32% cap; trim Bonds to 19% cap"
+    },
+    "rationale": "trim Corporate to 32% cap; trim Bonds to 19% cap",
+    "rules_check_result": null,
+    "version": "0.1.0"
+  },
+  {
+    "timestamp": "2026-06-20T01:56:13.207582+00:00",
+    "client_id": "c12336",
+    "action_type": "approve",
+    "actor": "hermes_bulk",
+    "tier": "deterministic",
+    "payload": {
+      "trades": [
+        {
+          "ticker": "HYG",
+          "action": "sell",
+          "units": 2339.586159,
+          "value": 187166.89,
+          "rationale": "trim HYG to address mandate breach"
+        },
+        {
+          "ticker": "IEF",
+          "action": "sell",
+          "units": 874.703746,
+          "value": 83096.86,
+          "rationale": "trim IEF to address mandate breach"
+        },
+        {
+          "ticker": "LQD",
+          "action": "sell",
+          "units": 755.425962,
+          "value": 83096.86,
+          "rationale": "trim LQD to address mandate breach"
+        },
+        {
+          "ticker": "TLT",
+          "action": "sell",
+          "units": 197.812875,
+          "value": 18792.22,
+          "rationale": "trim TLT to address mandate breach"
+        }
+      ],
+      "prior_status": "red",
+      "new_status": "green",
+      "rationale": "trim Bonds to 25% cap"
+    },
+    "rationale": "trim Bonds to 25% cap",
+    "rules_check_result": null,
+    "version": "0.1.0"
+  },
+  {
+    "timestamp": "2026-06-20T01:56:13.209980+00:00",
+    "client_id": "c30741",
+    "action_type": "approve",
+    "actor": "hermes_bulk",
+    "tier": "deterministic",
+    "payload": {
+      "trades": [
+        {
+          "ticker": "XLE",
+          "action": "sell",
+          "units": 1833.928968,
+          "value": 165053.61,
+          "rationale": "trim XLE to address mandate breach"
+        },
+        {
+          "ticker": "SPY",
+          "action": "buy",
+          "units": 80.1272,
+          "value": 40063.62,
+          "rationale": "redeploy proceeds into SPY"
+        }
+      ],
+      "prior_status": "red",
+      "new_status": "green",
+      "rationale": "trim XLE to single-holding cap; redeploy into SPY"
+    },
+    "rationale": "trim XLE to single-holding cap; redeploy into SPY",
+    "rules_check_result": null,
+    "version": "0.1.0"
+  },
+  {
+    "timestamp": "2026-06-20T01:56:13.212378+00:00",
+    "client_id": "c19377",
+    "action_type": "approve",
+    "actor": "hermes_bulk",
+    "tier": "deterministic",
+    "payload": {
+      "trades": [
+        {
+          "ticker": "XLE",
+          "action": "sell",
+          "units": 1536.308723,
+          "value": 138267.79,
+          "rationale": "trim XLE to address mandate breach"
+        },
+        {
+          "ticker": "SPY",
+          "action": "buy",
+          "units": 70.4446,
+          "value": 35222.32,
+          "rationale": "redeploy proceeds into SPY"
+        }
+      ],
+      "prior_status": "red",
+      "new_status": "green",
+      "rationale": "trim XLE to single-holding cap; redeploy into SPY"
+    },
+    "rationale": "trim XLE to single-holding cap; redeploy into SPY",
+    "rules_check_result": null,
+    "version": "0.1.0"
+  },
+  {
+    "timestamp": "2026-06-20T01:56:13.214597+00:00",
+    "client_id": "c27915",
+    "action_type": "approve",
+    "actor": "hermes_bulk",
+    "tier": "deterministic",
+    "payload": {
+      "trades": [
+        {
+          "ticker": "GLD",
+          "action": "sell",
+          "units": 701.760959,
+          "value": 168422.63,
+          "rationale": "trim GLD to address mandate breach"
+        },
+        {
+          "ticker": "SPY",
+          "action": "buy",
+          "units": 88.2387,
+          "value": 44119.36,
+          "rationale": "redeploy proceeds into SPY"
+        }
+      ],
+      "prior_status": "red",
+      "new_status": "green",
+      "rationale": "trim Commodity to 10% cap; redeploy into SPY"
+    },
+    "rationale": "trim Commodity to 10% cap; redeploy into SPY",
+    "rules_check_result": null,
+    "version": "0.1.0"
+  },
+  {
+    "timestamp": "2026-06-20T01:56:13.217033+00:00",
+    "client_id": "c22149",
+    "action_type": "approve",
+    "actor": "hermes_bulk",
+    "tier": "deterministic",
+    "payload": {
+      "trades": [
+        {
+          "ticker": "IEF",
+          "action": "sell",
+          "units": 417.900147,
+          "value": 39700.51,
+          "rationale": "trim IEF to address mandate breach"
+        },
+        {
+          "ticker": "TLT",
+          "action": "sell",
+          "units": 188.781711,
+          "value": 17934.26,
+          "rationale": "trim TLT to address mandate breach"
+        },
+        {
+          "ticker": "IEF",
+          "action": "sell",
+          "units": 899.564338,
+          "value": 85458.61,
+          "rationale": "trim IEF to address mandate breach"
+        },
+        {
+          "ticker": "SPY",
+          "action": "buy",
+          "units": 116.28,
+          "value": 58140,
+          "rationale": "redeploy proceeds into SPY"
+        }
+      ],
+      "prior_status": "red",
+      "new_status": "green",
+      "rationale": "trim Bonds to 29% cap; trim IEF to single-holding cap; redeploy into SPY"
+    },
+    "rationale": "trim Bonds to 29% cap; trim IEF to single-holding cap; redeploy into SPY",
+    "rules_check_result": null,
+    "version": "0.1.0"
+  },
+  {
+    "timestamp": "2026-06-20T01:56:13.219414+00:00",
+    "client_id": "c13004",
+    "action_type": "approve",
+    "actor": "hermes_bulk",
+    "tier": "deterministic",
+    "payload": {
+      "trades": [
+        {
+          "ticker": "BNDX",
+          "action": "sell",
+          "units": 1541.054694,
+          "value": 77052.73,
+          "rationale": "trim BNDX to address mandate breach"
+        },
+        {
+          "ticker": "TLT",
+          "action": "sell",
+          "units": 147.135209,
+          "value": 13977.84,
+          "rationale": "trim TLT to address mandate breach"
+        },
+        {
+          "ticker": "BNDX",
+          "action": "sell",
+          "units": 649.17852,
+          "value": 32458.93,
+          "rationale": "trim BNDX to address mandate breach"
+        }
+      ],
+      "prior_status": "red",
+      "new_status": "green",
+      "rationale": "trim Bonds to 21% cap; trim BNDX to single-holding cap"
+    },
+    "rationale": "trim Bonds to 21% cap; trim BNDX to single-holding cap",
+    "rules_check_result": null,
+    "version": "0.1.0"
+  },
+  {
+    "timestamp": "2026-06-20T01:56:13.221348+00:00",
+    "client_id": "c04064",
+    "action_type": "approve",
+    "actor": "hermes_bulk",
+    "tier": "deterministic",
+    "payload": {
+      "trades": [
+        {
+          "ticker": "EFA",
+          "action": "sell",
+          "units": 1260.205372,
+          "value": 100816.43,
+          "rationale": "trim EFA to address mandate breach"
+        },
+        {
+          "ticker": "SPY",
+          "action": "buy",
+          "units": 57.9072,
+          "value": 28953.61,
+          "rationale": "redeploy proceeds into SPY"
+        }
+      ],
+      "prior_status": "red",
+      "new_status": "orange",
+      "rationale": "trim EFA to single-holding cap; redeploy into SPY"
+    },
+    "rationale": "trim EFA to single-holding cap; redeploy into SPY",
+    "rules_check_result": null,
+    "version": "0.1.0"
+  },
+  {
+    "timestamp": "2026-06-20T01:56:13.223091+00:00",
+    "client_id": "c21170",
+    "action_type": "approve",
+    "actor": "hermes_bulk",
+    "tier": "deterministic",
+    "payload": {
+      "trades": [
+        {
+          "ticker": "HYG",
+          "action": "sell",
+          "units": 182.571708,
+          "value": 14605.74,
+          "rationale": "trim HYG to address mandate breach"
+        },
+        {
+          "ticker": "TLT",
+          "action": "sell",
+          "units": 793.855811,
+          "value": 75416.3,
+          "rationale": "trim TLT to address mandate breach"
+        },
+        {
+          "ticker": "TLT",
+          "action": "sell",
+          "units": 212.393074,
+          "value": 20177.34,
+          "rationale": "trim TLT to address mandate breach"
+        }
+      ],
+      "prior_status": "red",
+      "new_status": "green",
+      "rationale": "trim Bonds to 21% cap; trim TLT to single-holding cap"
+    },
+    "rationale": "trim Bonds to 21% cap; trim TLT to single-holding cap",
+    "rules_check_result": null,
+    "version": "0.1.0"
+  },
+  {
+    "timestamp": "2026-06-20T01:56:13.225013+00:00",
+    "client_id": "c20767",
+    "action_type": "approve",
+    "actor": "hermes_bulk",
+    "tier": "deterministic",
+    "payload": {
+      "trades": [
+        {
+          "ticker": "HYG",
+          "action": "sell",
+          "units": 219.175966,
+          "value": 17534.08,
+          "rationale": "trim HYG to address mandate breach"
+        },
+        {
+          "ticker": "LQD",
+          "action": "sell",
+          "units": 438.053256,
+          "value": 48185.86,
+          "rationale": "trim LQD to address mandate breach"
+        },
+        {
+          "ticker": "HYG",
+          "action": "sell",
+          "units": 394.998943,
+          "value": 31599.92,
+          "rationale": "trim HYG to address mandate breach"
+        },
+        {
+          "ticker": "LQD",
+          "action": "sell",
+          "units": 789.459631,
+          "value": 86840.56,
+          "rationale": "trim LQD to address mandate breach"
+        }
+      ],
+      "prior_status": "red",
+      "new_status": "green",
+      "rationale": "trim Corporate to 32% cap; trim Bonds to 19% cap"
+    },
+    "rationale": "trim Corporate to 32% cap; trim Bonds to 19% cap",
+    "rules_check_result": null,
+    "version": "0.1.0"
+  },
+  {
+    "timestamp": "2026-06-20T01:56:13.226856+00:00",
+    "client_id": "c09326",
+    "action_type": "approve",
+    "actor": "hermes_bulk",
+    "tier": "deterministic",
+    "payload": {
+      "trades": [
+        {
+          "ticker": "GLD",
+          "action": "sell",
+          "units": 508.867411,
+          "value": 122128.18,
+          "rationale": "trim GLD to address mandate breach"
+        },
+        {
+          "ticker": "SPY",
+          "action": "buy",
+          "units": 50.3937,
+          "value": 25196.86,
+          "rationale": "redeploy proceeds into SPY"
+        }
+      ],
+      "prior_status": "red",
+      "new_status": "green",
+      "rationale": "trim Commodity to 10% cap; redeploy into SPY"
+    },
+    "rationale": "trim Commodity to 10% cap; redeploy into SPY",
+    "rules_check_result": null,
+    "version": "0.1.0"
+  },
+  {
+    "timestamp": "2026-06-20T01:56:13.228904+00:00",
+    "client_id": "c28676",
+    "action_type": "approve",
+    "actor": "hermes_bulk",
+    "tier": "deterministic",
+    "payload": {
+      "trades": [
+        {
+          "ticker": "GLD",
+          "action": "sell",
+          "units": 179.00475,
+          "value": 42961.14,
+          "rationale": "trim GLD to address mandate breach"
+        },
+        {
+          "ticker": "SLV",
+          "action": "sell",
+          "units": 4942.897406,
+          "value": 128515.33,
+          "rationale": "trim SLV to address mandate breach"
+        },
+        {
+          "ticker": "SPY",
+          "action": "buy",
+          "units": 62.3027,
+          "value": 31151.36,
+          "rationale": "redeploy proceeds into SPY"
+        }
+      ],
+      "prior_status": "red",
+      "new_status": "green",
+      "rationale": "trim Commodity to 10% cap; redeploy into SPY"
+    },
+    "rationale": "trim Commodity to 10% cap; redeploy into SPY",
+    "rules_check_result": null,
+    "version": "0.1.0"
+  },
+  {
+    "timestamp": "2026-06-20T01:56:13.231242+00:00",
+    "client_id": "c19249",
+    "action_type": "approve",
+    "actor": "hermes_bulk",
+    "tier": "deterministic",
+    "payload": {
+      "trades": [
+        {
+          "ticker": "XLP",
+          "action": "sell",
+          "units": 97.027994,
+          "value": 7762.24,
+          "rationale": "trim XLP to address mandate breach"
+        },
+        {
+          "ticker": "XLY",
+          "action": "sell",
+          "units": 94.668992,
+          "value": 17040.42,
+          "rationale": "trim XLY to address mandate breach"
+        },
+        {
+          "ticker": "XLY",
+          "action": "sell",
+          "units": 304.730184,
+          "value": 54851.43,
+          "rationale": "trim XLY to address mandate breach"
+        },
+        {
+          "ticker": "SPY",
+          "action": "buy",
+          "units": 55.8998,
+          "value": 27949.9,
+          "rationale": "redeploy proceeds into SPY"
+        }
+      ],
+      "prior_status": "red",
+      "new_status": "green",
+      "rationale": "trim Consumer to 30% cap; trim XLY to single-holding cap; redeploy into SPY"
+    },
+    "rationale": "trim Consumer to 30% cap; trim XLY to single-holding cap; redeploy into SPY",
+    "rules_check_result": null,
+    "version": "0.1.0"
+  },
+  {
+    "timestamp": "2026-06-20T01:56:13.233124+00:00",
+    "client_id": "c32294",
+    "action_type": "approve",
+    "actor": "hermes_bulk",
+    "tier": "deterministic",
+    "payload": {
+      "trades": [
+        {
+          "ticker": "SPY",
+          "action": "sell",
+          "units": 136.332163,
+          "value": 68166.08,
+          "rationale": "trim SPY to address mandate breach"
+        },
+        {
+          "ticker": "SPY",
+          "action": "buy",
+          "units": 6.492,
+          "value": 3246,
+          "rationale": "redeploy proceeds into SPY"
+        }
+      ],
+      "prior_status": "red",
+      "new_status": "green",
+      "rationale": "trim SPY to single-holding cap; redeploy into SPY"
+    },
+    "rationale": "trim SPY to single-holding cap; redeploy into SPY",
+    "rules_check_result": null,
+    "version": "0.1.0"
+  },
+  {
+    "timestamp": "2026-06-20T01:56:13.234820+00:00",
+    "client_id": "c15470",
+    "action_type": "approve",
+    "actor": "hermes_bulk",
+    "tier": "deterministic",
+    "payload": {
+      "trades": [
+        {
+          "ticker": "DBC",
+          "action": "sell",
+          "units": 3527.264623,
+          "value": 88181.62,
+          "rationale": "trim DBC to address mandate breach"
+        },
+        {
+          "ticker": "SPY",
+          "action": "buy",
+          "units": 49.732,
+          "value": 24866.02,
+          "rationale": "redeploy proceeds into SPY"
+        }
+      ],
+      "prior_status": "red",
+      "new_status": "green",
+      "rationale": "trim Commodity to 10% cap; redeploy into SPY"
+    },
+    "rationale": "trim Commodity to 10% cap; redeploy into SPY",
+    "rules_check_result": null,
+    "version": "0.1.0"
+  },
+  {
+    "timestamp": "2026-06-20T01:56:13.236735+00:00",
+    "client_id": "c04325",
+    "action_type": "approve",
+    "actor": "hermes_bulk",
+    "tier": "deterministic",
+    "payload": {
+      "trades": [
+        {
+          "ticker": "IEF",
+          "action": "sell",
+          "units": 69.449853,
+          "value": 6597.74,
+          "rationale": "trim IEF to address mandate breach"
+        },
+        {
+          "ticker": "TLT",
+          "action": "sell",
+          "units": 172.800332,
+          "value": 16416.03,
+          "rationale": "trim TLT to address mandate breach"
+        },
+        {
+          "ticker": "TLT",
+          "action": "sell",
+          "units": 517.637599,
+          "value": 49175.57,
+          "rationale": "trim TLT to address mandate breach"
+        },
+        {
+          "ticker": "SPY",
+          "action": "buy",
+          "units": 9.2542,
+          "value": 4627.1,
+          "rationale": "redeploy proceeds into SPY"
+        }
+      ],
+      "prior_status": "red",
+      "new_status": "green",
+      "rationale": "trim Bonds to 29% cap; trim TLT to single-holding cap; redeploy into SPY"
+    },
+    "rationale": "trim Bonds to 29% cap; trim TLT to single-holding cap; redeploy into SPY",
+    "rules_check_result": null,
+    "version": "0.1.0"
+  },
+  {
+    "timestamp": "2026-06-20T01:56:13.238582+00:00",
+    "client_id": "c23549",
+    "action_type": "approve",
+    "actor": "hermes_bulk",
+    "tier": "deterministic",
+    "payload": {
+      "trades": [
+        {
+          "ticker": "XLP",
+          "action": "sell",
+          "units": 818.729716,
+          "value": 65498.38,
+          "rationale": "trim XLP to address mandate breach"
+        },
+        {
+          "ticker": "SPY",
+          "action": "buy",
+          "units": 42.081,
+          "value": 21040.52,
+          "rationale": "redeploy proceeds into SPY"
+        }
+      ],
+      "prior_status": "red",
+      "new_status": "green",
+      "rationale": "trim XLP to single-holding cap; redeploy into SPY"
+    },
+    "rationale": "trim XLP to single-holding cap; redeploy into SPY",
+    "rules_check_result": null,
+    "version": "0.1.0"
+  },
+  {
+    "timestamp": "2026-06-20T01:56:13.239908+00:00",
+    "client_id": "c26836",
+    "action_type": "approve",
+    "actor": "hermes_bulk",
+    "tier": "deterministic",
+    "payload": {
+      "trades": [
+        {
+          "ticker": "BTC",
+          "action": "sell",
+          "units": 1.92687,
+          "value": 115612.19,
+          "rationale": "trim BTC to address mandate breach"
+        },
+        {
+          "ticker": "SPY",
+          "action": "buy",
+          "units": 108.1466,
+          "value": 54073.32,
+          "rationale": "redeploy proceeds into SPY"
+        }
+      ],
+      "prior_status": "red",
+      "new_status": "green",
+      "rationale": "trim Crypto to 5% cap; redeploy into SPY"
+    },
+    "rationale": "trim Crypto to 5% cap; redeploy into SPY",
+    "rules_check_result": null,
+    "version": "0.1.0"
+  },
+  {
+    "timestamp": "2026-06-20T01:56:13.241436+00:00",
+    "client_id": "c33563",
+    "action_type": "approve",
+    "actor": "hermes_bulk",
+    "tier": "deterministic",
+    "payload": {
+      "trades": [
+        {
+          "ticker": "XLE",
+          "action": "sell",
+          "units": 701.822875,
+          "value": 63164.06,
+          "rationale": "trim XLE to address mandate breach"
+        },
+        {
+          "ticker": "SPY",
+          "action": "buy",
+          "units": 5.3877,
+          "value": 2693.86,
+          "rationale": "redeploy proceeds into SPY"
+        }
+      ],
+      "prior_status": "red",
+      "new_status": "green",
+      "rationale": "trim XLE to single-holding cap; redeploy into SPY"
+    },
+    "rationale": "trim XLE to single-holding cap; redeploy into SPY",
+    "rules_check_result": null,
+    "version": "0.1.0"
+  },
+  {
+    "timestamp": "2026-06-20T01:56:13.243450+00:00",
+    "client_id": "c30424",
+    "action_type": "approve",
+    "actor": "hermes_bulk",
+    "tier": "deterministic",
+    "payload": {
+      "trades": [
+        {
+          "ticker": "BNDX",
+          "action": "sell",
+          "units": 126.736052,
+          "value": 6336.8,
+          "rationale": "trim BNDX to address mandate breach"
+        },
+        {
+          "ticker": "IEF",
+          "action": "sell",
+          "units": 685.46211,
+          "value": 65118.9,
+          "rationale": "trim IEF to address mandate breach"
+        },
+        {
+          "ticker": "LQD",
+          "action": "sell",
+          "units": 254.732212,
+          "value": 28020.54,
+          "rationale": "trim LQD to address mandate breach"
+        },
+        {
+          "ticker": "TLT",
+          "action": "sell",
+          "units": 294.953087,
+          "value": 28020.54,
+          "rationale": "trim TLT to address mandate breach"
+        }
+      ],
+      "prior_status": "red",
+      "new_status": "green",
+      "rationale": "trim Bonds to 25% cap"
+    },
+    "rationale": "trim Bonds to 25% cap",
+    "rules_check_result": null,
+    "version": "0.1.0"
+  },
+  {
+    "timestamp": "2026-06-20T02:04:43.021060+00:00",
+    "client_id": "c00003",
+    "action_type": "approve",
+    "actor": "hermes_bulk",
+    "tier": "deterministic",
+    "payload": {
+      "trades": [
+        {
+          "ticker": "BNDX",
+          "action": "sell",
+          "units": 1739.293344,
+          "value": 86964.67,
+          "rationale": "trim BNDX to address mandate breach"
+        },
+        {
+          "ticker": "IEF",
+          "action": "sell",
+          "units": 914.030131,
+          "value": 86832.86,
+          "rationale": "trim IEF to address mandate breach"
+        },
+        {
+          "ticker": "LQD",
+          "action": "sell",
+          "units": 1288.569624,
+          "value": 141742.66,
+          "rationale": "trim LQD to address mandate breach"
+        },
+        {
+          "ticker": "TLT",
+          "action": "sell",
+          "units": 3650.363526,
+          "value": 346784.53,
+          "rationale": "trim TLT to address mandate breach"
+        }
+      ],
+      "prior_status": "red",
+      "new_status": "green",
+      "rationale": "trim Bonds to 25% cap"
+    },
+    "rationale": "trim Bonds to 25% cap",
+    "rules_check_result": null,
+    "version": "0.1.0"
+  },
+  {
+    "timestamp": "2026-06-20T02:08:40.828458+00:00",
+    "client_id": "c00003",
+    "action_type": "approve",
+    "actor": "hermes_bulk",
+    "tier": "deterministic",
+    "payload": {
+      "trades": [
+        {
+          "ticker": "BNDX",
+          "action": "sell",
+          "units": 1739.293344,
+          "value": 86964.67,
+          "rationale": "trim BNDX to address mandate breach"
+        },
+        {
+          "ticker": "IEF",
+          "action": "sell",
+          "units": 914.030131,
+          "value": 86832.86,
+          "rationale": "trim IEF to address mandate breach"
+        },
+        {
+          "ticker": "LQD",
+          "action": "sell",
+          "units": 1288.569624,
+          "value": 141742.66,
+          "rationale": "trim LQD to address mandate breach"
+        },
+        {
+          "ticker": "TLT",
+          "action": "sell",
+          "units": 3650.363526,
+          "value": 346784.53,
+          "rationale": "trim TLT to address mandate breach"
+        }
+      ],
+      "prior_status": "red",
+      "new_status": "green",
+      "rationale": "trim Bonds to 25% cap"
+    },
+    "rationale": "trim Bonds to 25% cap",
+    "rules_check_result": null,
+    "version": "0.1.0"
+  },
+  {
+    "timestamp": "2026-06-20T02:09:44.159256+00:00",
+    "client_id": "c00003",
+    "action_type": "approve",
+    "actor": "hermes_bulk",
+    "tier": "deterministic",
+    "payload": {
+      "trades": [
+        {
+          "ticker": "BNDX",
+          "action": "sell",
+          "units": 1739.293344,
+          "value": 86964.67,
+          "rationale": "trim BNDX to address mandate breach"
+        },
+        {
+          "ticker": "IEF",
+          "action": "sell",
+          "units": 914.030131,
+          "value": 86832.86,
+          "rationale": "trim IEF to address mandate breach"
+        },
+        {
+          "ticker": "LQD",
+          "action": "sell",
+          "units": 1288.569624,
+          "value": 141742.66,
+          "rationale": "trim LQD to address mandate breach"
+        },
+        {
+          "ticker": "TLT",
+          "action": "sell",
+          "units": 3650.363526,
+          "value": 346784.53,
+          "rationale": "trim TLT to address mandate breach"
+        }
+      ],
+      "prior_status": "red",
+      "new_status": "green",
+      "rationale": "trim Bonds to 25% cap"
+    },
+    "rationale": "trim Bonds to 25% cap",
+    "rules_check_result": null,
+    "version": "0.1.0"
+  },
+  {
+    "timestamp": "2026-06-20T02:11:29.078329+00:00",
+    "client_id": "c00011",
+    "action_type": "remediate_propose",
+    "actor": "ai",
+    "tier": "advisory",
+    "payload": {
+      "trades": []
+    },
+    "rationale": "Remediation agent",
+    "rules_check_result": null,
+    "version": "0.1.0"
+  },
+  {
+    "timestamp": "2026-06-20T02:11:29.078792+00:00",
+    "client_id": "c00011",
+    "action_type": "verify",
+    "actor": "engine",
+    "tier": "deterministic",
+    "payload": {
+      "status": "red"
+    },
+    "rationale": "rules_engine",
+    "rules_check_result": null,
+    "version": "0.1.0"
+  },
+  {
+    "timestamp": "2026-06-20T02:12:34.395024+00:00",
+    "client_id": "c00011",
+    "action_type": "remediate_propose",
+    "actor": "ai",
+    "tier": "advisory",
+    "payload": {
+      "trades": [
+        {
+          "ticker": "VTI",
+          "action": "sell",
+          "units": 2768.4055,
+          "value": 719785.43,
+          "rationale": "trim VTI to address mandate breach"
+        },
+        {
+          "ticker": "BTC",
+          "action": "sell",
+          "units": 0.3682,
+          "value": 22092,
+          "rationale": "trim BTC to address mandate breach"
+        },
+        {
+          "ticker": "HYG",
+          "action": "sell",
+          "units": 1417.649,
+          "value": 113411.92,
+          "rationale": "trim HYG to address mandate breach"
+        },
+        {
+          "ticker": "IEF",
+          "action": "sell",
+          "units": 140.0709,
+          "value": 13306.74,
+          "rationale": "trim IEF to address mandate breach"
+        },
+        {
+          "ticker": "XLF",
+          "action": "sell",
+          "units": 2520.2648,
+          "value": 113411.92,
+          "rationale": "trim XLF to address mandate breach"
+        },
+        {
+          "ticker": "XLV",
+          "action": "sell",
+          "units": 782.1511,
+          "value": 113411.91,
+          "rationale": "trim XLV to address mandate breach"
+        },
+        {
+          "ticker": "XLY",
+          "action": "sell",
+          "units": 630.0662,
+          "value": 113411.92,
+          "rationale": "trim XLY to address mandate breach"
+        }
+      ]
+    },
+    "rationale": "Remediation agent",
+    "rules_check_result": null,
+    "version": "0.1.0"
+  },
+  {
+    "timestamp": "2026-06-20T02:12:34.395492+00:00",
+    "client_id": "c00011",
+    "action_type": "verify",
+    "actor": "engine",
+    "tier": "deterministic",
+    "payload": {
+      "status": "green"
+    },
+    "rationale": "rules_engine",
+    "rules_check_result": null,
+    "version": "0.1.0"
+  },
+  {
+    "timestamp": "2026-06-20T02:12:41.593463+00:00",
+    "client_id": "c00011",
+    "action_type": "explain",
+    "actor": "ai",
+    "tier": "advisory",
+    "payload": {
+      "narrative": "[MOCK LLM] grounded explanation for: Rules-engine result (GROUND TRUTH — do not contradict):\n{\"client\": \"Hazel Pension #00011\", \"fum\": 7197854.38, \"holdings\"",
+      "breach_summaries": [
+        "Single holding 30% > 20% cap",
+        "Cash 1.1% < 2.2% min",
+        "US 70% > 58% region cap"
+      ],
+      "watch_summaries": []
+    },
+    "rationale": "Explainer agent",
+    "rules_check_result": null,
+    "version": "0.1.0"
+  },
+  {
+    "timestamp": "2026-06-20T02:12:52.176225+00:00",
+    "client_id": "c00011",
+    "action_type": "explain",
+    "actor": "ai",
+    "tier": "advisory",
+    "payload": {
+      "narrative": "[MOCK LLM] grounded explanation for: Rules-engine result (GROUND TRUTH — do not contradict):\n{\"client\": \"Hazel Pension #00011\", \"fum\": 7197854.38, \"holdings\"",
+      "breach_summaries": [
+        "Single holding 30% > 20% cap",
+        "Cash 1.1% < 2.2% min",
+        "US 70% > 58% region cap",
+        "Top-5 holdings 68% > 68% cap"
+      ],
+      "watch_summaries": []
+    },
+    "rationale": "Explainer agent",
+    "rules_check_result": null,
+    "version": "0.1.0"
+  },
+  {
+    "timestamp": "2026-06-20T02:12:52.175941+00:00",
+    "client_id": "c00011",
+    "action_type": "explain",
+    "actor": "ai",
+    "tier": "advisory",
+    "payload": {
+      "narrative": "[MOCK LLM] grounded explanation for: Rules-engine result (GROUND TRUTH — do not contradict):\n{\"client\": \"Hazel Pension #00011\", \"fum\": 7197854.38, \"holdings\"",
+      "breach_summaries": [
+        "Single holding 30% > 20% cap",
+        "Cash 1.1% < 2.2% min",
+        "US 70% > 58% region cap",
+        "Top-5 holdings 68% > 68% cap"
+      ],
+      "watch_summaries": []
+    },
+    "rationale": "Explainer agent",
+    "rules_check_result": null,
+    "version": "0.1.0"
+  },
+  {
+    "timestamp": "2026-06-20T02:12:52.232213+00:00",
+    "client_id": "c00011",
+    "action_type": "explain",
+    "actor": "ai",
+    "tier": "advisory",
+    "payload": {
+      "narrative": "[MOCK LLM] grounded explanation for: Rules-engine result (GROUND TRUTH — do not contradict):\n{\"client\": \"Hazel Pension #00011\", \"fum\": 7197854.38, \"holdings\"",
+      "breach_summaries": [
+        "Single holding 30% > 20% cap",
+        "Cash 1.1% < 2.2% min",
+        "US 70% > 58% region cap",
+        "Top-5 holdings 68% > 68% cap"
+      ],
+      "watch_summaries": []
+    },
+    "rationale": "Explainer agent",
+    "rules_check_result": null,
+    "version": "0.1.0"
+  },
+  {
+    "timestamp": "2026-06-20T02:12:53.937595+00:00",
+    "client_id": "c00011",
+    "action_type": "explain",
+    "actor": "ai",
+    "tier": "advisory",
+    "payload": {
+      "narrative": "No mandate check named 'drift:Equity' applies to this portfolio.",
+      "breach_summaries": [],
+      "watch_summaries": [],
+      "metric": "drift:Equity"
+    },
+    "rationale": "Explainer agent",
+    "rules_check_result": null,
+    "version": "0.1.0"
+  },
+  {
+    "timestamp": "2026-06-20T02:12:56.501311+00:00",
+    "client_id": "c00011",
+    "action_type": "explain",
+    "actor": "ai",
+    "tier": "advisory",
+    "payload": {
+      "narrative": "[MOCK LLM] grounded explanation for: Rules-engine result (GROUND TRUTH — do not contradict):\n{\"client\": \"Hazel Pension #00011\", \"fum\": 7197854.38, \"holdings\"",
+      "breach_summaries": [
+        "Single holding 30% > 20% cap",
+        "Cash 1.1% < 2.2% min",
+        "US 70% > 58% region cap",
+        "Top-5 holdings 68% > 68% cap"
+      ],
+      "watch_summaries": []
+    },
+    "rationale": "Explainer agent",
+    "rules_check_result": null,
+    "version": "0.1.0"
+  },
+  {
+    "timestamp": "2026-06-20T02:12:56.501559+00:00",
+    "client_id": "c00011",
+    "action_type": "explain",
+    "actor": "ai",
+    "tier": "advisory",
+    "payload": {
+      "narrative": "[MOCK LLM] grounded explanation for: Rules-engine result (GROUND TRUTH — do not contradict):\n{\"client\": \"Hazel Pension #00011\", \"fum\": 7197854.38, \"holdings\"",
+      "breach_summaries": [
+        "Single holding 30% > 20% cap",
+        "Cash 1.1% < 2.2% min",
+        "US 70% > 58% region cap",
+        "Top-5 holdings 68% > 68% cap"
+      ],
+      "watch_summaries": []
+    },
+    "rationale": "Explainer agent",
+    "rules_check_result": null,
+    "version": "0.1.0"
+  },
+  {
+    "timestamp": "2026-06-20T02:12:56.562240+00:00",
+    "client_id": "c00011",
+    "action_type": "explain",
+    "actor": "ai",
+    "tier": "advisory",
+    "payload": {
+      "narrative": "[MOCK LLM] grounded explanation for: Rules-engine result (GROUND TRUTH — do not contradict):\n{\"client\": \"Hazel Pension #00011\", \"fum\": 7197854.38, \"holdings\"",
+      "breach_summaries": [
+        "Single holding 30% > 20% cap",
+        "Cash 1.1% < 2.2% min",
+        "US 70% > 58% region cap",
+        "Top-5 holdings 68% > 68% cap"
+      ],
+      "watch_summaries": []
+    },
+    "rationale": "Explainer agent",
+    "rules_check_result": null,
+    "version": "0.1.0"
+  },
+  {
+    "timestamp": "2026-06-20T02:13:01.569959+00:00",
+    "client_id": "c00011",
+    "action_type": "remediate_propose",
+    "actor": "ai",
+    "tier": "advisory",
+    "payload": {
+      "trades": [
+        {
+          "ticker": "VTI",
+          "action": "sell",
+          "units": 2814.4958,
+          "value": 745093.83,
+          "rationale": "trim VTI to address mandate breach"
+        },
+        {
+          "ticker": "BTC",
+          "action": "sell",
+          "units": 0.373,
+          "value": 23266.72,
+          "rationale": "trim BTC to address mandate breach"
+        },
+        {
+          "ticker": "HYG",
+          "action": "sell",
+          "units": 1435.9149,
+          "value": 115379.24,
+          "rationale": "trim HYG to address mandate breach"
+        },
+        {
+          "ticker": "IEF",
+          "action": "sell",
+          "units": 141.8757,
+          "value": 13245.85,
+          "rationale": "trim IEF to address mandate breach"
+        },
+        {
+          "ticker": "XLF",
+          "action": "sell",
+          "units": 2552.7377,
+          "value": 114739.94,
+          "rationale": "trim XLF to address mandate breach"
+        },
+        {
+          "ticker": "XLV",
+          "action": "sell",
+          "units": 792.2289,
+          "value": 115012.3,
+          "rationale": "trim XLV to address mandate breach"
+        },
+        {
+          "ticker": "XLY",
+          "action": "sell",
+          "units": 638.1844,
+          "value": 117690.56,
+          "rationale": "trim XLY to address mandate breach"
+        },
+        {
+          "ticker": "INDA",
+          "action": "sell",
+          "units": 23.7294,
+          "value": 1223.51,
+          "rationale": "trim INDA to address mandate breach"
+        }
+      ]
+    },
+    "rationale": "Remediation agent",
+    "rules_check_result": null,
+    "version": "0.1.0"
+  },
+  {
+    "timestamp": "2026-06-20T02:13:01.570416+00:00",
+    "client_id": "c00011",
+    "action_type": "verify",
+    "actor": "engine",
+    "tier": "deterministic",
+    "payload": {
+      "status": "green"
+    },
+    "rationale": "rules_engine",
+    "rules_check_result": null,
+    "version": "0.1.0"
+  },
+  {
+    "timestamp": "2026-06-20T02:13:03.805568+00:00",
+    "client_id": "c00011",
+    "action_type": "approve",
+    "actor": "human",
+    "tier": "deterministic",
+    "payload": {
+      "trades": [
+        {
+          "ticker": "VTI",
+          "action": "sell",
+          "units": 2814.4958,
+          "value": 745093.83,
+          "rationale": "trim VTI to address mandate breach"
+        },
+        {
+          "ticker": "BTC",
+          "action": "sell",
+          "units": 0.373,
+          "value": 23266.72,
+          "rationale": "trim BTC to address mandate breach"
+        },
+        {
+          "ticker": "HYG",
+          "action": "sell",
+          "units": 1435.9149,
+          "value": 115379.24,
+          "rationale": "trim HYG to address mandate breach"
+        },
+        {
+          "ticker": "IEF",
+          "action": "sell",
+          "units": 141.8757,
+          "value": 13245.85,
+          "rationale": "trim IEF to address mandate breach"
+        },
+        {
+          "ticker": "XLF",
+          "action": "sell",
+          "units": 2552.7377,
+          "value": 114739.94,
+          "rationale": "trim XLF to address mandate breach"
+        },
+        {
+          "ticker": "XLV",
+          "action": "sell",
+          "units": 792.2289,
+          "value": 115012.3,
+          "rationale": "trim XLV to address mandate breach"
+        },
+        {
+          "ticker": "XLY",
+          "action": "sell",
+          "units": 638.1844,
+          "value": 117690.56,
+          "rationale": "trim XLY to address mandate breach"
+        },
+        {
+          "ticker": "INDA",
+          "action": "sell",
+          "units": 23.7294,
+          "value": 1223.51,
+          "rationale": "trim INDA to address mandate breach"
+        }
+      ],
+      "prior_status": "red",
+      "new_status": "green",
+      "breach_type": "max_single_holding",
+      "choice": "sell VTI"
+    },
+    "rationale": "approved AI proposal",
+    "rules_check_result": null,
+    "version": "0.1.0"
+  },
+  {
+    "timestamp": "2026-06-20T02:13:03.806045+00:00",
+    "client_id": "c00011",
+    "action_type": "verify",
+    "actor": "engine",
+    "tier": "deterministic",
+    "payload": {
+      "status": "green",
+      "breaches": 0,
+      "watches": 0
+    },
+    "rationale": "rules_engine re-check after approved trades",
+    "rules_check_result": null,
+    "version": "0.1.0"
+  }
+]

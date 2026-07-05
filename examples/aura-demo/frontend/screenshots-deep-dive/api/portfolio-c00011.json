@@ -1,0 +1,404 @@
+{
+  "client_id": "c00011",
+  "client_name": "Hazel Pension #00011",
+  "adviser": "Toby Ng",
+  "fum": 7197854.38,
+  "holdings": [
+    {
+      "ticker": "BTC",
+      "name": "Bitcoin",
+      "asset_class": "Crypto",
+      "sector": "Digital",
+      "region": "US",
+      "liquidity_tier": 3,
+      "units": 2.176881,
+      "price": 60000,
+      "market_value": 130612.86
+    },
+    {
+      "ticker": "EEM",
+      "name": "EM ETF",
+      "asset_class": "Equity",
+      "sector": "Broad",
+      "region": "EM",
+      "liquidity_tier": 2,
+      "units": 1346.101667,
+      "price": 42,
+      "market_value": 56536.27
+    },
+    {
+      "ticker": "EWJ",
+      "name": "Japan ETF",
+      "asset_class": "Equity",
+      "sector": "Broad",
+      "region": "ExUS",
+      "liquidity_tier": 2,
+      "units": 9578.575571,
+      "price": 70,
+      "market_value": 670500.29
+    },
+    {
+      "ticker": "HYG",
+      "name": "High Yield Corp",
+      "asset_class": "Bonds",
+      "sector": "Corporate",
+      "region": "US",
+      "liquidity_tier": 2,
+      "units": 8381.253625,
+      "price": 80,
+      "market_value": 670500.29
+    },
+    {
+      "ticker": "IEF",
+      "name": "7-10 Yr Treasury",
+      "asset_class": "Bonds",
+      "sector": "Govt",
+      "region": "US",
+      "liquidity_tier": 1,
+      "units": 828.110526,
+      "price": 95,
+      "market_value": 78670.5
+    },
+    {
+      "ticker": "INDA",
+      "name": "India ETF",
+      "asset_class": "Equity",
+      "sector": "Financials",
+      "region": "EM",
+      "liquidity_tier": 3,
+      "units": 13410.0058,
+      "price": 50,
+      "market_value": 670500.29
+    },
+    {
+      "ticker": "VEA",
+      "name": "Developed Mkts ETF",
+      "asset_class": "Equity",
+      "sector": "Broad",
+      "region": "ExUS",
+      "liquidity_tier": 1,
+      "units": 11175.004833,
+      "price": 60,
+      "market_value": 670500.29
+    },
+    {
+      "ticker": "VTI",
+      "name": "Total Mkt ETF",
+      "asset_class": "Equity",
+      "sector": "Broad",
+      "region": "US",
+      "liquidity_tier": 1,
+      "units": 8305.216577,
+      "price": 260,
+      "market_value": 2159356.31
+    },
+    {
+      "ticker": "XLF",
+      "name": "Financials ETF",
+      "asset_class": "Equity",
+      "sector": "Financials",
+      "region": "US",
+      "liquidity_tier": 1,
+      "units": 14900.006444,
+      "price": 45,
+      "market_value": 670500.29
+    },
+    {
+      "ticker": "XLV",
+      "name": "Healthcare ETF",
+      "asset_class": "Equity",
+      "sector": "Healthcare",
+      "region": "US",
+      "liquidity_tier": 1,
+      "units": 4624.139931,
+      "price": 145,
+      "market_value": 670500.29
+    },
+    {
+      "ticker": "XLY",
+      "name": "Consumer Disc ETF",
+      "asset_class": "Equity",
+      "sector": "Consumer",
+      "region": "US",
+      "liquidity_tier": 1,
+      "units": 3725.001611,
+      "price": 180,
+      "market_value": 670500.29
+    }
+  ],
+  "cash": 79176.4,
+  "mandate": {
+    "approved_universe": [
+      "BNDX",
+      "BTC",
+      "DBC",
+      "EEM",
+      "EWG",
+      "EWJ",
+      "HYG",
+      "IEF",
+      "INDA",
+      "LQD",
+      "VEA",
+      "VTI",
+      "VWO",
+      "XLE",
+      "XLF",
+      "XLK",
+      "XLP",
+      "XLRE",
+      "XLV",
+      "XLY"
+    ],
+    "drift_tolerance": 0.12,
+    "excluded_tickers": [
+      "XLP"
+    ],
+    "max_asset_class_weight": {
+      "Bonds": 0.155,
+      "Cash": 1,
+      "Commodity": 0.154,
+      "Crypto": 0.146,
+      "Equity": 0.968
+    },
+    "max_region_weight": {
+      "EM": 0.259,
+      "ExUS": 0.418,
+      "US": 0.583
+    },
+    "max_sector_weight": {
+      "Energy": 0.381,
+      "Metals": 0.385,
+      "Technology": 0.363
+    },
+    "max_single_holding": 0.2,
+    "max_top_n_concentration": {
+      "limit": 0.676,
+      "n": 5
+    },
+    "min_cash": 0.022,
+    "min_liquid_pct": 0.259,
+    "name": "aggressive_growth",
+    "target_allocation": {
+      "Bonds": 0.097,
+      "Equity": 0.881
+    }
+  },
+  "rules_result": {
+    "status": "red",
+    "breaches": [
+      {
+        "rule": "max_single_holding",
+        "current": 0.2999999998610697,
+        "limit": 0.2,
+        "offending_holdings": [
+          "VTI"
+        ],
+        "severity": "red",
+        "plain": "Single holding 30% > 20% cap"
+      },
+      {
+        "rule": "min_cash",
+        "current": 0.01100000026813546,
+        "limit": 0.022,
+        "offending_holdings": [],
+        "severity": "red",
+        "plain": "Cash 1.1% < 2.2% min"
+      },
+      {
+        "rule": "max_region_weight:US",
+        "current": 0.7016869987048653,
+        "limit": 0.583,
+        "offending_holdings": [
+          "BTC",
+          "HYG",
+          "IEF",
+          "VTI",
+          "XLF",
+          "XLV",
+          "XLY"
+        ],
+        "severity": "red",
+        "plain": "US 70% > 58% region cap"
+      }
+    ],
+    "watches": [],
+    "per_rule": [
+      {
+        "rule": "max_asset_class_weight:Bonds",
+        "pass": true,
+        "current": 0.10408251563444731,
+        "limit": 0.155,
+        "offending_holdings": [],
+        "severity": "green"
+      },
+      {
+        "rule": "max_asset_class_weight:Cash",
+        "pass": true,
+        "current": 0,
+        "limit": 1,
+        "offending_holdings": [],
+        "severity": "green"
+      },
+      {
+        "rule": "max_asset_class_weight:Commodity",
+        "pass": true,
+        "current": 0,
+        "limit": 0.154,
+        "offending_holdings": [],
+        "severity": "green"
+      },
+      {
+        "rule": "max_asset_class_weight:Crypto",
+        "pass": true,
+        "current": 0.018146082608225925,
+        "limit": 0.146,
+        "offending_holdings": [],
+        "severity": "green"
+      },
+      {
+        "rule": "max_asset_class_weight:Equity",
+        "pass": true,
+        "current": 0.866771401489191,
+        "limit": 0.968,
+        "offending_holdings": [],
+        "severity": "green"
+      },
+      {
+        "rule": "max_sector_weight:Energy",
+        "pass": true,
+        "current": 0,
+        "limit": 0.381,
+        "offending_holdings": [],
+        "severity": "green"
+      },
+      {
+        "rule": "max_sector_weight:Metals",
+        "pass": true,
+        "current": 0,
+        "limit": 0.385,
+        "offending_holdings": [],
+        "severity": "green"
+      },
+      {
+        "rule": "max_sector_weight:Technology",
+        "pass": true,
+        "current": 0,
+        "limit": 0.363,
+        "offending_holdings": [],
+        "severity": "green"
+      },
+      {
+        "rule": "approved_universe",
+        "pass": true,
+        "current": [],
+        "limit": [
+          "XLRE",
+          "LQD",
+          "VTI",
+          "XLP",
+          "XLF",
+          "BTC",
+          "VEA",
+          "EEM",
+          "BNDX",
+          "EWJ",
+          "IEF",
+          "XLV",
+          "DBC",
+          "HYG",
+          "EWG",
+          "VWO",
+          "XLK",
+          "XLE",
+          "INDA",
+          "XLY"
+        ],
+        "offending_holdings": [],
+        "severity": "green"
+      },
+      {
+        "rule": "max_single_holding",
+        "pass": false,
+        "current": 0.2999999998610697,
+        "limit": 0.2,
+        "offending_holdings": [
+          "VTI"
+        ],
+        "severity": "red"
+      },
+      {
+        "rule": "min_cash",
+        "pass": false,
+        "current": 0.01100000026813546,
+        "limit": 0.022,
+        "offending_holdings": [],
+        "severity": "red"
+      },
+      {
+        "rule": "max_region_weight:EM",
+        "pass": true,
+        "current": 0.10100740062625077,
+        "limit": 0.259,
+        "offending_holdings": [],
+        "severity": "green"
+      },
+      {
+        "rule": "max_region_weight:ExUS",
+        "pass": true,
+        "current": 0.18630560040074828,
+        "limit": 0.418,
+        "offending_holdings": [],
+        "severity": "green"
+      },
+      {
+        "rule": "max_region_weight:US",
+        "pass": false,
+        "current": 0.7016869987048653,
+        "limit": 0.583,
+        "offending_holdings": [
+          "BTC",
+          "HYG",
+          "IEF",
+          "VTI",
+          "XLF",
+          "XLV",
+          "XLY"
+        ],
+        "severity": "red"
+      },
+      {
+        "rule": "esg_exclusions",
+        "pass": true,
+        "current": [],
+        "limit": [
+          "XLP"
+        ],
+        "offending_holdings": [],
+        "severity": "green"
+      },
+      {
+        "rule": "max_top_n_concentration",
+        "pass": true,
+        "current": 0.6726112006625662,
+        "limit": 0.676,
+        "offending_holdings": [
+          "VTI",
+          "EWJ",
+          "HYG",
+          "INDA",
+          "VEA"
+        ],
+        "severity": "green"
+      },
+      {
+        "rule": "min_liquid_pct",
+        "pass": true,
+        "current": 0.6835409160966394,
+        "limit": 0.259,
+        "offending_holdings": [],
+        "severity": "green"
+      }
+    ]
+  }
+}

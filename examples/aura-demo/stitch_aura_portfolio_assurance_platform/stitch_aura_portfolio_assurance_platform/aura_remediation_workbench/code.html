@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AURA - Remediation Workbench</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-surface": "#191c1e",
+                      "surface-bright": "#f8f9fb",
+                      "on-tertiary-fixed": "#2d1600",
+                      "surface-container": "#edeef0",
+                      "background": "#f8f9fb",
+                      "tertiary-fixed": "#ffdcbe",
+                      "surface-container-high": "#e7e8ea",
+                      "surface-container-highest": "#e1e2e4",
+                      "surface": "#f8f9fb",
+                      "on-primary-fixed": "#001c3a",
+                      "secondary-fixed": "#98f2f0",
+                      "on-tertiary-fixed-variant": "#633f18",
+                      "on-error-container": "#93000a",
+                      "tertiary-container": "#402200",
+                      "on-secondary": "#ffffff",
+                      "tertiary": "#231000",
+                      "on-secondary-fixed-variant": "#00504f",
+                      "on-tertiary-container": "#b6875a",
+                      "on-primary-container": "#7a92b7",
+                      "error-container": "#ffdad6",
+                      "surface-container-low": "#f2f4f6",
+                      "secondary-fixed-dim": "#7cd5d3",
+                      "on-background": "#191c1e",
+                      "secondary": "#006a69",
+                      "surface-container-lowest": "#ffffff",
+                      "primary-fixed": "#d4e3ff",
+                      "on-secondary-fixed": "#002020",
+                      "surface-dim": "#d9dadc",
+                      "surface-tint": "#485f82",
+                      "on-surface-variant": "#43474e",
+                      "inverse-primary": "#b0c8f0",
+                      "outline": "#74777f",
+                      "surface-variant": "#e1e2e4",
+                      "on-secondary-container": "#00706f",
+                      "outline-variant": "#c4c6cf",
+                      "tertiary-fixed-dim": "#f1bc8b",
+                      "primary": "#00152f",
+                      "inverse-surface": "#2e3132",
+                      "on-error": "#ffffff",
+                      "secondary-container": "#98f2f0",
+                      "error": "#ba1a1a",
+                      "on-primary": "#ffffff",
+                      "on-primary-fixed-variant": "#304869",
+                      "inverse-on-surface": "#f0f1f3",
+                      "on-tertiary": "#ffffff",
+                      "primary-fixed-dim": "#b0c8f0",
+                      "primary-container": "#0f2a4a"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "container_max_width": "1440px",
+                      "stack_gap_md": "16px",
+                      "sidebar_width": "240px",
+                      "gutter": "24px",
+                      "topbar_height": "64px",
+                      "card_padding": "20px",
+                      "stack_gap_sm": "8px"
+              },
+              "fontFamily": {
+                      "body-sm": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "display-lg-mobile": [
+                              "Inter"
+                      ],
+                      "data-mono": [
+                              "Inter"
+                      ],
+                      "display-lg": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "label-caps": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "body-sm": [
+                              "13px",
+                              {
+                                      "lineHeight": "18px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "data-mono": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "display-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-md": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "label-caps": [
+                              "11px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md min-h-screen flex overflow-x-hidden">
+<!-- Navigation Drawer -->
+<nav class="hidden md:flex flex-col bg-primary-container dark:bg-primary fixed left-0 top-0 h-full w-[240px] p-gutter gap-stack_gap_md z-20">
+<div class="pt-6 pb-4">
+<span class="font-display-lg text-display-lg text-surface-lowest tracking-tight">AURA</span>
+</div>
+<div class="flex flex-col gap-2 w-full">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-primary-fixed-variant opacity-70 hover:bg-on-primary-fixed-variant/10 hover:text-secondary-fixed-dim transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-body-md text-body-md">Command Centre</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-primary-fixed-variant opacity-70 hover:bg-on-primary-fixed-variant/10 hover:text-secondary-fixed-dim transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="account_balance_wallet">account_balance_wallet</span>
+<span class="font-body-md text-body-md">Portfolios</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-secondary-fixed font-semibold bg-on-primary-fixed-variant/10 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="build_circle">build_circle</span>
+<span class="font-body-md text-body-md">Remediation</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-primary-fixed-variant opacity-70 hover:bg-on-primary-fixed-variant/10 hover:text-secondary-fixed-dim transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="history_edu">history_edu</span>
+<span class="font-body-md text-body-md">Audit Log</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-primary-fixed-variant opacity-70 hover:bg-on-primary-fixed-variant/10 hover:text-secondary-fixed-dim transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+</div>
+</nav>
+<!-- Top App Bar -->
+<header class="fixed top-0 right-0 h-topbar_height w-full md:w-[calc(100%-240px)] bg-surface-container-lowest dark:bg-surface-dim flex items-center justify-between px-gutter border-b border-outline-variant z-10">
+<div class="flex items-center gap-4">
+<button class="md:hidden p-2 text-on-surface-variant hover:text-primary transition-all duration-150">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-md w-64 outline-none placeholder:text-outline" placeholder="Search portfolios, assets, or rules..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 px-3 py-1.5 rounded border border-outline-variant text-body-sm font-medium">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+                Production
+            </div>
+<div class="w-8 h-8 rounded-full bg-surface-variant flex items-center justify-center overflow-hidden border border-outline-variant cursor-pointer">
+<img class="object-cover w-full h-full" data-alt="A professional headshot of a financial portfolio manager in a bright, modern office setting. Crisp white shirt, subtle dark tie. Soft lighting, high key, clear corporate aesthetic. 8k resolution, photorealistic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBaDBgIxfgkwZH7GgRhUzi7og0sY3-xj5zE7e-RNIPsn07_qEzB2j5LOENXeNivBjmZb3CLNwqXe9LMhNrHzaJi2Bz5L_JP7CHkkBaASlJFeGzf5gnhEXCOGM6KMOdcduWGUkJ8S-qg3ogsXV0g1he5bMv9syZamXamkEo-Jtut3CONqgJSobfOtRRcoyEDV1jk6FQmKpVhiiMW_sb3SZfjCWVXohapnDhXNoqfwcQRkhrMBHoW-FWPX_hk_4rzT-x7J4WJ4-MOH5y6"/>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="w-full md:ml-[240px] pt-topbar_height p-4 md:p-8 flex flex-col gap-8 pb-32">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+<div>
+<h1 class="font-display-lg text-display-lg text-on-surface">Remediation Workbench</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Portfolio: Alpha Growth Fund (AGF-001)</p>
+</div>
+<button class="flex items-center gap-2 bg-primary-container text-on-primary px-6 py-3 rounded-lg font-body-md font-medium hover:bg-primary transition-colors border border-transparent shadow-sm">
+<span class="material-symbols-outlined text-secondary-fixed">auto_awesome</span>
+                Propose a Fix
+            </button>
+</div>
+<!-- AI Insight Banner -->
+<div class="bg-surface-container-lowest border-l-4 border-l-secondary border border-outline-variant rounded-lg p-6 flex gap-4 items-start shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05),0_2px_4px_-2px_rgba(0,0,0,0.03)]">
+<span class="material-symbols-outlined text-secondary text-2xl mt-1">insights</span>
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">AI Remediation Rationale</h3>
+<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                    Proposed: trim <span class="font-data-mono text-data-mono font-medium text-primary">NVDA</span>, exit <span class="font-data-mono text-data-mono font-medium text-primary">AVAX</span>, add <span class="font-data-mono text-data-mono font-medium text-primary">XLV</span>. 
+                    Brings technology sector exposure to 24% and completely eliminates crypto exposure. All mandate rules satisfied with minimal tracking error impact.
+                </p>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Left/Main: Trade Table -->
+<div class="lg:col-span-2 bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05),0_2px_4px_-2px_rgba(0,0,0,0.03)] flex flex-col">
+<div class="p-card_padding border-b border-outline-variant flex justify-between items-center bg-surface-bright">
+<h2 class="font-headline-md text-headline-md text-on-surface">Proposed Trades</h2>
+<span class="font-label-caps text-label-caps bg-surface-container-high px-2 py-1 rounded text-on-surface-variant">3 TRADES PENDING</span>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-surface-variant bg-surface text-on-surface-variant font-label-caps text-label-caps uppercase tracking-wider">
+<th class="p-4 font-medium">Holding</th>
+<th class="p-4 font-medium">Current</th>
+<th class="p-4 font-medium">Proposed Trade</th>
+<th class="p-4 font-medium">Trade Value</th>
+<th class="p-4 font-medium">Resulting Weight</th>
+<th class="p-4 font-medium">Est. P/L</th>
+</tr>
+</thead>
+<tbody class="font-data-mono text-data-mono text-sm">
+<tr class="border-b border-surface-variant hover:bg-surface-bright transition-colors bg-error-container/10">
+<td class="p-4">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded bg-surface-variant flex items-center justify-center font-bold text-xs">AV</div>
+<div>
+<div class="font-medium text-on-surface">AVAX</div>
+<div class="text-xs text-on-surface-variant font-body-sm">Avalanche</div>
+</div>
+</div>
+</td>
+<td class="p-4">1.2%</td>
+<td class="p-4 text-error font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">arrow_downward</span> Sell All
+                                </td>
+<td class="p-4">$142,500</td>
+<td class="p-4">0.0%</td>
+<td class="p-4 text-secondary">+$12,400</td>
+</tr>
+<tr class="border-b border-surface-variant hover:bg-surface-bright transition-colors bg-error-container/5">
+<td class="p-4">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded bg-surface-variant flex items-center justify-center font-bold text-xs">NV</div>
+<div>
+<div class="font-medium text-on-surface">NVDA</div>
+<div class="text-xs text-on-surface-variant font-body-sm">NVIDIA Corp</div>
+</div>
+</div>
+</td>
+<td class="p-4">8.5%</td>
+<td class="p-4 text-error font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">arrow_downward</span> Sell
+                                </td>
+<td class="p-4">$850,000</td>
+<td class="p-4">5.2%</td>
+<td class="p-4 text-secondary">+$340,000</td>
+</tr>
+<tr class="border-b border-surface-variant hover:bg-surface-bright transition-colors bg-secondary-container/10">
+<td class="p-4">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded bg-surface-variant flex items-center justify-center font-bold text-xs">XL</div>
+<div>
+<div class="font-medium text-on-surface">XLV</div>
+<div class="text-xs text-on-surface-variant font-body-sm">Health Care Select</div>
+</div>
+</div>
+</td>
+<td class="p-4">12.0%</td>
+<td class="p-4 text-secondary font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">arrow_upward</span> Buy
+                                </td>
+<td class="p-4">$992,500</td>
+<td class="p-4">15.8%</td>
+<td class="p-4 text-on-surface-variant">-</td>
+</tr>
+<tr class="hover:bg-surface-bright transition-colors text-on-surface-variant opacity-60">
+<td class="p-4">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded bg-surface-variant flex items-center justify-center font-bold text-xs">AA</div>
+<div>
+<div class="font-medium text-on-surface">AAPL</div>
+<div class="text-xs text-on-surface-variant font-body-sm">Apple Inc</div>
+</div>
+</div>
+</td>
+<td class="p-4">6.2%</td>
+<td class="p-4 font-medium flex items-center gap-1">
+                                    -
+                                </td>
+<td class="p-4">-</td>
+<td class="p-4">6.2%</td>
+<td class="p-4">-</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Right/Side: Assurance Verification -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05),0_2px_4px_-2px_rgba(0,0,0,0.03)] flex flex-col">
+<div class="p-card_padding border-b border-outline-variant bg-primary-container text-on-primary">
+<div class="flex items-center justify-between mb-2">
+<h2 class="font-headline-md text-headline-md">Assurance Check</h2>
+<span class="material-symbols-outlined text-secondary-fixed">verified_user</span>
+</div>
+<p class="font-body-sm text-body-sm text-primary-fixed-dim">AI recommended. Assurance verifies.</p>
+</div>
+<div class="p-card_padding flex flex-col gap-6 flex-grow bg-surface-bright">
+<!-- Mini Donuts Before/After -->
+<div class="flex items-center justify-around py-4">
+<div class="flex flex-col items-center gap-2">
+<div class="w-20 h-20 rounded-full border-4 border-surface-variant border-t-error border-r-error flex items-center justify-center relative">
+<span class="material-symbols-outlined text-error absolute">warning</span>
+</div>
+<span class="font-label-caps text-label-caps text-on-surface-variant">BEFORE</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant">arrow_forward</span>
+<div class="flex flex-col items-center gap-2">
+<div class="w-20 h-20 rounded-full border-4 border-surface-variant border-t-secondary border-r-secondary border-b-secondary flex items-center justify-center relative">
+<span class="material-symbols-outlined text-secondary absolute">check</span>
+</div>
+<span class="font-label-caps text-label-caps text-on-surface-variant">AFTER</span>
+</div>
+</div>
+<!-- Checklist -->
+<div class="flex flex-col gap-3">
+<div class="flex items-center justify-between p-3 rounded bg-surface border border-surface-variant">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary">check_circle</span>
+<span class="font-body-sm text-body-sm font-medium">Technology ≤ 25%</span>
+</div>
+<span class="font-data-mono text-data-mono text-xs text-on-surface-variant">now 24%</span>
+</div>
+<div class="flex items-center justify-between p-3 rounded bg-surface border border-surface-variant">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary">check_circle</span>
+<span class="font-body-sm text-body-sm font-medium">Crypto = 0%</span>
+</div>
+<span class="font-data-mono text-data-mono text-xs text-on-surface-variant">now 0%</span>
+</div>
+<div class="flex items-center justify-between p-3 rounded bg-surface border border-surface-variant">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary">check_circle</span>
+<span class="font-body-sm text-body-sm font-medium">Cash Buffer ≥ 2%</span>
+</div>
+<span class="font-data-mono text-data-mono text-xs text-on-surface-variant">now 3.1%</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Audit Trail Strip -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-3 flex items-center gap-4 shadow-sm overflow-x-auto whitespace-nowrap mt-4">
+<span class="font-label-caps text-label-caps text-on-surface-variant mr-2">RECENT LOGS</span>
+<div class="flex items-center gap-2 text-sm">
+<span class="font-data-mono text-data-mono text-xs text-outline">10:42 AM</span>
+<span class="font-body-sm font-medium text-primary">System</span>
+<span class="font-body-sm text-on-surface-variant">Flagged AVAX crypto exposure</span>
+</div>
+<span class="w-1 h-1 rounded-full bg-outline-variant mx-2"></span>
+<div class="flex items-center gap-2 text-sm">
+<span class="font-data-mono text-data-mono text-xs text-outline">10:45 AM</span>
+<span class="font-body-sm font-medium text-primary">AURA AI</span>
+<span class="font-body-sm text-on-surface-variant">Generated remediation proposal</span>
+</div>
+<span class="w-1 h-1 rounded-full bg-outline-variant mx-2"></span>
+<div class="flex items-center gap-2 text-sm opacity-50">
+<span class="font-data-mono text-data-mono text-xs text-outline">09:15 AM</span>
+<span class="font-body-sm font-medium text-primary">J. Doe</span>
+<span class="font-body-sm text-on-surface-variant">Approved daily sync</span>
+</div>
+</div>
+</main>
+<!-- Bottom Action Bar -->
+<div class="fixed bottom-0 right-0 w-full md:w-[calc(100%-240px)] bg-surface-container-lowest border-t border-outline-variant p-4 px-8 flex items-center justify-between z-30 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+<div class="flex items-center gap-3 max-w-xl">
+<span class="material-symbols-outlined text-outline-variant text-xl">info</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                Nothing executes automatically. Every action is approved by a person before submission to the order management system.
+            </p>
+</div>
+<div class="flex items-center gap-4">
+<button class="px-6 py-2.5 rounded border border-outline-variant text-primary font-body-md font-medium hover:bg-surface-variant transition-colors bg-surface-container-lowest">
+                Modify
+            </button>
+<button class="px-8 py-2.5 rounded bg-primary-container text-on-primary font-body-md font-medium hover:bg-primary transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">done_all</span>
+                Approve &amp; Log
+            </button>
+</div>
+</div>
+</body></html>

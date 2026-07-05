@@ -1,0 +1,3 @@
+# One-off dependencies used only to generate demo collateral (Word guides).
+# Not required to run the AURA backend or frontend.
+python-docx==1.2.0

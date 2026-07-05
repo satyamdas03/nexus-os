@@ -1,0 +1,9 @@
+{
+  "total": 34000,
+  "counts": {
+    "green": 27200,
+    "orange": 5100,
+    "red": 1700
+  },
+  "breach_count": 8013
+}

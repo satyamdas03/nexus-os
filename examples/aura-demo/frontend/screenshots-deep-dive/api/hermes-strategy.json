@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "variables": {
+    "breach_priority_order": {
+      "value": [
+        "approved_universe",
+        "max_sector_weight",
+        "max_asset_class_weight",
+        "max_single_holding",
+        "min_cash",
+        "drift"
+      ],
+      "rationale": "Fix hard mandate breaches (unapproved holdings, sector/asset caps) before softer drift watches."
+    },
+    "preferred_trim_method": {
+      "value": "proportional",
+      "rationale": "Trim offending holdings proportionally to keep diversification, rather than liquidating one name."
+    },
+    "replacement_preference": {
+      "value": "SPY",
+      "rationale": "Redeploy sale proceeds into the broad approved S&P 500 ETF as the default safe landing."
+    },
+    "min_trade_size": {
+      "value": 0.01,
+      "rationale": "Skip trades smaller than 1% of portfolio value to avoid noisy micro-trades."
+    },
+    "max_trades_per_portfolio": {
+      "value": 4,
+      "rationale": "Keep remediations minimal and human-reviewable; cap proposals at 4 trades."
+    },
+    "cash_buffer_target": {
+      "value": 0.03,
+      "rationale": "Hold ~3% cash buffer above the mandate minimum for redemption flexibility."
+    }
+  }
+}

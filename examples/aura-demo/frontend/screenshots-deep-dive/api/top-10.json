@@ -1,0 +1,99 @@
+{
+  "top": [
+    {
+      "client_id": "c07560",
+      "client_name": "Fjord Investments #07560",
+      "adviser": "Toby Ng",
+      "fum": 1609943558.63,
+      "status": "green",
+      "top_reason": null,
+      "top_asset_class": null
+    },
+    {
+      "client_id": "c20453",
+      "client_name": "Xanadu Foundation #20453",
+      "adviser": "Cara Duffy",
+      "fum": 934993655.61,
+      "status": "green",
+      "top_reason": null,
+      "top_asset_class": null
+    },
+    {
+      "client_id": "c13003",
+      "client_name": "Jade Securities #13003",
+      "adviser": "Vince Ito",
+      "fum": 636518817.66,
+      "status": "green",
+      "top_reason": null,
+      "top_asset_class": null
+    },
+    {
+      "client_id": "c15240",
+      "client_name": "Aster Family Office #15240",
+      "adviser": "Bo Mercer",
+      "fum": 498578530.25,
+      "status": "green",
+      "top_reason": null,
+      "top_asset_class": null
+    },
+    {
+      "client_id": "c08788",
+      "client_name": "Driftwood Partners #08788",
+      "adviser": "Pat Quinn",
+      "fum": 480384579.74,
+      "status": "green",
+      "top_reason": null,
+      "top_asset_class": null
+    },
+    {
+      "client_id": "c08546",
+      "client_name": "Indigo Group #08546",
+      "adviser": "Eli Carr",
+      "fum": 315489927.3,
+      "status": "orange",
+      "top_reason": null,
+      "top_asset_class": null
+    },
+    {
+      "client_id": "c06524",
+      "client_name": "Bluecrest Advisory #06524",
+      "adviser": "Lena Voss",
+      "fum": 309866338.09,
+      "status": "orange",
+      "top_reason": null,
+      "top_asset_class": null
+    },
+    {
+      "client_id": "c08935",
+      "client_name": "Westbrook Foundation #08935",
+      "adviser": "Mia Tan",
+      "fum": 300763681.37,
+      "status": "green",
+      "top_reason": null,
+      "top_asset_class": null
+    },
+    {
+      "client_id": "c21116",
+      "client_name": "Maple Stewardship #21116",
+      "adviser": "Ruth Cohen",
+      "fum": 295423155.74,
+      "status": "orange",
+      "top_reason": null,
+      "top_asset_class": null
+    },
+    {
+      "client_id": "c15720",
+      "client_name": "Garnet Family Office #15720",
+      "adviser": "Mia Tan",
+      "fum": 295403467.96,
+      "status": "green",
+      "top_reason": null,
+      "top_asset_class": null
+    }
+  ],
+  "rest": {
+    "count": 33990,
+    "fum": 113641624888.44,
+    "dominant_status": "green"
+  }
+}

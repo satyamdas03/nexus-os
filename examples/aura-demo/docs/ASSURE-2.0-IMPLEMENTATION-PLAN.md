@@ -157,10 +157,10 @@ mandate:
 
 ---
 
-## Sprint 3 — Kernel API (Weeks 4–6)
+## Sprint 3 — Kernel API (Weeks 4–6) — IN PROGRESS
 
 ### Goal
-Expose the kernel as a standalone service with `/check`, `/verify`, `/evidence`, `/explain`.
+Expose the kernel as a standalone service with `/evaluate`, `/verify`, `/evidence`, `/explain`.
 
 ### New module
 ```
@@ -168,27 +168,30 @@ packages/assure-kernel/
   assure_kernel/
     api.py          # FastAPI router
     service.py      # business logic layer
-    explain.py      # grounded explainer (no LLM required; deterministic templates)
-    evidence.py     # JSON/PDF evidence pack builder
+    main.py         # ASGI entry point
+    evidence.py     # JSON/PDF evidence pack builder (next)
 ```
 
-### Endpoints
-- `POST /v1/check` — full rules check.
+### Endpoints (delivered)
+- `GET /v1/health` — service health + kernel version.
+- `POST /v1/evaluate` — full rules check (renamed from `/check` to match service verbs).
 - `POST /v1/verify` — what-if trade verification.
+- `POST /v1/explain` — deterministic, grounded mandate documentation.
+
+### Endpoints remaining
 - `POST /v1/evidence` — evidence pack (JSON + HTML).
-- `POST /v1/explain` — deterministic, grounded explanation.
 
 ### Tasks
-1. Build FastAPI service with OpenAPI docs.
-2. Add request/response logging.
-3. Add API key auth middleware (pluggable).
-4. Dockerize the kernel.
-5. Add load tests (≥1,000 RPS check throughput).
+1. ✅ Build FastAPI service with OpenAPI docs.
+2. ⬜ Add request/response logging.
+3. ⬜ Add API key auth middleware (pluggable).
+4. ✅ Dockerize the kernel.
+5. ⬜ Add load tests (≥1,000 RPS check throughput).
 
 ### Acceptance Criteria
-- `curl` examples work against Docker container.
-- Response latency P95 < 50ms for a 50-holding portfolio.
-- 100% test coverage on API contracts.
+- ✅ `curl` examples work against running service (uvicorn smoke test passed; Docker daemon unavailable locally).
+- ⬜ Response latency P95 < 50ms for a 50-holding portfolio.
+- ⬜ 100% test coverage on API contracts.
 
 ---
 

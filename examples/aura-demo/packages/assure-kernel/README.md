@@ -46,6 +46,57 @@ print(result.per_rule)      # every rule check with current/limit/pass
 3. **Extensible rules.** New rule types register through the rule registry.
 4. **Backward compatible.** Legacy aura-demo dicts are translated into kernel models.
 
+## Kernel-as-a-Service
+
+The kernel can run as a standalone HTTP service with a stable, versioned API.
+
+### Run locally
+
+```bash
+pip install -e ".[service]"
+uvicorn assure_kernel.main:app --host 127.0.0.1 --port 8000
+```
+
+### Run in Docker
+
+```bash
+docker build -t assure-kernel:0.1.0 .
+docker run -p 8000:8000 assure-kernel:0.1.0
+# or via compose
+docker compose up
+```
+
+### API endpoints
+
+| Method | Path | Purpose |
+|--------|------|---------|
+| GET | `/v1/health` | Service health + kernel version |
+| POST | `/v1/evaluate` | Full rules check on a portfolio + mandate |
+| POST | `/v1/verify` | What-if trade gate: post-trade verdict |
+| POST | `/v1/explain` | Deterministic mandate documentation |
+
+### Example: evaluate a portfolio
+
+```bash
+curl -s -X POST http://127.0.0.1:8000/v1/evaluate \
+  -H "Content-Type: application/json" \
+  -d '{
+    "portfolio": {
+      "cash": 10000,
+      "holdings": [
+        {"ticker": "SPY", "units": 10, "price": 500, "asset_class": "Equity", "sector": "Broad", "region": "US", "liquidity_tier": 1}
+      ]
+    },
+    "mandate": {
+      "rules": [
+        {"type": "max_asset_class_weight", "parameters": {"max_weights": {"Equity": 0.6, "Cash": 1.0}}},
+        {"type": "max_single_holding", "parameters": {"max_weight": 0.4}},
+        {"type": "min_cash", "parameters": {"min_weight": 0.05}}
+      ]
+    }
+  }'
+```
+
 ## Testing
 
 ```bash

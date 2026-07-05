@@ -1,4 +1,4 @@
-import type { PortfolioSummary, Portfolio, RulesResult, RemediationResult, AuditEntry, ApproveResult, ExplainResult, SummaryAiResult, EvidencePack, HermesStrategy, HermesProposal, HermesAdoptResult, HermesHeartbeat, HermesHistoryEntry, HermesApproveBatchItem, HermesApproveBatchResult, HermesRollbackResult, HermesSimulationResult, MarketClock, MarketHistoryPoint, MarketPrices, MarketStatus, TopSafeguard, HermesQueuePage, HermesScanJob, MandateDetail } from "./types";
+import type { PortfolioSummary, Portfolio, RulesResult, RemediationResult, AuditEntry, ApproveResult, ExplainResult, SummaryAiResult, EvidencePack, HermesStrategy, HermesProposal, HermesAdoptResult, HermesHeartbeat, HermesHistoryEntry, HermesApproveBatchItem, HermesApproveBatchResult, HermesRollbackResult, HermesSimulationResult, MarketClock, MarketHistoryPoint, MarketPrices, MarketStatus, TopSafeguard, HermesQueuePage, HermesScanJob, MandateDetail, AdviserWhiteboard, AdviserChatResponse, ConfidenceResult, HermesGenerateResult, RunTestResult } from "./types";
 
 function base() {
   // Client (browser): same-origin /api, proxied to backend via next.config rewrites.
@@ -124,6 +124,10 @@ export const api = {
       j<HermesRollbackResult>("/hermes/rollback", { method: "POST", body: JSON.stringify({ version }) }),
     simulate: (body: { days?: number; mode?: "reactive" | "prevent"; seed?: number }) =>
       j<HermesSimulationResult>("/hermes/simulate", { method: "POST", body: JSON.stringify(body) }),
+    generate: (body?: { days?: number; seed?: number }) =>
+      j<HermesGenerateResult>("/hermes/generate", { method: "POST", body: JSON.stringify(body || {}) }),
+    runTest: (source: string) =>
+      j<RunTestResult>("/hermes/run-test", { method: "POST", body: JSON.stringify({ source }) }),
   },
 
   // Evidence Pack — read-only compliance proof artifact for a single portfolio.
@@ -142,4 +146,29 @@ export const api = {
   voiceStatus: () => j<import("./types").VoiceStatus>("/voice/status"),
   voiceToken: (clientId: string) =>
     j<import("./types").VoiceToken>(`/voice/token/${clientId}`, { method: "POST" }),
+
+  // AI Investment Manager adviser.
+  adviser: {
+    whiteboard: (clientId: string) =>
+      j<AdviserWhiteboard>(`/adviser/whiteboard/${clientId}`, { method: "POST" }),
+    chat: (clientId: string, query: string) =>
+      j<AdviserChatResponse>("/adviser/chat", {
+        method: "POST",
+        body: JSON.stringify({ client_id: clientId, query }),
+      }),
+    session: (clientId: string) =>
+      j<Omit<import("./types").VoiceToken, "configured">>("/adviser/session", {
+        method: "POST",
+        body: JSON.stringify({ client_id: clientId }),
+      }),
+  },
+
+  // Confidence / confirmation prediction card.
+  confidence: {
+    calculate: (clientId: string, trades: any[]) =>
+      j<ConfidenceResult>(`/confidence/${clientId}`, {
+        method: "POST",
+        body: JSON.stringify({ trades }),
+      }),
+  },
 };

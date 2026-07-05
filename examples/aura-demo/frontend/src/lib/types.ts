@@ -132,6 +132,81 @@ export interface VoiceToken {
   configured: boolean;
 }
 
+// ---- AI Investment Manager adviser ----
+
+export interface AdviserWhiteboard {
+  client_id: string;
+  client_name: string;
+  current_status: Status;
+  breaches: Array<{
+    rule: string;
+    limit?: number | string | string[];
+    current?: number | string | string[];
+    offending_holdings: string[];
+    explanation: string;
+  }>;
+  proposed_trades: Trade[];
+  post_status: Status;
+  impact: { aum_impact_pct: number; trades_count: number };
+}
+
+export interface AdviserChatResponse {
+  answer: string;
+  whiteboard: AdviserWhiteboard;
+}
+
+// ---- Confidence / confirmation prediction card ----
+
+export interface ConfidenceFactor {
+  name: string;
+  score: number;
+  weight: number;
+}
+
+export interface ConfidenceResult {
+  confidence: number;
+  rule_engine_certainty: number;
+  simulation_baseline: number;
+  historical_approval_success: number;
+  data_freshness: number;
+  human_review_recommended: boolean;
+  factors: ConfidenceFactor[];
+  explanation: string;
+}
+
+// ---- Hermes synthetic-reality code generator ----
+
+export interface HermesDiff {
+  variable: string;
+  from: any;
+  to: any;
+  rationale: string;
+}
+
+export interface HermesGeneratedTest {
+  filename: string;
+  source: string;
+}
+
+export interface HermesGenerateResult {
+  ok: boolean;
+  diff: HermesDiff | null;
+  test?: HermesGeneratedTest;
+  simulation: {
+    reactive_incidence?: number;
+    prevent_incidence_before?: number;
+    prevent_incidence_after?: number;
+    improvement_pct?: number;
+  };
+}
+
+export interface RunTestResult {
+  ok: boolean;
+  stdout: string;
+  stderr: string;
+  returncode: number;
+}
+
 export interface SummaryAiResult {
   narrative: string;
   aggregate: {

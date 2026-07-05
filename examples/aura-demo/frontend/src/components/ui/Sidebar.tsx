@@ -7,6 +7,7 @@ import { clsx } from "clsx";
 const navItems = [
   { id: "command", label: "Command Centre", icon: "dashboard", href: "/" },
   { id: "hermes", label: "Hermes Engine", icon: "auto_awesome", href: "/hermes" },
+  { id: "adviser", label: "AI Adviser", icon: "support_agent", href: "/adviser" },
 ];
 
 export function Sidebar() {

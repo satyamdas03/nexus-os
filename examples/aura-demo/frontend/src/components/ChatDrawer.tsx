@@ -3,8 +3,11 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { clsx } from "clsx";
 import { api } from "@/lib/api";
-import type { ChatResponse, VoiceToken } from "@/lib/types";
+import type { ChatResponse, VoiceToken, AdviserWhiteboard } from "@/lib/types";
 import { Panel } from "@/components/ui/Panel";
+import { AdviserCanvas } from "@/components/adviser/AdviserCanvas";
+import { AdviserChat } from "@/components/adviser/AdviserChat";
+import { AdviserControls } from "@/components/adviser/AdviserControls";
 import { PrimaryButton } from "@/components/ui/PrimaryButton";
 import { SecondaryButton } from "@/components/ui/SecondaryButton";
 import { VoiceRoom } from "@/components/VoiceRoom";
@@ -41,6 +44,9 @@ export function ChatDrawer({
   const [inVoiceRoom, setInVoiceRoom] = useState(false);
   const [voiceToken, setVoiceToken] = useState<VoiceToken | null>(null);
   const [joiningVoice, setJoiningVoice] = useState(false);
+  const [adviserMode, setAdviserMode] = useState(false);
+  const [whiteboard, setWhiteboard] = useState<AdviserWhiteboard | null>(null);
+  const [wbLoading, setWbLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<any>(null);
 
@@ -58,6 +64,18 @@ export function ChatDrawer({
     // Also check LiveKit backend status so we can show a real-voice badge if configured.
     api.voiceStatus().then(setVoiceStatus).catch(() => setVoiceStatus({ configured: false, message: "" }));
   }, []);
+
+  // Load the adviser whiteboard when entering adviser mode.
+  useEffect(() => {
+    if (adviserMode && clientId && !whiteboard) {
+      setWbLoading(true);
+      api.adviser
+        .whiteboard(clientId)
+        .then(setWhiteboard)
+        .catch(() => setWhiteboard(null))
+        .finally(() => setWbLoading(false));
+    }
+  }, [adviserMode, clientId, whiteboard]);
 
   const speak = useCallback((text: string) => {
     if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
@@ -184,11 +202,37 @@ export function ChatDrawer({
             </span>
           }
           right={
-            <button onClick={onClose} className="material-symbols-outlined text-aura-slate hover:text-aura-navy" aria-label="Close chat">
-              close
-            </button>
+            <div className="flex items-center gap-1">
+              <button
+                onClick={() => setAdviserMode((v) => !v)}
+                className={clsx(
+                  "material-symbols-outlined text-aura-slate hover:text-aura-navy px-2 py-1 rounded",
+                  adviserMode && "bg-aura-navy text-white hover:text-white"
+                )}
+                aria-label={adviserMode ? "Switch to chat mode" : "Switch to adviser mode"}
+              >
+                {adviserMode ? "chat" : "auto_fix_high"}
+              </button>
+              <button onClick={onClose} className="material-symbols-outlined text-aura-slate hover:text-aura-navy" aria-label="Close chat">
+                close
+              </button>
+            </div>
           }
         >
+          {adviserMode ? (
+            <div className="flex-1 overflow-y-auto pr-1 space-y-6">
+              {wbLoading && (
+                <div className="text-sm text-aura-slate flex items-center gap-2">
+                  <span className="material-symbols-outlined animate-spin">progress_activity</span>
+                  Building adviser whiteboard…
+                </div>
+              )}
+              {whiteboard && <AdviserCanvas whiteboard={whiteboard} />}
+              <AdviserChat clientId={clientId} />
+              <AdviserControls clientId={clientId} />
+            </div>
+          ) : (
+          <div className="flex flex-col flex-1 min-h-0">
           <div className="flex-1 overflow-y-auto pr-1" ref={scrollRef}>
             <div className="space-y-4">
               {messages.map((m, i) => (
@@ -266,6 +310,8 @@ export function ChatDrawer({
               </PrimaryButton>
             </form>
           </div>
+          </div>
+          )}
         </Panel>
       </div>
     </div>

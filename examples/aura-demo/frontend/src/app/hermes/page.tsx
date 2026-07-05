@@ -16,6 +16,7 @@ import { HermesStrategyPanel } from "@/components/hermes/HermesStrategyPanel";
 import { HermesQueue } from "@/components/hermes/HermesQueue";
 import { HermesHistory } from "@/components/hermes/HermesHistory";
 import { HermesPreventPanel } from "@/components/hermes/HermesPreventPanel";
+import { HermesGeneratePanel } from "@/components/hermes/HermesGeneratePanel";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { PrimaryButton } from "@/components/ui/PrimaryButton";
 import { SecondaryButton } from "@/components/ui/SecondaryButton";
@@ -258,6 +259,7 @@ export default function HermesPage() {
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
         <div className="xl:col-span-7 flex flex-col gap-6">
           <HermesScorePanel heartbeat={heartbeat} />
+          <HermesGeneratePanel onAdopted={refreshAll} />
           <HermesPreventPanel onPreventDone={loadQueue} />
           <div className="flex items-center justify-between gap-3 flex-wrap">
             <span className="font-mono text-xs text-aura-text-muted">Queue filter</span>

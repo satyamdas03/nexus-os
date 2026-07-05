@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { api } from "@/lib/api";
-import type { Portfolio, RemediationResult, Trade, RulesResult } from "@/lib/types";
+import type { Portfolio, RemediationResult, Trade, RulesResult, ConfidenceResult } from "@/lib/types";
 import { WorkbenchTable } from "@/components/WorkbenchTable";
 import { VerifyPanel } from "@/components/VerifyPanel";
 import { AuditTrail } from "@/components/AuditTrail";
@@ -16,6 +16,7 @@ import { AboutPopover } from "@/components/guide/AboutPopover";
 import { LoadingOverlay } from "@/components/ui/LoadingOverlay";
 import { useMutationGuard } from "@/components/auth/useMutationGuard";
 import { useAuth } from "@/components/auth/AuthContext";
+import { ConfidenceCard } from "@/components/ConfidenceCard";
 
 export default function Workbench({ params }: { params: { id: string } }) {
   const guard = useMutationGuard();
@@ -33,6 +34,7 @@ export default function Workbench({ params }: { params: { id: string } }) {
   const [approveErr, setApproveErr] = useState<string | null>(null);
   const [resetting, setResetting] = useState(false);
   const [approvedRulesResult, setApprovedRulesResult] = useState<RulesResult | null>(null);
+  const [confidence, setConfidence] = useState<ConfidenceResult | null>(null);
 
   useEffect(() => {
     setApprovedRulesResult(null);
@@ -58,6 +60,14 @@ export default function Workbench({ params }: { params: { id: string } }) {
     setTrades(next);
     api.verify(id, next).then(setLiveVerify).catch(() => setLiveVerify(null));
   };
+
+  useEffect(() => {
+    if (trades.length > 0) {
+      api.confidence.calculate(id, trades).then(setConfidence).catch(() => setConfidence(null));
+    } else {
+      setConfidence(null);
+    }
+  }, [trades, id]);
 
   const approve = async () => {
     if (approving) return;
@@ -177,6 +187,7 @@ export default function Workbench({ params }: { params: { id: string } }) {
                 Live re-verify: trader edit rechecked by rules engine.
               </div>
             )}
+            {confidence && <ConfidenceCard result={confidence} />}
           </div>
         </div>
       </div>

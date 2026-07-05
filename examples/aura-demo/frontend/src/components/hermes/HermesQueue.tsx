@@ -8,8 +8,9 @@ import { PrimaryButton } from "@/components/ui/PrimaryButton";
 import { StatusBadge } from "@/components/StatusBadge";
 import { VerifyPanel } from "@/components/VerifyPanel";
 import { api } from "@/lib/api";
-import type { HermesQueueItem, HermesHeartbeat, RulesResult } from "@/lib/types";
+import type { HermesQueueItem, HermesHeartbeat, RulesResult, ConfidenceResult } from "@/lib/types";
 import { useMutationGuard } from "@/components/auth/useMutationGuard";
+import { ConfidenceCard } from "@/components/ConfidenceCard";
 
 type RowState = "pending" | "applied" | "rejected";
 
@@ -30,6 +31,7 @@ function QueueRow({
   const [state, setState] = useState<RowState>("pending");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+  const [confidence, setConfidence] = useState<ConfidenceResult | null>(null);
   const guard = useMutationGuard();
 
   // confidence is optional on HermesQueueItem (/hermes/queue SELECT omits it).
@@ -40,13 +42,20 @@ function QueueRow({
   const expand = async () => {
     const next = !open;
     setOpen(next);
-    if (next && !verification && !loadingV) {
-      setLoadingV(true);
-      setErr(null);
-      api.verify(q.client_id, q.trades)
-        .then(setVerification)
-        .catch((e) => setErr(String(e.message ?? e)))
-        .finally(() => setLoadingV(false));
+    if (next) {
+      if (!verification && !loadingV) {
+        setLoadingV(true);
+        setErr(null);
+        api.verify(q.client_id, q.trades)
+          .then(setVerification)
+          .catch((e) => setErr(String(e.message ?? e)))
+          .finally(() => setLoadingV(false));
+      }
+      if (q.trades.length > 0) {
+        api.confidence.calculate(q.client_id, q.trades)
+          .then(setConfidence)
+          .catch(() => setConfidence(null));
+      }
     }
   };
 
@@ -190,6 +199,15 @@ function QueueRow({
               </table>
             </div>
           </div>
+
+          {confidence && (
+            <div>
+              <div className="font-mono text-[10px] uppercase tracking-wider text-aura-text-subtle mb-2">
+                AI Confidence
+              </div>
+              <ConfidenceCard result={confidence} />
+            </div>
+          )}
 
           <div>
             <div className="font-mono text-[10px] uppercase tracking-wider text-aura-text-subtle mb-2">

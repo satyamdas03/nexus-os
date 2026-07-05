@@ -283,11 +283,16 @@ Upgrade Hermes from reactive breach scanner to proactive drift prevention engine
 ## Sprint 7 — Packaging and Pilot Prep (Weeks 12–13)
 
 ### Deliverables
-1. Docker Compose stack: kernel + aura-demo backend + frontend + nginx.
-2. Deployment guide for AWS/GCP/Azure.
-3. SOC 2 readiness checklist.
-4. Pilot onboarding template.
-5. Whitepaper draft in `docs/whitepaper/`.
+1. ✅ Docker Compose stack: kernel + aura-demo backend + frontend + nginx.
+   - Files: `docker-compose.yml`, `backend/Dockerfile`, `frontend/Dockerfile`, `nginx/nginx.conf`, `scripts/smoke_docker.py`.
+2. ✅ Deployment guide for AWS/GCP/Azure + local + Render/Vercel.
+   - File: `docs/DEPLOYMENT.md`.
+3. ✅ SOC 2 readiness checklist mapped to Trust Services Criteria.
+   - File: `docs/SOC2-CHECKLIST.md`.
+4. ✅ Pilot onboarding template.
+   - File: `docs/PILOT-ONBOARDING.md`.
+5. ✅ Whitepaper draft in `docs/whitepaper/`.
+   - File: `docs/whitepaper/WHITEPAPER.md`.
 
 ---
 

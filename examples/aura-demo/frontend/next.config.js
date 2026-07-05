@@ -18,6 +18,7 @@ const cspDirectives = [
 
 /** @type {import('next').NextConfig} */
 module.exports = {
+  output: "standalone",
   async rewrites() {
     // Proxy same-origin /api -> backend in ALL environments (dev + prod).
     // Client never knows the backend URL; avoids build-time env baking.

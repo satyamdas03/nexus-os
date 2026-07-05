@@ -74,6 +74,7 @@ docker compose up
 | POST | `/v1/evaluate` | Full rules check on a portfolio + mandate |
 | POST | `/v1/verify` | What-if trade gate: post-trade verdict |
 | POST | `/v1/explain` | Deterministic mandate documentation |
+| POST | `/v1/evidence` | Regulator-reviewable evidence pack (JSON + optional HTML) |
 
 ### Example: evaluate a portfolio
 
@@ -94,6 +95,32 @@ curl -s -X POST http://127.0.0.1:8000/v1/evaluate \
         {"type": "min_cash", "parameters": {"min_weight": 0.05}}
       ]
     }
+  }'
+```
+
+### Example: generate an evidence pack
+
+```bash
+curl -s -X POST http://127.0.0.1:8000/v1/evidence \
+  -H "Content-Type: application/json" \
+  -d '{
+    "portfolio": {
+      "client_id": "C-001",
+      "cash": 10000,
+      "holdings": [
+        {"ticker": "SPY", "units": 10, "price": 500, "asset_class": "Equity", "sector": "Broad", "region": "US", "liquidity_tier": 1}
+      ]
+    },
+    "mandate": {
+      "rules": [
+        {"type": "max_asset_class_weight", "parameters": {"max_weights": {"Equity": 0.6, "Cash": 1.0}}},
+        {"type": "max_single_holding", "parameters": {"max_weight": 0.4}},
+        {"type": "min_cash", "parameters": {"min_weight": 0.05}}
+      ]
+    },
+    "client_name": "Jane Smith",
+    "adviser": "A-742",
+    "include_html": true
   }'
 ```
 

@@ -9,6 +9,7 @@ from assure_kernel.dsl import (
     to_legacy_dict,
 )
 from assure_kernel.engine import check, evaluate_portfolio
+from assure_kernel.evidence import build_evidence
 from assure_kernel.models import (
     Holding,
     Mandate,
@@ -48,4 +49,5 @@ __all__ = [
     "describe_rule",
     "describe_mandate",
     "rule_type_metadata",
+    "build_evidence",
 ]

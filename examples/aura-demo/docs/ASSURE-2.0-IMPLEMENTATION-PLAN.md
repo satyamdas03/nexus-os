@@ -177,19 +177,19 @@ packages/assure-kernel/
 - `POST /v1/evaluate` — full rules check (renamed from `/check` to match service verbs).
 - `POST /v1/verify` — what-if trade verification.
 - `POST /v1/explain` — deterministic, grounded mandate documentation.
-
-### Endpoints remaining
-- `POST /v1/evidence` — evidence pack (JSON + HTML).
+- `POST /v1/evidence` — regulator-reviewable evidence pack (JSON + optional HTML).
 
 ### Tasks
 1. ✅ Build FastAPI service with OpenAPI docs.
-2. ⬜ Add request/response logging.
-3. ⬜ Add API key auth middleware (pluggable).
-4. ✅ Dockerize the kernel.
-5. ⬜ Add load tests (≥1,000 RPS check throughput).
+2. ✅ Add `/v1/evidence` evidence pack builder with deterministic attestation, mandate docs, alignment history, remediation evidence, control statement, and print-ready HTML.
+3. ⬜ Add request/response logging.
+4. ⬜ Add API key auth middleware (pluggable).
+5. ✅ Dockerize the kernel.
+6. ⬜ Add load tests (≥1,000 RPS check throughput).
 
 ### Acceptance Criteria
 - ✅ `curl` examples work against running service (uvicorn smoke test passed; Docker daemon unavailable locally).
+- ✅ `/v1/evidence` returns correct red/green verdict and includes HTML when requested.
 - ⬜ Response latency P95 < 50ms for a 50-holding portfolio.
 - ⬜ 100% test coverage on API contracts.
 

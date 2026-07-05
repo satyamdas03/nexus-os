@@ -11,6 +11,7 @@ from pydantic import BaseModel, Field
 
 from assure_kernel.service import check_portfolio, verify_trades, explain_mandate
 from assure_kernel import __version__ as kernel_version
+from assure_kernel.evidence import build_evidence
 
 router = APIRouter(prefix="/v1")
 
@@ -41,6 +42,18 @@ class VerifyRequest(BaseModel):
 
 class ExplainRequest(BaseModel):
     mandate: dict
+
+
+class EvidenceRequest(BaseModel):
+    portfolio: dict
+    mandate: dict
+    client_name: str | None = None
+    adviser: str | None = None
+    fum: float | None = None
+    day: int = 0
+    alignment_history: list[dict] | None = None
+    remediation_evidence: list[dict] | None = None
+    include_html: bool = False
 
 
 @router.get("/health", response_model=HealthResponse)
@@ -75,3 +88,31 @@ def explain(req: ExplainRequest) -> dict:
         return explain_mandate(req.mandate)
     except Exception as exc:
         raise HTTPException(status_code=400, detail=f"Explain failed: {exc}") from exc
+
+
+@router.post("/evidence")
+def evidence(req: EvidenceRequest) -> dict:
+    """Build a stateless, regulator-reviewable evidence pack.
+
+    Computes the deterministic rules result fresh from the supplied portfolio
+    and mandate, then returns structured JSON plus optional pre-rendered HTML.
+    """
+    try:
+        pack = build_evidence(
+            portfolio=req.portfolio,
+            mandate=req.mandate,
+            client_name=req.client_name,
+            adviser=req.adviser,
+            fum=req.fum,
+            day=req.day,
+            alignment_history=req.alignment_history or [],
+            remediation_evidence=req.remediation_evidence or [],
+        )
+    except Exception as exc:
+        raise HTTPException(status_code=400, detail=f"Evidence build failed: {exc}") from exc
+
+    html = pack.pop("_html", None)
+    out: dict = {"evidence": pack}
+    if req.include_html:
+        out["html"] = html
+    return out

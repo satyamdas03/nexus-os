@@ -102,3 +102,56 @@ def test_explain_legacy_mandate(client):
     assert r.status_code == 200
     body = r.json()
     assert body["rule_count"] >= 3
+
+
+def test_evidence_pack(client, sample_portfolio, sample_mandate):
+    r = client.post("/v1/evidence", json={
+        "portfolio": sample_portfolio,
+        "mandate": sample_mandate,
+        "client_name": "Test Client",
+        "adviser": "Test Adviser",
+        "fum": 15_000.0,
+        "day": 7,
+        "alignment_history": [{"day": 0, "status": "green", "breach_count": 0, "watch_count": 0}],
+        "remediation_evidence": [
+            {"timestamp": "2026-07-05T10:00:00+00:00", "actor": "adviser", "action_type": "explain", "tier": "advisory", "rationale": "review", "payload_summary": "explanation narrative", "rules_status": "green"}
+        ],
+    })
+    assert r.status_code == 200
+    body = r.json()
+    evidence = body["evidence"]
+    assert evidence["header"]["client_id"] == "test-001"
+    assert evidence["header"]["day"] == 7
+    assert evidence["current_attestation"]["status"] == "green"
+    assert evidence["mandate_documentation"]["rule_count"] == 3
+    assert "_html" not in evidence
+    assert "html" not in body
+
+
+def test_evidence_pack_with_html(client, sample_portfolio, sample_mandate):
+    r = client.post("/v1/evidence", json={
+        "portfolio": sample_portfolio,
+        "mandate": sample_mandate,
+        "include_html": True,
+    })
+    assert r.status_code == 200
+    body = r.json()
+    assert "html" in body
+    assert body["html"].startswith("<!DOCTYPE html")
+    assert "ASSURE" in body["html"]
+
+
+def test_evidence_pack_breach(client, sample_mandate):
+    portfolio = {
+        "client_id": "test-breach",
+        "cash": 10_000.0,
+        "holdings": [
+            {"ticker": "SPY", "units": 100.0, "price": 500.0, "asset_class": "Equity", "sector": "Broad", "region": "US", "liquidity_tier": 1},
+            {"ticker": "TLT", "units": 20.0, "price": 95.0, "asset_class": "Bonds", "sector": "Broad", "region": "US", "liquidity_tier": 1},
+        ],
+    }
+    r = client.post("/v1/evidence", json={"portfolio": portfolio, "mandate": sample_mandate})
+    assert r.status_code == 200
+    evidence = r.json()["evidence"]
+    assert evidence["current_attestation"]["status"] == "red"
+    assert "BREACH" in evidence["deterministic_summary"]

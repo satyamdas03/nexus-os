@@ -29,20 +29,37 @@ class ChatAnswer:
 
 
 def _classify_intent(query: str) -> str:
-    """Fast rule-based intent classifier."""
+    """Fast rule-based intent classifier.
+
+    Order matters: more specific phrases are checked first so that words like
+    'cash' or 'orange' inside a rule/breach/trade question do not hijack intent.
+    """
     q = query.lower()
+    # Explicit rule questions first.
+    if any(w in q for w in ("what is the", "what does the", "explain the", "does the", "tell me about the")) and any(
+        w in q for w in ("rule", "limit", "cap")
+    ):
+        return "explain_rule"
+    # "... rule ok/passing?" and "is the ... rule ok" patterns are rule checks.
+    if "rule" in q and any(w in q for w in ("pass", "passing", "ok")):
+        return "explain_rule"
+    # What-if trade: includes buy/sell and numbers, or exact "what if" phrasing.
+    if re.search(r"\b(buy|sell|purchase)\b.*\b\d+\b", q) or any(w in q for w in ("what if", "whatif", "if i")):
+        return "what_if_trade"
+    # Watch / drift questions.
+    if any(w in q for w in ("watch", "drift", "attention")):
+        return "explain_watches"
+    if q.strip().endswith("orange?") or "portfolio orange" in q:
+        return "explain_watches"
+    # Breach / red / violation questions.
     if any(w in q for w in ("why", "breach", "red", "flag", "violation")):
         return "explain_breaches"
-    if any(w in q for w in ("watch", "orange", "attention", "drift")):
-        return "explain_watches"
-    if any(w in q for w in ("rule", "limit", "cap", "check")):
-        return "explain_rule"
-    if any(w in q for w in ("sell", "buy", "trade", "what if", "whatif", "if i")):
-        return "what_if_trade"
-    if any(w in q for w in ("status", "how is", "summary", "overview", "tell me about")):
-        return "summarize"
+    # Cash / liquidity.
     if any(w in q for w in ("cash", "liquid", "money")):
         return "explain_cash"
+    # Summary fallback.
+    if any(w in q for w in ("status", "how is", "summary", "overview", "tell me about", "how is the portfolio doing")):
+        return "summarize"
     return "summarize"
 
 

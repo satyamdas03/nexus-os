@@ -11,13 +11,18 @@ from assure_kernel.dsl import (
 from assure_kernel.engine import check, evaluate_portfolio
 from assure_kernel.evidence import build_evidence
 from assure_kernel.synthetic import (
+    Adversary,
+    AdversaryResult,
+    BreachObservation,
     PortfolioGenerator,
     Scenario,
     ShockMap,
+    find_breaches,
     generate_portfolios,
     get_scenario,
     list_scenarios,
     stress_portfolio,
+    stress_until_breach,
 )
 from assure_kernel.models import (
     Holding,
@@ -66,4 +71,9 @@ __all__ = [
     "list_scenarios",
     "get_scenario",
     "stress_portfolio",
+    "Adversary",
+    "AdversaryResult",
+    "BreachObservation",
+    "find_breaches",
+    "stress_until_breach",
 ]

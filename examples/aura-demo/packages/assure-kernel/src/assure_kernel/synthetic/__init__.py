@@ -8,6 +8,13 @@ from assure_kernel.synthetic.generator import (
     PortfolioGenerator,
     generate_portfolios,
 )
+from assure_kernel.synthetic.adversary import (
+    Adversary,
+    AdversaryResult,
+    BreachObservation,
+    find_breaches,
+    stress_until_breach,
+)
 from assure_kernel.synthetic.scenarios import (
     Scenario,
     ShockMap,
@@ -24,4 +31,9 @@ __all__ = [
     "get_scenario",
     "list_scenarios",
     "stress_portfolio",
+    "Adversary",
+    "AdversaryResult",
+    "BreachObservation",
+    "find_breaches",
+    "stress_until_breach",
 ]

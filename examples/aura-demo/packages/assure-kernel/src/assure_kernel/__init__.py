@@ -17,6 +17,8 @@ from assure_kernel.synthetic import (
     PortfolioGenerator,
     Scenario,
     ShockMap,
+    StressReport,
+    build_report,
     find_breaches,
     generate_portfolios,
     get_scenario,
@@ -76,4 +78,6 @@ __all__ = [
     "BreachObservation",
     "find_breaches",
     "stress_until_breach",
+    "StressReport",
+    "build_report",
 ]

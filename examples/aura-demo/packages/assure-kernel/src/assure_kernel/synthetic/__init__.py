@@ -15,6 +15,7 @@ from assure_kernel.synthetic.adversary import (
     find_breaches,
     stress_until_breach,
 )
+from assure_kernel.synthetic.report import StressReport, build_report
 from assure_kernel.synthetic.scenarios import (
     Scenario,
     ShockMap,
@@ -36,4 +37,6 @@ __all__ = [
     "BreachObservation",
     "find_breaches",
     "stress_until_breach",
+    "StressReport",
+    "build_report",
 ]

@@ -5,6 +5,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { api } from "@/lib/api";
 import type { MarketClock, MarketHistoryPoint } from "@/lib/types";
+import { useMutationGuard } from "@/components/auth/useMutationGuard";
 
 const COLOR = { green: "#10B981", orange: "#D97706", red: "#DC2626" };
 
@@ -52,6 +53,7 @@ export function MarketPanel({ onTick }: { onTick?: () => void }) {
   };
 
   const priceEntries = Object.entries(prices).slice(0, 12);
+  const guard = useMutationGuard();
 
   return (
     <div className="bg-aura-surface-low border border-aura-border rounded p-4 flex flex-col gap-3 mb-6">
@@ -66,18 +68,18 @@ export function MarketPanel({ onTick }: { onTick?: () => void }) {
       </div>
 
       <div className="flex flex-wrap items-center gap-2">
-        <button disabled={busy} onClick={() => act(() => api.market.tick())}
+        <button disabled={busy || guard.disabled} title={guard.title} onClick={() => act(() => api.market.tick())}
           className="inline-flex items-center gap-1 px-3 py-1 font-mono text-xs border border-aura-navy text-aura-navy rounded hover:bg-aura-surface disabled:opacity-40 transition">
           {busy && <span className="material-symbols-outlined text-[14px] animate-spin">progress_activity</span>}
           Tick
         </button>
-        <button disabled={busy} onClick={() => act(() => api.market.autorun(!(clock?.running)))}
+        <button disabled={busy || guard.disabled} title={guard.title} onClick={() => act(() => api.market.autorun(!(clock?.running)))}
           className="inline-flex items-center gap-1 px-3 py-1 font-mono text-xs border border-aura-border text-aura-text rounded hover:border-aura-navy transition">
           {busy && <span className="material-symbols-outlined text-[14px] animate-spin">progress_activity</span>}
           {clock?.running ? "Pause" : "Auto-run"}
         </button>
-        <button disabled={busy} onClick={() => act(() => api.market.autofix(!(clock?.auto_fix)))}
-          className={`inline-flex items-center gap-1 px-3 py-1 font-mono text-xs border rounded ${clock?.auto_fix ? "border-aura-emerald text-aura-emerald" : "border-aura-border text-aura-text-muted"} hover:border-aura-emerald transition`}>
+        <button disabled={busy || guard.disabled} title={guard.title} onClick={() => act(() => api.market.autofix(!(clock?.auto_fix)))}
+          className={`inline-flex items-center gap-1 px-3 py-1 font-mono text-xs border rounded ${clock?.auto_fix ? "border-aura-emerald text-aura-emerald" : "border-aura-border text-aura-text-muted"} hover:border-aura-emerald transition disabled:opacity-40`}>
           {busy && <span className="material-symbols-outlined text-[14px] animate-spin">progress_activity</span>}
           Auto-fix {clock?.auto_fix ? "on" : "off"}
         </button>
@@ -85,7 +87,7 @@ export function MarketPanel({ onTick }: { onTick?: () => void }) {
           <input type="number" min={1} max={50} value={advN}
             onChange={(e) => setAdvN(Math.max(1, Math.min(50, Number(e.target.value))))}
             className="w-16 bg-white border border-aura-border text-aura-text font-mono text-xs px-2 py-1 rounded" />
-          <button disabled={busy} onClick={() => act(() => api.market.advance(advN))}
+          <button disabled={busy || guard.disabled} title={guard.title} onClick={() => act(() => api.market.advance(advN))}
             className="inline-flex items-center gap-1 px-3 py-1 font-mono text-xs border border-aura-border text-aura-text rounded hover:border-aura-navy transition"
           >
             {busy && <span className="material-symbols-outlined text-[14px] animate-spin">progress_activity</span>}

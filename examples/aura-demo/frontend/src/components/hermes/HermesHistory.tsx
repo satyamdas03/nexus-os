@@ -6,6 +6,7 @@ import { Panel } from "@/components/ui/Panel";
 import { SecondaryButton } from "@/components/ui/SecondaryButton";
 import { api } from "@/lib/api";
 import type { HermesHistoryEntry, HermesStrategy } from "@/lib/types";
+import { useMutationGuard } from "@/components/auth/useMutationGuard";
 
 function fmtVal(v: unknown): string {
   if (Array.isArray(v)) return `${v.length} items`;
@@ -22,6 +23,7 @@ export function HermesHistory({
 }) {
   const [busy, setBusy] = useState<number | null>(null);
   const [err, setErr] = useState<string | null>(null);
+  const guard = useMutationGuard();
 
   const ordered = [...history].sort((a, b) => b.snapshot.version - a.snapshot.version);
 
@@ -119,7 +121,8 @@ export function HermesHistory({
 
                   <SecondaryButton
                     onClick={() => restore(h)}
-                    disabled={busy !== null || isLatest}
+                    disabled={busy !== null || isLatest || guard.disabled}
+                    title={guard.disabled ? guard.title : isLatest ? "Current version" : undefined}
                     loading={busy === h.snapshot.version}
                     className="flex items-center gap-2 text-aura-ochre border-aura-ochre hover:bg-aura-ochre-soft/40 disabled:opacity-40"
                   >

@@ -18,12 +18,13 @@ app.add_middleware(
     allow_origins=allow_origins,
     allow_credentials="*" not in allow_origins,
     allow_methods=["GET", "POST"],
-    allow_headers=["Content-Type", "X-Admin-Secret"],
+    allow_headers=["Content-Type", "X-Admin-Secret", "Authorization"],
 )
 
 
-from routers import portfolios, audit, actions, admin, hermes, market, evidence, chat, voice
+from routers import portfolios, audit, actions, admin, hermes, market, evidence, chat, voice, auth
 
+app.include_router(auth.router)
 app.include_router(portfolios.router)
 app.include_router(audit.router)
 app.include_router(actions.router)
@@ -48,8 +49,10 @@ async def _ensure_book_then_autorun():
     inside the loop so it can. Idempotent via `start_autorun_loop`'s guard.
     """
     from core import data_loader
+    from core.auth import ensure_bootstrap_admin
 
     data_loader.ensure_book()
+    ensure_bootstrap_admin()
     if os.environ.get("MARKET_AUTO_RUN", "").lower() in ("1", "true", "on"):
         market.start_autorun_loop()
 

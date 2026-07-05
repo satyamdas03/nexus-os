@@ -7,6 +7,7 @@ export function PrimaryButton({
   loading,
   type = "button",
   className,
+  title,
 }: {
   children: React.ReactNode;
   onClick?: () => void;
@@ -14,6 +15,7 @@ export function PrimaryButton({
   loading?: boolean;
   type?: "button" | "submit";
   className?: string;
+  title?: string;
 }) {
   const isBusy = disabled || loading;
   return (
@@ -21,6 +23,7 @@ export function PrimaryButton({
       type={type}
       onClick={onClick}
       disabled={isBusy}
+      title={title}
       aria-busy={loading ? "true" : undefined}
       className={clsx(
         "px-4 py-2 rounded bg-aura-navy text-white font-mono text-sm font-medium",

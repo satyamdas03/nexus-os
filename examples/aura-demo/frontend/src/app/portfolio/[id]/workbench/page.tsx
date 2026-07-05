@@ -14,8 +14,12 @@ import { SecondaryButton } from "@/components/ui/SecondaryButton";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { AboutPopover } from "@/components/guide/AboutPopover";
 import { LoadingOverlay } from "@/components/ui/LoadingOverlay";
+import { useMutationGuard } from "@/components/auth/useMutationGuard";
+import { useAuth } from "@/components/auth/AuthContext";
 
 export default function Workbench({ params }: { params: { id: string } }) {
+  const guard = useMutationGuard();
+  const { isAdmin } = useAuth();
   const { id } = params;
   const [p, setP] = useState<Portfolio | null>(null);
   const [res, setRes] = useState<RemediationResult | null>(null);
@@ -124,7 +128,13 @@ export default function Workbench({ params }: { params: { id: string } }) {
             <p className="font-mono text-[10px] uppercase text-aura-text-subtle mb-1">AUM Impact</p>
             <p className="font-mono text-base font-bold tabular-nums text-aura-navy">${(aumImpact / 1e3).toFixed(0)}k ({((aumImpact / p.fum) * 100).toFixed(1)}%)</p>
           </div>
-          <SecondaryButton onClick={resetDemo} disabled={resetting} loading={resetting} className="flex items-center gap-2 text-aura-crimson border-aura-crimson hover:bg-aura-crimson-soft">
+          <SecondaryButton
+            onClick={resetDemo}
+            disabled={resetting || !isAdmin}
+            title={!isAdmin ? "Admin only" : undefined}
+            loading={resetting}
+            className="flex items-center gap-2 text-aura-crimson border-aura-crimson hover:bg-aura-crimson-soft"
+          >
             <span className="material-symbols-outlined text-[16px]">restart_alt</span>
             {resetting ? "Resetting..." : "Reset demo state"}
           </SecondaryButton>
@@ -149,7 +159,7 @@ export default function Workbench({ params }: { params: { id: string } }) {
             </div>
           </div>
 
-          <WorkbenchTable trades={trades} portfolio={p} editable={!!res} onTradesChange={onTradesChange} />
+          <WorkbenchTable trades={trades} portfolio={p} editable={!!res && !guard.disabled} onTradesChange={onTradesChange} />
           <SuggestionChip clientId={id} />
         </div>
 
@@ -196,8 +206,8 @@ export default function Workbench({ params }: { params: { id: string } }) {
           <span className="font-mono text-xs">Nothing executes automatically. Approving logs the intent and queues orders for manual trader review.</span>
         </div>
         <div className="flex items-center gap-3">
-          <SecondaryButton onClick={propose} disabled={busy || approving} loading={busy}>{busy ? "Proposing..." : "Propose a fix"}</SecondaryButton>
-          <PrimaryButton onClick={approve} disabled={!res || approved || approving} loading={approving} className="flex items-center gap-2" data-tour="approve">
+          <SecondaryButton onClick={propose} disabled={busy || approving || guard.disabled} title={guard.title} loading={busy}>{busy ? "Proposing..." : "Propose a fix"}</SecondaryButton>
+          <PrimaryButton onClick={approve} disabled={!res || approved || approving || guard.disabled} title={guard.title} loading={approving} className="flex items-center gap-2" data-tour="approve">
             <span className="material-symbols-outlined text-[18px]">gavel</span>
             {approved ? "Approved" : approving ? "Approving..." : "Approve & Log"}
           </PrimaryButton>
@@ -210,8 +220,8 @@ export default function Workbench({ params }: { params: { id: string } }) {
           Nothing executes automatically. Approving logs the intent and queues orders for manual review.
         </p>
         <div className="flex gap-3">
-          <SecondaryButton onClick={propose} disabled={busy || approving} loading={busy} className="flex-1">{busy ? "Proposing..." : "Propose a fix"}</SecondaryButton>
-          <PrimaryButton onClick={approve} disabled={!res || approved || approving} loading={approving} className="flex-1 flex items-center justify-center gap-2">
+          <SecondaryButton onClick={propose} disabled={busy || approving || guard.disabled} title={guard.title} loading={busy} className="flex-1">{busy ? "Proposing..." : "Propose a fix"}</SecondaryButton>
+          <PrimaryButton onClick={approve} disabled={!res || approved || approving || guard.disabled} title={guard.title} loading={approving} className="flex-1 flex items-center justify-center gap-2">
             <span className="material-symbols-outlined text-[18px]">gavel</span>
             {approved ? "Approved" : approving ? "Approving..." : "Approve & Log"}
           </PrimaryButton>

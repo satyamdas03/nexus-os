@@ -7,10 +7,11 @@ import asyncio
 import os
 from typing import Optional
 
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, Depends, Query
 from pydantic import BaseModel
 
 from core import market as M, data_loader
+from core.auth import require_mutation
 
 router = APIRouter(prefix="/market", tags=["market"])
 
@@ -48,17 +49,17 @@ def clock():
 
 
 @router.post("/tick")
-def tick():
+def tick(_user=Depends(require_mutation)):
     return M.tick(run_monitor=True)
 
 
 @router.post("/advance")
-def advance(days: int = Query(..., ge=1, le=500)):
+def advance(days: int = Query(..., ge=1, le=500), _user=Depends(require_mutation)):
     return M.advance(days, run_monitor=True)
 
 
 @router.post("/auto-run")
-async def auto_run(body: AutoRunBody):
+async def auto_run(body: AutoRunBody, _user=Depends(require_mutation)):
     M.set_running(body.on, interval_sec=body.interval_sec)
     start_autorun_loop() if body.on else stop_autorun_loop()
     return M.get_clock()
@@ -88,7 +89,7 @@ def stop_autorun_loop():
 
 
 @router.post("/auto-fix")
-def auto_fix(body: AutoFixBody):
+def auto_fix(body: AutoFixBody, _user=Depends(require_mutation)):
     return M.set_auto_fix(body.on)
 
 

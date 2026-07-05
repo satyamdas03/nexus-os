@@ -15,7 +15,7 @@ import json
 import uuid
 from datetime import datetime, timezone
 
-from fastapi import APIRouter, BackgroundTasks, HTTPException, Query
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Query
 from pydantic import BaseModel
 
 from core import data_loader
@@ -23,6 +23,7 @@ from core.data_loader import get_portfolio, get_conn_cached
 from core.effective import effective_portfolio, record_trades, get_effective
 from core.rules_engine import check
 from core.hermes_store import get_hermes_store, HERMES_STORE_URL
+from core.auth import require_mutation, require_admin
 from agents.hermes import HEARTBEAT_PATH, HISTORY_DIR
 from agents.hermes.loop import scan_book, prevent_scan, simulate_book
 from agents.hermes.reflect import reflect
@@ -74,7 +75,7 @@ def _log(client_id: str, action_type: str, actor: str, tier: str, payload: dict,
 
 
 @router.post("/hermes/scan")
-def hermes_scan(background: BackgroundTasks):
+def hermes_scan(background: BackgroundTasks, _user=Depends(require_mutation)):
     """Launch an async full-book scan. Returns a job_id immediately; the
     scan writes a scan_jobs row and the paged hermes_queue as it goes.
     Human-applies gate still holds — this only proposes + gates + queues."""
@@ -99,7 +100,7 @@ def _run_scan_job(job_id: str):
 
 
 @router.post("/hermes/prevent-scan")
-def hermes_prevent_scan(background: BackgroundTasks):
+def hermes_prevent_scan(background: BackgroundTasks, _user=Depends(require_mutation)):
     """Launch an async full-book prevent scan.
 
     Scans currently-green portfolios, projects them forward, and queues
@@ -153,14 +154,14 @@ def hermes_strategy():
 
 
 @router.post("/hermes/reflect")
-def hermes_reflect(body: ReflectBody):
+def hermes_reflect(body: ReflectBody, _user=Depends(require_mutation)):
     if body.mode not in ("fallback", "hermes"):
         raise HTTPException(400, "mode must be 'fallback' or 'hermes'")
     return reflect(mode=body.mode)
 
 
 @router.post("/hermes/adopt")
-def hermes_adopt(body: AdoptBody):
+def hermes_adopt(body: AdoptBody, _user=Depends(require_mutation)):
     """Human gate. Applies one strategy change, bumps version, archives, audits.
     Never self-adopts — a human must call this."""
     try:
@@ -209,7 +210,7 @@ def hermes_queue(day: int | None = None, cursor: int = 0,
 
 
 @router.post("/hermes/approve-batch")
-def hermes_approve_batch(body: ApproveBatchBody):
+def hermes_approve_batch(body: ApproveBatchBody, _user=Depends(require_mutation)):
     """Bulk-apply human-approved trades for multiple Hermes queue items.
 
     For each item: record trades against the shadow state, recompute the
@@ -265,7 +266,7 @@ def hermes_approve_batch(body: ApproveBatchBody):
 
 
 @router.post("/hermes/rollback")
-def hermes_rollback(body: RollbackBody):
+def hermes_rollback(body: RollbackBody, _user=Depends(require_admin)):
     """Human-gated strategy rollback. Restores the snapshot at
     history/v{version}.json. Before overwriting, archives the CURRENT strategy
     so the rollback is itself reversible. Bumps version forward. Appends an

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from datetime import datetime, timezone
 from pathlib import Path
 from pydantic import BaseModel
@@ -6,6 +6,7 @@ from core.data_loader import get_portfolio
 from core.rules_engine import check
 from core.effective import effective_portfolio, record_trades
 from core.trades import apply_trades
+from core.auth import require_mutation
 from agents.explain import explain
 from agents.remediate import remediate
 from agents.reflect import suggest, adopt
@@ -79,7 +80,7 @@ def verify_endpoint(client_id: str, body: VerifyBody):
 
 
 @router.post("/portfolio/{client_id}/remediate")
-def remediate_endpoint(client_id: str):
+def remediate_endpoint(client_id: str, _user=Depends(require_mutation)):
     p = get_portfolio(client_id)
     if not p:
         _404(client_id)
@@ -92,7 +93,7 @@ def remediate_endpoint(client_id: str):
 
 
 @router.post("/portfolio/{client_id}/approve")
-def approve_endpoint(client_id: str, body: ApproveBody):
+def approve_endpoint(client_id: str, body: ApproveBody, _user=Depends(require_mutation)):
     p = get_portfolio(client_id)
     if not p:
         _404(client_id)
@@ -118,7 +119,7 @@ def approve_endpoint(client_id: str, body: ApproveBody):
 
 
 @router.post("/portfolio/{client_id}/reflect")
-def reflect_endpoint(client_id: str):
+def reflect_endpoint(client_id: str, _user=Depends(require_mutation)):
     s = suggest(client_id)
     if s:
         _log(client_id, "reflect_suggest", "ai", "advisory", s, "learning loop")
@@ -126,7 +127,7 @@ def reflect_endpoint(client_id: str):
 
 
 @router.post("/preferences/adopt")
-def adopt_endpoint(body: AdoptBody):
+def adopt_endpoint(body: AdoptBody, _user=Depends(require_mutation)):
     pref_path = Path(__file__).parent.parent / "data" / "preferences.jsonl"
     existing = pref_path.read_text().splitlines() if pref_path.exists() else []
     version = len([l for l in existing if l.strip()]) + 1

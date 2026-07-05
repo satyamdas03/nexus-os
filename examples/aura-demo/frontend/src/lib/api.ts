@@ -8,9 +8,25 @@ function base() {
   return "/api";
 }
 
+function authHeader(): Record<string, string> {
+  if (typeof window === "undefined") return {};
+  const raw = window.sessionStorage.getItem("assure_auth");
+  if (!raw) return {};
+  try {
+    const parsed = JSON.parse(raw);
+    return parsed.token ? { Authorization: `Bearer ${parsed.token}` } : {};
+  } catch {
+    return {};
+  }
+}
+
 async function j<T>(path: string, init?: RequestInit): Promise<T> {
   const r = await fetch(`${base()}${path}`, {
-    headers: { "Content-Type": "application/json", ...init?.headers },
+    headers: {
+      "Content-Type": "application/json",
+      ...authHeader(),
+      ...init?.headers,
+    },
     ...init,
   });
   if (!r.ok) throw new Error(`${path} -> ${r.status}`);
@@ -25,6 +41,16 @@ const _clock = (r: any): MarketClock => ({
 });
 
 export const api = {
+  login: async (username: string, password: string) => {
+    const r = await fetch(`${base()}/auth/token`, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({ username, password }),
+    });
+    if (!r.ok) throw new Error("Login failed");
+    return r.json() as Promise<{ access_token: string; token_type: string; role: string; username: string }>;
+  },
+  me: () => j<{ username: string; role: string }>("/auth/me"),
   listPortfolios: (limit = 500, offset = 0) =>
     j<PortfolioSummary[]>(`/portfolios?limit=${limit}&offset=${offset}`),
   portfoliosTop: (limit = 200) =>

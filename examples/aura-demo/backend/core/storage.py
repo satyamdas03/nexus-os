@@ -76,6 +76,13 @@ CREATE TABLE IF NOT EXISTS tickers (
   ticker TEXT PRIMARY KEY, name TEXT, asset_class TEXT, sector TEXT,
   region TEXT, liquidity_tier INTEGER, base_price REAL, mu REAL, sigma REAL
 );
+CREATE TABLE IF NOT EXISTS users (
+  username TEXT PRIMARY KEY,
+  hashed_password TEXT NOT NULL,
+  role TEXT NOT NULL CHECK(role IN ('viewer', 'adviser', 'admin')),
+  assigned_adviser_filter TEXT,
+  disabled INTEGER DEFAULT 0
+);
 """
 
 

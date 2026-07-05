@@ -4,8 +4,10 @@ import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import { PrimaryButton } from "@/components/ui/PrimaryButton";
 import { SecondaryButton } from "@/components/ui/SecondaryButton";
+import { useMutationGuard } from "@/components/auth/useMutationGuard";
 
 export function SuggestionChip({ clientId }: { clientId: string }) {
+  const guard = useMutationGuard();
   const [s, setS] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
   const [adopted, setAdopted] = useState(false);
@@ -37,6 +39,8 @@ export function SuggestionChip({ clientId }: { clientId: string }) {
               })
               .then(() => setAdopted(true))
           }
+          disabled={guard.disabled}
+          title={guard.title}
           className="px-3 py-1.5 text-xs"
         >
           Adopt

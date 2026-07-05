@@ -6,6 +6,7 @@ import { PrimaryButton } from "@/components/ui/PrimaryButton";
 import { SecondaryButton } from "@/components/ui/SecondaryButton";
 import { api } from "@/lib/api";
 import type { HermesStrategy, HermesProposal, HermesAdoptResult } from "@/lib/types";
+import { useMutationGuard } from "@/components/auth/useMutationGuard";
 
 function fmt(v: unknown): string {
   if (Array.isArray(v)) return v.join(" > ");
@@ -25,6 +26,7 @@ export function HermesStrategyPanel({
   const [err, setErr] = useState<string | null>(null);
   const [lastAdopt, setLastAdopt] = useState<HermesAdoptResult | null>(null);
   const [lastDismissMsg, setLastDismissMsg] = useState(false);
+  const guard = useMutationGuard();
 
   const doReflect = (mode: "fallback" | "hermes") => {
     setBusy("reflect");
@@ -88,10 +90,10 @@ export function HermesStrategyPanel({
           <span className="font-mono text-xs text-aura-text-subtle">proposes ONE strategy change</span>
         </div>
         <div className="flex gap-2 mb-3 flex-wrap">
-          <SecondaryButton onClick={() => doReflect("fallback")} disabled={busy !== null} loading={busy === "reflect"}>
+          <SecondaryButton onClick={() => doReflect("fallback")} disabled={busy !== null || guard.disabled} title={guard.title} loading={busy === "reflect"}>
             {busy === "reflect" ? "Reflecting…" : "Reflect (deterministic)"}
           </SecondaryButton>
-          <SecondaryButton onClick={() => doReflect("hermes")} disabled={busy !== null} loading={busy === "reflect"}>
+          <SecondaryButton onClick={() => doReflect("hermes")} disabled={busy !== null || guard.disabled} title={guard.title} loading={busy === "reflect"}>
             Reflect (Claude)
           </SecondaryButton>
         </div>
@@ -111,7 +113,7 @@ export function HermesStrategyPanel({
             </p>
             <p className="font-mono text-xs text-aura-text-muted mt-1 leading-snug">{proposal.rationale}</p>
             <div className="mt-3 flex items-center gap-2 flex-wrap">
-              <PrimaryButton onClick={doAdopt} disabled={busy !== null} loading={busy === "adopt"} className="flex items-center gap-2">
+              <PrimaryButton onClick={doAdopt} disabled={busy !== null || guard.disabled} title={guard.title} loading={busy === "adopt"} className="flex items-center gap-2">
                 <span className="material-symbols-outlined text-[16px]">gavel</span>
                 {busy === "adopt" ? "Adopting..." : "Adopt (human gate)"}
               </PrimaryButton>

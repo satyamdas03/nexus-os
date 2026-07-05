@@ -7,6 +7,7 @@ import { Panel } from "@/components/ui/Panel";
 import { PrimaryButton } from "@/components/ui/PrimaryButton";
 import { SecondaryButton } from "@/components/ui/SecondaryButton";
 import type { HermesSimulationResult, HermesScanJob } from "@/lib/types";
+import { useMutationGuard } from "@/components/auth/useMutationGuard";
 
 const pollJob = (jobId: string): Promise<HermesScanJob> =>
   new Promise((resolve, reject) => {
@@ -34,6 +35,7 @@ export function HermesPreventPanel({
   const [simBusy, setSimBusy] = useState(false);
   const [simResult, setSimResult] = useState<HermesSimulationResult | null>(null);
   const [err, setErr] = useState<string | null>(null);
+  const guard = useMutationGuard();
 
   const preventScan = () => {
     if (scanning) return;
@@ -76,16 +78,16 @@ export function HermesPreventPanel({
       </p>
 
       <div className="flex flex-wrap gap-2 mb-4">
-        <PrimaryButton onClick={preventScan} disabled={scanning} loading={scanning} className="flex items-center gap-2">
+        <PrimaryButton onClick={preventScan} disabled={scanning || guard.disabled} title={guard.title} loading={scanning} className="flex items-center gap-2">
           <span className={clsx("material-symbols-outlined text-[18px]", scanning && "animate-spin")}>
             radar
           </span>
           {scanning ? "Prevent scan…" : "Prevent Scan"}
         </PrimaryButton>
-        <SecondaryButton onClick={() => runSim("reactive")} disabled={simBusy} loading={simBusy}>
+        <SecondaryButton onClick={() => runSim("reactive")} disabled={simBusy || guard.disabled} title={guard.title} loading={simBusy}>
           Simulate 100d reactive
         </SecondaryButton>
-        <SecondaryButton onClick={() => runSim("prevent")} disabled={simBusy} loading={simBusy}>
+        <SecondaryButton onClick={() => runSim("prevent")} disabled={simBusy || guard.disabled} title={guard.title} loading={simBusy}>
           Simulate 100d prevent
         </SecondaryButton>
       </div>

@@ -6,18 +6,21 @@ export function SecondaryButton({
   disabled,
   loading,
   className,
+  title,
 }: {
   children: React.ReactNode;
   onClick?: () => void;
   disabled?: boolean;
   loading?: boolean;
   className?: string;
+  title?: string;
 }) {
   const isBusy = disabled || loading;
   return (
     <button
       onClick={onClick}
       disabled={isBusy}
+      title={title}
       aria-busy={loading ? "true" : undefined}
       className={clsx(
         "px-4 py-2 rounded border border-aura-border text-aura-navy font-mono text-sm font-medium",

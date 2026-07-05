@@ -9,6 +9,7 @@ import { StatusBadge } from "@/components/StatusBadge";
 import { VerifyPanel } from "@/components/VerifyPanel";
 import { api } from "@/lib/api";
 import type { HermesQueueItem, HermesHeartbeat, RulesResult } from "@/lib/types";
+import { useMutationGuard } from "@/components/auth/useMutationGuard";
 
 type RowState = "pending" | "applied" | "rejected";
 
@@ -29,6 +30,7 @@ function QueueRow({
   const [state, setState] = useState<RowState>("pending");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+  const guard = useMutationGuard();
 
   // confidence is optional on HermesQueueItem (/hermes/queue SELECT omits it).
   // Fall back to 0 so the tone + % render without undefined arithmetic.
@@ -208,7 +210,7 @@ function QueueRow({
           </div>
 
           <div className="flex flex-wrap items-center gap-2 pt-1">
-            <PrimaryButton onClick={approve} disabled={busy} loading={busy} className="flex items-center gap-2">
+            <PrimaryButton onClick={approve} disabled={busy || guard.disabled} title={guard.title} loading={busy} className="flex items-center gap-2">
               <span className="material-symbols-outlined text-[16px]">check</span>
               {busy ? "Approving..." : "Approve"}
             </PrimaryButton>
@@ -255,6 +257,7 @@ export function HermesQueue({
   const [items, setItems] = useState<HermesQueueItem[]>(queue);
   const [batchBusy, setBatchBusy] = useState(false);
   const [batchErr, setBatchErr] = useState<string | null>(null);
+  const guard = useMutationGuard();
 
   // keep local items in sync when the prop changes (e.g. after a new scan)
   // but preserve user-driven removals until a new prop reference arrives.
@@ -325,7 +328,7 @@ export function HermesQueue({
                 Approve all verified — every queued item is rules-engine green.
               </p>
             </div>
-            <PrimaryButton onClick={approveAll} disabled={batchBusy} loading={batchBusy} className="flex items-center gap-2">
+            <PrimaryButton onClick={approveAll} disabled={batchBusy || guard.disabled} title={guard.title} loading={batchBusy} className="flex items-center gap-2">
               <span className="material-symbols-outlined text-[16px]">done_all</span>
               {batchBusy ? "Approving all..." : `Approve all verified (${items.length})`}
             </PrimaryButton>

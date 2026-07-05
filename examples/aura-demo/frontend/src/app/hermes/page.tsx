@@ -22,6 +22,7 @@ import { SecondaryButton } from "@/components/ui/SecondaryButton";
 import { Panel } from "@/components/ui/Panel";
 import { AboutPopover } from "@/components/guide/AboutPopover";
 import { LoadingOverlay } from "@/components/ui/LoadingOverlay";
+import { useMutationGuard } from "@/components/auth/useMutationGuard";
 
 const CAGE_STAGES: { label: string; sub: string; icon: string; tone: string }[] = [
   { label: "Hermes proposes", sub: "strategy.yaml · judgment", icon: "auto_awesome", tone: "text-aura-ochre" },
@@ -40,6 +41,7 @@ export default function HermesPage() {
   const [scanPhase, setScanPhase] = useState(0);
   const [initializing, setInitializing] = useState(true);
   const [queueMode, setQueueMode] = useState<"remediate" | "prevent" | undefined>(undefined);
+  const guard = useMutationGuard();
 
   const refreshAll = async () => {
     const [hb, strat, hist] = await Promise.all([
@@ -195,7 +197,7 @@ export default function HermesPage() {
             verifies, a human approves. Reflection learns from misses and tunes the strategy — never the mandate.
           </p>
         </div>
-        <PrimaryButton onClick={scan} disabled={scanning} loading={scanning} className="flex items-center gap-2">
+        <PrimaryButton onClick={scan} disabled={scanning || guard.disabled} title={guard.title} loading={scanning} className="flex items-center gap-2">
           <span className={clsx("material-symbols-outlined text-[18px]", scanning && "animate-spin")}>
             radar
           </span>

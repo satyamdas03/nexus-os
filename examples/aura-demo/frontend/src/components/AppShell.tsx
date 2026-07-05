@@ -8,6 +8,8 @@ import { Sidebar } from "@/components/ui/Sidebar";
 import { useGuideSeen } from "@/components/guide/useGuideSeen";
 import { GuidedTour } from "@/components/guide/GuidedTour";
 import { dispatchStartTour } from "@/components/guide/useTour";
+import { useAuth } from "@/components/auth/AuthContext";
+import { LoginModal } from "@/components/auth/LoginModal";
 
 function ShowGuideButton() {
   const { reset } = useGuideSeen();
@@ -37,7 +39,9 @@ const mobileTabs = [
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [loginOpen, setLoginOpen] = useState(false);
   const isHome = pathname === "/";
+  const { username, role, logout, canMutate } = useAuth();
 
   return (
     <div className="min-h-screen bg-aura-background">
@@ -58,6 +62,36 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </div>
         <div className="flex items-center gap-3">
           <ShowGuideButton />
+          {role && (
+            <div className={clsx(
+              "hidden sm:flex items-center gap-2 px-3 py-1.5 rounded border font-mono text-[10px] uppercase",
+              canMutate
+                ? "bg-aura-surface-low border-aura-border text-aura-navy"
+                : "bg-aura-crimson/10 border-aura-crimson/30 text-aura-crimson"
+            )}>
+              <span className={clsx("w-2 h-2 rounded-full", canMutate ? "bg-aura-emerald" : "bg-aura-crimson")} />
+              <span>{role}</span>
+            </div>
+          )}
+          {username ? (
+            <div className="flex items-center gap-2">
+              <span className="hidden sm:block text-xs text-aura-text-muted font-mono">{username}</span>
+              <button
+                onClick={logout}
+                className="px-3 py-1.5 rounded border border-aura-border text-xs font-mono text-aura-text-muted hover:bg-aura-surface-low"
+              >
+                Sign out
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => setLoginOpen(true)}
+              className="px-3 py-1.5 rounded bg-aura-navy text-white text-xs font-mono hover:bg-aura-navy/90"
+            >
+              Sign in
+            </button>
+          )}
+          <LoginModal open={loginOpen} onClose={() => setLoginOpen(false)} />
           <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded bg-aura-surface-low border border-aura-border">
             <span className="w-2 h-2 rounded-full bg-aura-emerald" />
             <span className="font-mono text-[10px] uppercase text-aura-navy">Live</span>

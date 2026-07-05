@@ -54,17 +54,17 @@ class HermesStore(ABC):
 
     # ---- hermes_queue ----
     @abstractmethod
-    def clear_queue(self, day: Optional[int] = None) -> None: ...
+    def clear_queue(self, day: Optional[int] = None, mode: Optional[str] = None) -> None: ...
     @abstractmethod
     def insert_queue_rows(self, rows: list[dict]) -> None: ...
     @abstractmethod
-    def get_queue(self, day: int, cursor: int, limit: int) -> list[dict]: ...
+    def get_queue(self, day: int, cursor: int, limit: int, mode: Optional[str] = None) -> list[dict]: ...
     @abstractmethod
-    def get_latest_queue_day(self) -> Optional[int]: ...
+    def get_latest_queue_day(self, mode: Optional[str] = None) -> Optional[int]: ...
     @abstractmethod
-    def mark_queue_processed(self, client_ids: list[str], day: int, processed_ts: str) -> int: ...
+    def mark_queue_processed(self, client_ids: list[str], day: int, processed_ts: str, mode: Optional[str] = None) -> int: ...
     @abstractmethod
-    def count_unprocessed_queue(self, day: int) -> int: ...
+    def count_unprocessed_queue(self, day: int, mode: Optional[str] = None) -> int: ...
 
     # ---- heartbeat ----
     @abstractmethod
@@ -116,29 +116,37 @@ class SQLiteHermesStore(HermesStore):
         # Re-create hermes_queue with the primary key we need for upserts.
         # On a fresh DB core.storage already creates the PK version. On an older
         # dev DB we migrate in place by copying the data.
-        pk = conn.execute(
-            "SELECT count(*) FROM pragma_table_info('hermes_queue') WHERE pk > 0"
-        ).fetchone()[0]
-        has_processed = conn.execute(
-            "SELECT count(*) FROM pragma_table_info('hermes_queue') WHERE name='processed_at'"
-        ).fetchone()[0]
-        if pk == 0:
-            # Old table without PK: rename, recreate with PK, copy back.
+        cols = {r["name"]: r for r in conn.execute("SELECT name, pk FROM pragma_table_info('hermes_queue')")}
+        pk_cols = sorted([name for name, r in cols.items() if r["pk"] > 0])
+        has_processed = "processed_at" in cols
+        has_mode = "mode" in cols
+        has_prevent = "prevent_meta" in cols
+        # Need PK(day, client_id, mode). If the existing PK is different, recreate.
+        needs_recreate = pk_cols and pk_cols != ["client_id", "day", "mode"] and pk_cols != ["day", "client_id", "mode"]
+        if not cols or pk_cols == [] or needs_recreate:
+            # Rename, recreate with correct PK + columns, copy back.
             conn.executescript(
                 "ALTER TABLE hermes_queue RENAME TO hermes_queue_old;"
                 "CREATE TABLE hermes_queue ("
                 "  day INTEGER, client_id TEXT, prior_status TEXT, post_status TEXT,"
                 "  fum REAL, trades TEXT, rationale TEXT, rank_score REAL, created_ts TEXT,"
-                "  processed_at TEXT, PRIMARY KEY(day, client_id)"
+                "  processed_at TEXT, mode TEXT DEFAULT 'remediate', prevent_meta TEXT,"
+                "  PRIMARY KEY(day, client_id, mode)"
                 ");"
-                "INSERT INTO hermes_queue (day, client_id, prior_status, post_status, fum, trades, rationale, rank_score, created_ts, processed_at)"
-                "  SELECT day, client_id, prior_status, post_status, fum, trades, rationale, rank_score, created_ts, NULL"
+                "INSERT INTO hermes_queue (day, client_id, prior_status, post_status, fum, trades, rationale, rank_score, created_ts, processed_at, mode, prevent_meta)"
+                "  SELECT day, client_id, prior_status, post_status, fum, trades, rationale, rank_score, created_ts, NULL, 'remediate', NULL"
                 "  FROM hermes_queue_old;"
                 "DROP TABLE hermes_queue_old;"
             )
-        elif not has_processed:
-            conn.execute("ALTER TABLE hermes_queue ADD COLUMN processed_at TEXT")
+        else:
+            if not has_processed:
+                conn.execute("ALTER TABLE hermes_queue ADD COLUMN processed_at TEXT")
+            if not has_mode:
+                conn.execute("ALTER TABLE hermes_queue ADD COLUMN mode TEXT DEFAULT 'remediate'")
+            if not has_prevent:
+                conn.execute("ALTER TABLE hermes_queue ADD COLUMN prevent_meta TEXT")
         conn.execute("CREATE INDEX IF NOT EXISTS idx_queue_processed ON hermes_queue(processed_at)")
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_queue_mode ON hermes_queue(mode)")
         conn.commit()
 
     def _resolve_conn(self):
@@ -189,12 +197,16 @@ class SQLiteHermesStore(HermesStore):
         row = conn.execute("SELECT * FROM scan_jobs WHERE job_id=?", (job_id,)).fetchone()
         return dict(row) if row else None
 
-    def clear_queue(self, day: Optional[int] = None) -> None:
+    def clear_queue(self, day: Optional[int] = None, mode: Optional[str] = None) -> None:
         conn = self._resolve_conn()
-        if day is None:
-            conn.execute("DELETE FROM hermes_queue")
-        else:
-            conn.execute("DELETE FROM hermes_queue WHERE day=?", (day,))
+        params = []
+        where = []
+        if day is not None:
+            where.append("day=?"); params.append(day)
+        if mode is not None:
+            where.append("mode=?"); params.append(mode)
+        sql = "DELETE FROM hermes_queue" + (" WHERE " + " AND ".join(where) if where else "")
+        conn.execute(sql, params)
         conn.commit()
 
     def insert_queue_rows(self, rows: list[dict]) -> None:
@@ -202,50 +214,74 @@ class SQLiteHermesStore(HermesStore):
             return
         conn = self._resolve_conn()
         # Upsert so a re-scan of the same day does not duplicate rows.
+        # Mode is part of the PK; remediate and prevent rows coexist.
         for r in rows:
+            mode = r.get("mode", "remediate")
+            prevent_meta = r.get("prevent_meta")
             conn.execute(
-                "INSERT INTO hermes_queue (day, client_id, prior_status, post_status, fum, trades, rationale, rank_score, created_ts, processed_at) "
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NULL) "
-                "ON CONFLICT(day, client_id) DO UPDATE SET "
+                "INSERT INTO hermes_queue (day, client_id, prior_status, post_status, fum, trades, rationale, rank_score, created_ts, processed_at, mode, prevent_meta) "
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, ?, ?) "
+                "ON CONFLICT(day, client_id, mode) DO UPDATE SET "
                 "prior_status=excluded.prior_status, post_status=excluded.post_status, fum=excluded.fum, "
                 "trades=excluded.trades, rationale=excluded.rationale, rank_score=excluded.rank_score, "
-                "created_ts=excluded.created_ts, processed_at=NULL",
+                "created_ts=excluded.created_ts, processed_at=NULL, prevent_meta=excluded.prevent_meta",
                 (r["day"], r["client_id"], r["prior_status"], r["post_status"], r["fum"],
-                 r["trades"], r["rationale"], r["rank_score"], r["created_ts"]),
+                 r["trades"], r["rationale"], r["rank_score"], r["created_ts"],
+                 mode, prevent_meta),
             )
         conn.commit()
 
-    def get_queue(self, day: int, cursor: int, limit: int) -> list[dict]:
+    def get_queue(self, day: int, cursor: int, limit: int, mode: Optional[str] = None) -> list[dict]:
         conn = self._resolve_conn()
+        params = [day, limit, cursor]
+        where = "day=? AND processed_at IS NULL"
+        if mode is not None:
+            where += " AND mode=?"
+            params.insert(0, mode)
         rows = conn.execute(
-            "SELECT day, client_id, prior_status, post_status, fum, trades, rationale, rank_score, created_ts, processed_at "
-            "FROM hermes_queue WHERE day=? AND processed_at IS NULL ORDER BY rank_score DESC, fum DESC LIMIT ? OFFSET ?",
-            (day, limit, cursor),
+            f"SELECT day, client_id, prior_status, post_status, fum, trades, rationale, rank_score, created_ts, processed_at, mode, prevent_meta "
+            f"FROM hermes_queue WHERE {where} ORDER BY rank_score DESC, fum DESC LIMIT ? OFFSET ?",
+            params,
         ).fetchall()
         return [dict(r) for r in rows]
 
-    def get_latest_queue_day(self) -> Optional[int]:
+    def get_latest_queue_day(self, mode: Optional[str] = None) -> Optional[int]:
         conn = self._resolve_conn()
-        row = conn.execute("SELECT MAX(day) AS d FROM hermes_queue WHERE processed_at IS NULL").fetchone()
+        where = "processed_at IS NULL"
+        params = []
+        if mode is not None:
+            where += " AND mode=?"
+            params.append(mode)
+        row = conn.execute(f"SELECT MAX(day) AS d FROM hermes_queue WHERE {where}", params).fetchone()
         return row["d"] if row else None
 
-    def mark_queue_processed(self, client_ids: list[str], day: int, processed_ts: str) -> int:
+    def mark_queue_processed(self, client_ids: list[str], day: int, processed_ts: str, mode: Optional[str] = None) -> int:
         if not client_ids:
             return 0
         conn = self._resolve_conn()
         placeholders = ",".join("?" for _ in client_ids)
+        where = f"day=? AND client_id IN ({placeholders}) AND processed_at IS NULL"
+        params = [day, *client_ids]
+        if mode is not None:
+            where += " AND mode=?"
+            params.append(mode)
         cur = conn.execute(
-            f"UPDATE hermes_queue SET processed_at=? WHERE day=? AND client_id IN ({placeholders}) AND processed_at IS NULL",
-            (processed_ts, day, *client_ids),
+            f"UPDATE hermes_queue SET processed_at=? WHERE {where}",
+            (processed_ts, *params),
         )
         conn.commit()
         return cur.rowcount
 
-    def count_unprocessed_queue(self, day: int) -> int:
+    def count_unprocessed_queue(self, day: int, mode: Optional[str] = None) -> int:
         conn = self._resolve_conn()
+        where = "day=? AND processed_at IS NULL"
+        params = [day]
+        if mode is not None:
+            where += " AND mode=?"
+            params.append(mode)
         row = conn.execute(
-            "SELECT count(*) AS n FROM hermes_queue WHERE day=? AND processed_at IS NULL",
-            (day,),
+            f"SELECT count(*) AS n FROM hermes_queue WHERE {where}",
+            params,
         ).fetchone()
         return row["n"] if row else 0
 
@@ -320,7 +356,9 @@ class PostgresHermesStore(HermesStore):
                     rank_score REAL,
                     created_ts TEXT,
                     processed_at TEXT,
-                    PRIMARY KEY (day, client_id)
+                    mode TEXT DEFAULT 'remediate',
+                    prevent_meta TEXT,
+                    PRIMARY KEY (day, client_id, mode)
                 )
                 """
             )
@@ -367,13 +405,17 @@ class PostgresHermesStore(HermesStore):
             cols = [c.name for c in cur.description]
             return dict(zip(cols, row))
 
-    def clear_queue(self, day: Optional[int] = None) -> None:
+    def clear_queue(self, day: Optional[int] = None, mode: Optional[str] = None) -> None:
         conn = self.get_conn()
         with conn.cursor() as cur:
-            if day is None:
-                cur.execute("DELETE FROM hermes_queue")
-            else:
-                cur.execute("DELETE FROM hermes_queue WHERE day=%s", (day,))
+            where = []
+            params = []
+            if day is not None:
+                where.append("day=%s"); params.append(day)
+            if mode is not None:
+                where.append("mode=%s"); params.append(mode)
+            sql = "DELETE FROM hermes_queue" + (" WHERE " + " AND ".join(where) if where else "")
+            cur.execute(sql, params)
         conn.commit()
 
     def insert_queue_rows(self, rows: list[dict]) -> None:
@@ -382,57 +424,80 @@ class PostgresHermesStore(HermesStore):
         conn = self.get_conn()
         with conn.cursor() as cur:
             for r in rows:
+                mode = r.get("mode", "remediate")
+                prevent_meta = r.get("prevent_meta")
                 cur.execute(
-                    "INSERT INTO hermes_queue (day, client_id, prior_status, post_status, fum, trades, rationale, rank_score, created_ts, processed_at) "
-                    "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, NULL) "
-                    "ON CONFLICT (day, client_id) DO UPDATE SET "
+                    "INSERT INTO hermes_queue (day, client_id, prior_status, post_status, fum, trades, rationale, rank_score, created_ts, processed_at, mode, prevent_meta) "
+                    "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, NULL, %s, %s) "
+                    "ON CONFLICT (day, client_id, mode) DO UPDATE SET "
                     "prior_status=EXCLUDED.prior_status, post_status=EXCLUDED.post_status, fum=EXCLUDED.fum, "
                     "trades=EXCLUDED.trades, rationale=EXCLUDED.rationale, rank_score=EXCLUDED.rank_score, "
-                    "created_ts=EXCLUDED.created_ts, processed_at=NULL",
+                    "created_ts=EXCLUDED.created_ts, processed_at=NULL, prevent_meta=EXCLUDED.prevent_meta",
                     (r["day"], r["client_id"], r["prior_status"], r["post_status"], r["fum"],
-                     r["trades"], r["rationale"], r["rank_score"], r["created_ts"]),
+                     r["trades"], r["rationale"], r["rank_score"], r["created_ts"],
+                     mode, prevent_meta),
                 )
         conn.commit()
 
-    def get_queue(self, day: int, cursor: int, limit: int) -> list[dict]:
+    def get_queue(self, day: int, cursor: int, limit: int, mode: Optional[str] = None) -> list[dict]:
         conn = self.get_conn()
         with conn.cursor() as cur:
+            where = "day=%s AND processed_at IS NULL"
+            params = [day]
+            if mode is not None:
+                where += " AND mode=%s"
+                params.append(mode)
             cur.execute(
-                "SELECT day, client_id, prior_status, post_status, fum, trades, rationale, rank_score, created_ts, processed_at "
-                "FROM hermes_queue WHERE day=%s AND processed_at IS NULL "
-                "ORDER BY rank_score DESC, fum DESC LIMIT %s OFFSET %s",
-                (day, limit, cursor),
+                f"SELECT day, client_id, prior_status, post_status, fum, trades, rationale, rank_score, created_ts, processed_at, mode, prevent_meta "
+                f"FROM hermes_queue WHERE {where} "
+                f"ORDER BY rank_score DESC, fum DESC LIMIT %s OFFSET %s",
+                (*params, limit, cursor),
             )
             rows = cur.fetchall()
             cols = [c.name for c in cur.description]
             return [dict(zip(cols, r)) for r in rows]
 
-    def get_latest_queue_day(self) -> Optional[int]:
+    def get_latest_queue_day(self, mode: Optional[str] = None) -> Optional[int]:
         conn = self.get_conn()
         with conn.cursor() as cur:
-            cur.execute("SELECT MAX(day) AS d FROM hermes_queue WHERE processed_at IS NULL")
+            where = "processed_at IS NULL"
+            params = []
+            if mode is not None:
+                where += " AND mode=%s"
+                params.append(mode)
+            cur.execute(f"SELECT MAX(day) AS d FROM hermes_queue WHERE {where}", params)
             row = cur.fetchone()
             return row[0] if row and row[0] is not None else None
 
-    def mark_queue_processed(self, client_ids: list[str], day: int, processed_ts: str) -> int:
+    def mark_queue_processed(self, client_ids: list[str], day: int, processed_ts: str, mode: Optional[str] = None) -> int:
         if not client_ids:
             return 0
         conn = self.get_conn()
         with conn.cursor() as cur:
+            where = f"day=%s AND client_id = ANY(%s) AND processed_at IS NULL"
+            params = [day, client_ids]
+            if mode is not None:
+                where += " AND mode=%s"
+                params.append(mode)
             cur.execute(
-                "UPDATE hermes_queue SET processed_at=%s WHERE day=%s AND client_id = ANY(%s) AND processed_at IS NULL",
-                (processed_ts, day, client_ids),
+                f"UPDATE hermes_queue SET processed_at=%s WHERE {where}",
+                (processed_ts, *params),
             )
             count = cur.rowcount
         conn.commit()
         return count
 
-    def count_unprocessed_queue(self, day: int) -> int:
+    def count_unprocessed_queue(self, day: int, mode: Optional[str] = None) -> int:
         conn = self.get_conn()
         with conn.cursor() as cur:
+            where = "day=%s AND processed_at IS NULL"
+            params = [day]
+            if mode is not None:
+                where += " AND mode=%s"
+                params.append(mode)
             cur.execute(
-                "SELECT count(*) FROM hermes_queue WHERE day=%s AND processed_at IS NULL",
-                (day,),
+                f"SELECT count(*) FROM hermes_queue WHERE {where}",
+                params,
             )
             row = cur.fetchone()
             return row[0] if row else 0

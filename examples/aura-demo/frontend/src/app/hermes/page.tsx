@@ -15,8 +15,10 @@ import { HermesScorePanel } from "@/components/hermes/HermesScorePanel";
 import { HermesStrategyPanel } from "@/components/hermes/HermesStrategyPanel";
 import { HermesQueue } from "@/components/hermes/HermesQueue";
 import { HermesHistory } from "@/components/hermes/HermesHistory";
+import { HermesPreventPanel } from "@/components/hermes/HermesPreventPanel";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { PrimaryButton } from "@/components/ui/PrimaryButton";
+import { SecondaryButton } from "@/components/ui/SecondaryButton";
 import { Panel } from "@/components/ui/Panel";
 import { AboutPopover } from "@/components/guide/AboutPopover";
 import { LoadingOverlay } from "@/components/ui/LoadingOverlay";
@@ -37,6 +39,7 @@ export default function HermesPage() {
   const [err, setErr] = useState<string | null>(null);
   const [scanPhase, setScanPhase] = useState(0);
   const [initializing, setInitializing] = useState(true);
+  const [queueMode, setQueueMode] = useState<"remediate" | "prevent" | undefined>(undefined);
 
   const refreshAll = async () => {
     const [hb, strat, hist] = await Promise.all([
@@ -54,7 +57,7 @@ export default function HermesPage() {
   // downstream approve/verify calls send arrays, not strings.
   const loadQueue = async () => {
     try {
-      const page = await api.hermes.queue();
+      const page = await api.hermes.queue(undefined, 0, 50, queueMode);
       setQueue(
         page.rows.map((r) => ({
           ...r,
@@ -75,6 +78,10 @@ export default function HermesPage() {
       .catch((e) => setErr(String(e.message ?? e)))
       .finally(() => setInitializing(false));
   }, []);
+
+  useEffect(() => {
+    if (!initializing) loadQueue().catch(() => {});
+  }, [queueMode]);
 
   // Progress animation while scanning.
   useEffect(() => {
@@ -136,6 +143,7 @@ export default function HermesPage() {
       client_id: q.client_id,
       trades: q.trades,
       rationale: q.rationale,
+      mode: q.mode ?? "remediate",
     }));
     await api.hermes.approveBatch(payload);
     await Promise.all([loadQueue(), refreshAll()]);
@@ -163,7 +171,7 @@ export default function HermesPage() {
         <AboutPopover title="About Hermes">
           <p>Hermes is the book-wide self-improving remediation engine.</p>
           <p>The Assurance Cage separates LAW (mandate rules, enforced by rules_engine.py) from JUDGMENT (strategy.yaml, Hermes-tunable).</p>
-          <p>Scan Book proposes trades for every non-green portfolio and gates each proposal through the rules engine before a human sees it. Hermes never self-adopts and cannot touch mandate rules.</p>
+          <p>Scan Book proposes trades for every non-green portfolio and gates each proposal through the rules engine before a human sees it. Prevent Scan looks ahead 14 days for currently-green portfolios and queues small preventive trades. Hermes never self-adopts and cannot touch mandate rules.</p>
         </AboutPopover>
       </div>
       {/* Scanning progress bar */}
@@ -248,6 +256,15 @@ export default function HermesPage() {
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-6">
         <div className="xl:col-span-7 flex flex-col gap-6">
           <HermesScorePanel heartbeat={heartbeat} />
+          <HermesPreventPanel onPreventDone={loadQueue} />
+          <div className="flex items-center justify-between gap-3 flex-wrap">
+            <span className="font-mono text-xs text-aura-text-muted">Queue filter</span>
+            <div className="flex gap-2">
+              <SecondaryButton onClick={() => setQueueMode(undefined)} disabled={queueMode === undefined}>All</SecondaryButton>
+              <SecondaryButton onClick={() => setQueueMode("remediate")} disabled={queueMode === "remediate"}>Remediate</SecondaryButton>
+              <SecondaryButton onClick={() => setQueueMode("prevent")} disabled={queueMode === "prevent"}>Prevent</SecondaryButton>
+            </div>
+          </div>
           <HermesQueue
             queue={queue}
             heartbeat={heartbeat}

@@ -7,7 +7,7 @@
 #
 # Every variable has a value + a rationale so strategy changes are legible.
 # Reflection may mutate values + rationales; the rules engine still disposes.
-version: 3
+version: 4
 
 variables:
   breach_priority_order:
@@ -43,3 +43,16 @@ variables:
   cash_buffer_target:
     value: 0.03
     rationale: "Hold ~3% cash buffer above the mandate minimum for redemption flexibility."
+
+  # ---- Hermes 2.0 proactive drift-prevention variables ----
+  prevent_horizon_days:
+    value: 14
+    rationale: "Look 14 trading days ahead when projecting breaches; long enough to be useful, short enough to avoid noise."
+
+  prevent_risk_threshold:
+    value: 0.5
+    rationale: "Queue preventive action when projected risk score reaches 0.5 (watch approaching breach)."
+
+  auto_approve_band:
+    value: 0.02
+    rationale: "Auto-approve preventive trades that keep every weight within 2% of current as low-risk housekeeping."

@@ -304,3 +304,48 @@ def test_rollback_404_unknown_version(tmp_path, monkeypatch):
     client = TestClient(app)
     r = client.post("/hermes/rollback", json={"version": 999})
     assert r.status_code == 404
+
+
+# --- Hermes 2.0 proactive drift prevention (Sprint 6) ---
+
+def test_prevent_scan_queues_green_portfolios_with_meta():
+    """POST /hermes/prevent-scan: async job scans green portfolios, queues
+    preventive trades with mode='prevent' and prevent_meta in the row."""
+    c, _ = _client(n=400)
+    r = c.post("/hermes/prevent-scan")
+    assert r.status_code == 200
+    job_id = r.json()["job_id"]
+    import time
+    for _ in range(80):
+        st = c.get(f"/hermes/scan/{job_id}").json()
+        if st["status"] in ("done", "failed"):
+            break
+        time.sleep(0.1)
+    assert st["status"] == "done", f"prevent scan job failed: {st}"
+
+    rows = c.get("/hermes/queue?mode=prevent&limit=200").json()["rows"]
+    for row in rows:
+        assert row.get("mode") == "prevent", f"expected mode=prevent, got {row.get('mode')}"
+        meta = json.loads(row["prevent_meta"]) if isinstance(row.get("prevent_meta"), str) else row.get("prevent_meta")
+        assert meta and "horizon_days" in meta and "risk_before" in meta and "risk_after" in meta
+        assert meta["risk_after"] < meta["risk_before"], "preventive trade must reduce projected risk"
+
+
+def test_simulate_book_prevent_reduces_breach_incidence():
+    """simulate_book('prevent') must reduce aggregate breach incidence by ≥50%
+    versus the reactive baseline on the same cloned book and seed."""
+    c, _ = _client(n=400)
+    from agents.hermes.loop import simulate_book
+    reactive = simulate_book(days=100, mode="reactive", seed=42)
+    prevent = simulate_book(days=100, mode="prevent", seed=42)
+    assert reactive["mode"] == "reactive"
+    assert prevent["mode"] == "prevent"
+    assert len(reactive["series"]) == 100
+    assert len(prevent["series"]) == 100
+    assert reactive["reactive_incidence"] is not None
+    assert prevent["prevent_incidence"] is not None
+    reduction = (reactive["reactive_incidence"] - prevent["prevent_incidence"]) / reactive["reactive_incidence"]
+    assert reduction >= 0.50, (
+        f"expected ≥50% breach-incidence reduction, got {reduction:.2%} "
+        f"(reactive={reactive['reactive_incidence']}, prevent={prevent['prevent_incidence']})"
+    )

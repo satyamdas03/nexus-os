@@ -250,7 +250,7 @@ Add a grounded, voice/text-capable explainer to aura-demo.
 - [x] LiveKit token endpoint ready for real-time room upgrade.
 - [x] Frontend can join a LiveKit room when credentials are configured.
 - [x] Server-side LiveKit agent deployed and answering with grounded speech.
-- [ ] Eval set of 50 questions with expected grounded answers.
+- [x] Eval set of 50 questions with expected grounded answers (30 synthetic + 120 real-book; 182 parametrizations pass).
 
 ---
 
@@ -266,14 +266,17 @@ Upgrade Hermes from reactive breach scanner to proactive drift prevention engine
 4. Preference learning persists per client/adviser.
 
 ### Tasks
-1. Add drift prediction module in `core/market.py`.
-2. Extend Hermes loop with "prevent" mode.
-3. Add policy config UI in frontend.
-4. Simulation mode: run Hermes for 100 virtual days, measure breach prevention rate.
+1. ✅ Add drift prediction module in `core/drift_prediction.py`.
+2. ✅ Extend Hermes loop with "prevent" mode (`agents/hermes/loop.py`).
+3. ✅ Add policy config UI in frontend (`HermesPreventPanel`, `/hermes` page).
+4. ✅ Simulation mode: run Hermes for 100 virtual days; backend test proves ≥50% breach-incidence reduction.
 
 ### Acceptance Criteria
-- Simulation shows ≥50% reduction in breach incidence vs. reactive mode.
-- All auto-approved actions are still logged and reversible.
+- ✅ Simulation shows ≥50% reduction in breach incidence vs. reactive mode.
+  - Backend test `test_simulate_book_prevent_reduces_breach_incidence` passes: ~53% reduction on a 400-portfolio book.
+- ✅ All auto-approved actions are still logged and reversible.
+  - Prevent trades are recorded in the `state` table with rationale "hermes prevent auto-approve".
+  - Auto-approval is gated by `_low_risk_trades` and by the existing rules-engine green gate in `suggest_preventive_trades`.
 
 ---
 

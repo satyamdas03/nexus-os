@@ -107,10 +107,17 @@ function QueueRow({
             <StatusBadge status={q.prior_status} />
             <span className="text-aura-text-subtle font-mono text-xs">→</span>
             <StatusBadge status={q.post_status} />
-            <span className="ml-1 inline-flex items-center gap-1 px-1.5 py-0.5 rounded border border-aura-emerald bg-aura-emerald-soft/50 text-aura-emerald font-mono text-[10px] uppercase tracking-wider">
-              <span className="material-symbols-outlined text-[14px] material-symbols-filled">verified</span>
-              ASSURANCE
-            </span>
+            {q.mode === "prevent" ? (
+              <span className="ml-1 inline-flex items-center gap-1 px-1.5 py-0.5 rounded border border-aura-navy bg-aura-navy/10 text-aura-navy font-mono text-[10px] uppercase tracking-wider">
+                <span className="material-symbols-outlined text-[14px] material-symbols-filled">shield</span>
+                PREVENT
+              </span>
+            ) : (
+              <span className="ml-1 inline-flex items-center gap-1 px-1.5 py-0.5 rounded border border-aura-emerald bg-aura-emerald-soft/50 text-aura-emerald font-mono text-[10px] uppercase tracking-wider">
+                <span className="material-symbols-outlined text-[14px] material-symbols-filled">verified</span>
+                ASSURANCE
+              </span>
+            )}
             <span
               className={clsx(
                 "material-symbols-outlined text-[18px] text-aura-text-subtle transition-transform",
@@ -133,6 +140,12 @@ function QueueRow({
           </span>
         </div>
         <p className="font-mono text-xs text-aura-text-muted leading-snug">{q.rationale}</p>
+        {q.mode === "prevent" && q.prevent_meta && (
+          <p className="font-mono text-[10px] text-aura-navy mt-1 leading-snug">
+            Proactive · {q.prevent_meta.horizon_days}d horizon · risk {q.prevent_meta.risk_before.toFixed(2)} →{" "}
+            {q.prevent_meta.risk_after.toFixed(2)} · projected {q.prevent_meta.projected_status}
+          </p>
+        )}
       </button>
 
       {open && (

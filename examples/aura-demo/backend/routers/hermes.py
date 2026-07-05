@@ -24,7 +24,7 @@ from core.effective import effective_portfolio, record_trades, get_effective
 from core.rules_engine import check
 from core.hermes_store import get_hermes_store, HERMES_STORE_URL
 from agents.hermes import HEARTBEAT_PATH, HISTORY_DIR
-from agents.hermes.loop import scan_book
+from agents.hermes.loop import scan_book, prevent_scan, simulate_book
 from agents.hermes.reflect import reflect
 from agents.hermes.strategy_io import load_strategy, adopt_proposal, restore_version
 from routers.audit import append_audit
@@ -48,6 +48,7 @@ class BatchItem(BaseModel):
     client_id: str
     trades: list[dict] = []
     rationale: str = ""
+    mode: str = "remediate"
 
 
 class ApproveBatchBody(BaseModel):
@@ -56,6 +57,12 @@ class ApproveBatchBody(BaseModel):
 
 class RollbackBody(BaseModel):
     version: int
+
+
+class SimulateBody(BaseModel):
+    days: int = 100
+    mode: str = "reactive"  # "reactive" | "prevent"
+    seed: Optional[int] = None
 
 
 def _log(client_id: str, action_type: str, actor: str, tier: str, payload: dict, rationale: str = ""):
@@ -89,6 +96,47 @@ def _run_scan_job(job_id: str):
         _hstore.update_scan_job_done(
             job_id, datetime.now(timezone.utc).isoformat(), 0, 0, 0, error=str(e),
         )
+
+
+@router.post("/hermes/prevent-scan")
+def hermes_prevent_scan(background: BackgroundTasks):
+    """Launch an async full-book prevent scan.
+
+    Scans currently-green portfolios, projects them forward, and queues
+    preventive trades gated by the rules engine. Human approval still required
+    for execution unless a low-risk policy explicitly auto-approves.
+    """
+    job_id = uuid.uuid4().hex
+    _hstore.insert_scan_job(job_id, "prevent", "running", datetime.now(timezone.utc).isoformat())
+    background.add_task(_run_prevent_scan_job, job_id)
+    return {"job_id": job_id}
+
+
+def _run_prevent_scan_job(job_id: str):
+    try:
+        result = prevent_scan()
+        counts = result.get("counts", {})
+        _hstore.update_scan_job_done(
+            job_id, datetime.now(timezone.utc).isoformat(),
+            counts.get("scanned", 0), counts.get("remediated", 0), counts.get("missed", 0),
+        )
+    except Exception as e:  # noqa: BLE001
+        _hstore.update_scan_job_done(
+            job_id, datetime.now(timezone.utc).isoformat(), 0, 0, 0, error=str(e),
+        )
+
+
+@router.post("/hermes/simulate")
+def hermes_simulate(body: SimulateBody):
+    """Run a virtual 100-day simulation on a cloned book.
+
+    Modes:
+      reactive — market ticks only, no Hermes intervention.
+      prevent  — prevent scan + auto-approve low-risk trades before each tick.
+
+    Returns a daily time series plus aggregate breach incidence.
+    """
+    return simulate_book(days=body.days, mode=body.mode, seed=body.seed)
 
 
 @router.get("/hermes/scan/{job_id}")
@@ -149,13 +197,14 @@ def hermes_history():
 
 @router.get("/hermes/queue")
 def hermes_queue(day: int | None = None, cursor: int = 0,
-                 limit: int = Query(50, ge=1, le=500)):
+                 limit: int = Query(50, ge=1, le=500),
+                 mode: str | None = None):
     """Paged Hermes remediation queue. day defaults to the latest queue day.
-    cursor = rowid offset. Returns rows + next_cursor."""
+    cursor = rowid offset. mode filters remediate/prevent. Returns rows + next_cursor."""
     if day is None:
-        d = _hstore.get_latest_queue_day()
+        d = _hstore.get_latest_queue_day(mode=mode)
         day = d if d is not None else 0
-    rows = _hstore.get_queue(day, cursor, limit)
+    rows = _hstore.get_queue(day, cursor, limit, mode=mode)
     return {"day": day, "rows": rows, "next_cursor": cursor + len(rows)}
 
 
@@ -204,11 +253,14 @@ def hermes_approve_batch(body: ApproveBatchBody):
     # Mark approved rows as processed so they vanish from the active queue.
     if applied:
         day = data_loader._clock()[0]
-        _hstore.mark_queue_processed(
-            [item.client_id for item in body.items],
-            day,
-            datetime.now(timezone.utc).isoformat(),
-        )
+        # Group by mode so the composite PK is respected.
+        by_mode: dict[str, list[str]] = {}
+        for item in body.items:
+            by_mode.setdefault(item.mode, []).append(item.client_id)
+        for mode, cids in by_mode.items():
+            _hstore.mark_queue_processed(
+                cids, day, datetime.now(timezone.utc).isoformat(), mode=mode,
+            )
     return {"results": results, "applied": applied, "failed": failed}
 
 

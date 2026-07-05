@@ -1,4 +1,4 @@
-import type { PortfolioSummary, Portfolio, RulesResult, RemediationResult, AuditEntry, ApproveResult, ExplainResult, SummaryAiResult, EvidencePack, HermesStrategy, HermesProposal, HermesAdoptResult, HermesHeartbeat, HermesHistoryEntry, HermesApproveBatchItem, HermesApproveBatchResult, HermesRollbackResult, MarketClock, MarketHistoryPoint, MarketPrices, MarketStatus, TopSafeguard, HermesQueuePage, HermesScanJob, MandateDetail } from "./types";
+import type { PortfolioSummary, Portfolio, RulesResult, RemediationResult, AuditEntry, ApproveResult, ExplainResult, SummaryAiResult, EvidencePack, HermesStrategy, HermesProposal, HermesAdoptResult, HermesHeartbeat, HermesHistoryEntry, HermesApproveBatchItem, HermesApproveBatchResult, HermesRollbackResult, HermesSimulationResult, MarketClock, MarketHistoryPoint, MarketPrices, MarketStatus, TopSafeguard, HermesQueuePage, HermesScanJob, MandateDetail } from "./types";
 
 function base() {
   // Client (browser): same-origin /api, proxied to backend via next.config rewrites.
@@ -81,8 +81,9 @@ export const api = {
   // Hermes — book-wide self-improving remediation engine.
   hermes: {
     scan: () => j<{ job_id: string }>("/hermes/scan", { method: "POST" }),
-    queue: (day?: number, cursor = 0, limit = 50) =>
-      j<HermesQueuePage>(`/hermes/queue?cursor=${cursor}&limit=${limit}${day != null ? `&day=${day}` : ""}`),
+    preventScan: () => j<{ job_id: string }>("/hermes/prevent-scan", { method: "POST" }),
+    queue: (day?: number, cursor = 0, limit = 50, mode?: "remediate" | "prevent") =>
+      j<HermesQueuePage>(`/hermes/queue?cursor=${cursor}&limit=${limit}${day != null ? `&day=${day}` : ""}${mode ? `&mode=${mode}` : ""}`),
     scanJob: (jobId: string) => j<HermesScanJob>(`/hermes/scan/${jobId}`),
     strategy: () => j<HermesStrategy>("/hermes/strategy"),
     reflect: (mode: "fallback" | "hermes") =>
@@ -95,6 +96,8 @@ export const api = {
       j<HermesApproveBatchResult>("/hermes/approve-batch", { method: "POST", body: JSON.stringify({ items }) }),
     rollback: (version: number) =>
       j<HermesRollbackResult>("/hermes/rollback", { method: "POST", body: JSON.stringify({ version }) }),
+    simulate: (body: { days?: number; mode?: "reactive" | "prevent"; seed?: number }) =>
+      j<HermesSimulationResult>("/hermes/simulate", { method: "POST", body: JSON.stringify(body) }),
   },
 
   // Evidence Pack — read-only compliance proof artifact for a single portfolio.

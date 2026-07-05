@@ -166,6 +166,13 @@ export interface HermesHeartbeat {
   message?: string;
 }
 
+export interface HermesPreventMeta {
+  horizon_days: number;
+  risk_before: number;
+  risk_after: number;
+  projected_status: Status;
+}
+
 export interface HermesQueueItem {
   client_id: string; client_name?: string; fum: number;
   prior_status: Status; post_status: Status;
@@ -173,6 +180,8 @@ export interface HermesQueueItem {
   trades: Trade[]; rationale: string;
   rank_score: number;
   day?: number; created_ts?: string;
+  mode?: "remediate" | "prevent";
+  prevent_meta?: HermesPreventMeta;
 }
 
 // retained for reference (scan now returns {job_id})
@@ -223,6 +232,7 @@ export interface HermesApproveBatchItem {
   client_id: string;
   trades: Trade[];
   rationale: string;
+  mode?: "remediate" | "prevent";
 }
 
 export interface HermesApproveBatchResult {
@@ -352,4 +362,21 @@ export interface HermesScanJob {
   remediated: number;
   missed: number;
   error: string | null;
+}
+
+export interface HermesSimulationPoint {
+  day: number;
+  counts: { green: number; orange: number; red: number };
+  prevent_approved: number;
+}
+
+export interface HermesSimulationResult {
+  mode: "reactive" | "prevent";
+  days: number;
+  seed?: number;
+  series: HermesSimulationPoint[];
+  prevented_breaches: number;
+  approved_prevent_trades: number;
+  reactive_incidence?: number;
+  prevent_incidence?: number;
 }

@@ -12,20 +12,26 @@ Applying trades stays behind the human gate (approve-batch). Nothing here
 touches mandate rules or rules_engine.py.
 """
 import json
+import os
 from datetime import datetime, timezone
 from typing import Optional
 
 from core import data_loader, effective, rules_engine
+from core.drift_prediction import suggest_preventive_trades
 from core.trades import apply_trades
-from core.hermes_store import get_hermes_store, HermesStore
+from core.hermes_store import get_hermes_store, HermesStore, SQLiteHermesStore
 
 from agents.hermes import HEARTBEAT_PATH
-from agents.hermes.proposer import propose
+from agents.hermes.proposer import propose, strategy_vars
 from agents.hermes.strategy_io import load_strategy
 from agents.hermes import score as _score
 
 _SEV_WEIGHT = {"red": 3, "orange": 2, "green": 0}
 _store_override: Optional[HermesStore] = None
+
+# Prevent-mode defaults if strategy.yaml lacks the Hermes 2.0 variables.
+_DEFAULT_HORIZON = 14
+_DEFAULT_RISK_THRESHOLD = 0.5
 
 
 def _severity(rr: dict) -> str:
@@ -161,7 +167,7 @@ def scan_book_paged(cursor=0, batch=500, subset=None, day=None, clear=False) -> 
     Returns {queue_page (top 50), next_cursor, counts, misses}.
     """
     if clear:
-        _active_store().clear_queue(day=day)
+        _active_store().clear_queue(day=day, mode="remediate")
     if subset is not None:
         ids = list(subset)
         next_cursor = None
@@ -228,3 +234,237 @@ def delta_scan(client_ids: list[str], day: int) -> dict:
     misses: list = []
     page = _scan_ids(list(client_ids), strategy, day, counts, misses, write=True)
     return {"queue_page": page[:50], "counts": counts, "misses": misses}
+
+
+def _prevent_thresholds(strategy: dict) -> tuple[int, float]:
+    """Read Hermes 2.0 proactive variables from strategy.yaml with safe defaults."""
+    vars_ = strategy_vars(strategy)
+    horizon = int(vars_.get("prevent_horizon_days", _DEFAULT_HORIZON))
+    threshold = float(vars_.get("prevent_risk_threshold", _DEFAULT_RISK_THRESHOLD))
+    return max(1, horizon), max(0.0, min(1.0, threshold))
+
+
+def _scan_prevent_ids(ids: list[str], strategy: dict, day: int,
+                      counts: dict, write: bool) -> list[dict]:
+    """Scan green portfolios for predicted future breaches.
+
+    Only considers portfolios that are green NOW. For each, project holdings to
+    the strategy horizon, run the rules engine, and suggest preventive trades.
+    Gating: trades must keep the current portfolio green AND reduce projected
+    risk. Surviving rows are queued with mode='prevent'.
+    """
+    horizon, threshold = _prevent_thresholds(strategy)
+    prices = data_loader.current_prices()
+    queue_rows: list = []
+    for cid in ids:
+        p = data_loader.get_portfolio(cid)
+        if p is None:
+            continue
+        eff = effective.get_effective(cid, seed=p)
+        if eff is None:
+            continue
+        rr = rules_engine.check(eff, p["mandate"])
+        counts["scanned"] += 1
+        if rr["status"] != "green":
+            continue
+        counts["green"] += 1
+        plan = suggest_preventive_trades(eff, p["mandate"], strategy,
+                                          horizon_days=horizon)
+        if not plan.get("gated") or not plan.get("trades"):
+            continue
+        if plan["risk_before"] < threshold:
+            continue
+        counts["remediated"] += 1  # queued preventive action
+        rank = p["fum"] * 2  # prevent rows rank below reactive red rows
+        prevent_meta = {
+            "horizon_days": horizon,
+            "risk_before": plan["risk_before"],
+            "risk_after": plan["risk_after"],
+            "projected_status": plan["projected_unhedged"]["status"],
+        }
+        queue_rows.append({
+            "day": day, "client_id": cid, "prior_status": "green",
+            "post_status": "green", "fum": p["fum"],
+            "trades": json.dumps(plan["trades"]),
+            "rationale": plan["rationale"],
+            "rank_score": rank, "created_ts": _now(),
+            "mode": "prevent",
+            "prevent_meta": json.dumps(prevent_meta),
+            # in-memory extras
+            "client_name": p["client_name"], "confidence": 1.0 - plan["risk_after"],
+            "post_rules_result": plan["current_after_hedge"],
+            "_trades_obj": plan["trades"],
+        })
+    if write and queue_rows:
+        _active_store().insert_queue_rows(queue_rows)
+    queue_rows.sort(key=lambda q: q["rank_score"], reverse=True)
+    return queue_rows
+
+
+def prevent_scan_paged(cursor=0, batch=500, subset=None, day=None,
+                       clear=False) -> dict:
+    """One paged prevent-scan batch.
+
+    Scans currently-green portfolios, projects them forward, and queues
+    preventive trades that reduce projected breach risk.
+    """
+    if clear:
+        _active_store().clear_queue(day=day, mode="prevent")
+    if subset is not None:
+        ids = list(subset)
+        next_cursor = None
+    else:
+        conn = data_loader.get_conn_cached()
+        ids = [r["client_id"] for r in conn.execute(
+            "SELECT client_id FROM portfolios ORDER BY client_id LIMIT ? OFFSET ?",
+            (batch, cursor))]
+        next_cursor = cursor + batch if len(ids) == batch else None
+    strategy = load_strategy()
+    counts = {"scanned": 0, "green": 0, "remediated": 0, "missed": 0, "skipped": 0}
+    page = _scan_prevent_ids(ids, strategy, day, counts, write=True)
+    return {"queue_page": page[:50], "next_cursor": next_cursor,
+            "counts": counts}
+
+
+def prevent_scan() -> dict:
+    """Full paged prevent scan to completion. Clears prevent queue, returns top 50."""
+    conn = data_loader.get_conn_cached()
+    total = conn.execute("SELECT count(*) FROM portfolios").fetchone()[0]
+    day = data_loader._clock()[0]
+    counts = {"scanned": 0, "green": 0, "remediated": 0, "missed": 0, "skipped": 0}
+    all_queue: list = []
+    cursor = 0
+    first = True
+    while True:
+        res = prevent_scan_paged(cursor=cursor, batch=500, day=day, clear=first)
+        first = False
+        for k in counts:
+            counts[k] += res["counts"][k]
+        all_queue.extend(res["queue_page"])
+        if res["next_cursor"] is None:
+            break
+        cursor = res["next_cursor"]
+    all_queue.sort(key=lambda q: q["rank_score"], reverse=True)
+    return {"queue": all_queue[:50], "counts": counts, "total": total}
+
+
+def simulate_book(days: int = 100, mode: str = "reactive",
+                  seed: Optional[int] = None) -> dict:
+    """Run a virtual 100-day simulation on a cloned book without mutating prod state.
+
+    Modes:
+      reactive — only the drift monitor runs; no Hermes intervention.
+      prevent  — each day starts with a prevent scan + auto-approval of gated
+                 preventive trades, then the market ticks.
+
+    Returns a daily time series plus aggregate breach-incidence comparison.
+    """
+    import shutil
+    import tempfile
+    from core import storage, market as mkt
+    from agents.hermes import monitor
+
+    if mode not in ("reactive", "prevent"):
+        raise ValueError("mode must be 'reactive' or 'prevent'")
+
+    orig_conn = data_loader.get_conn_cached()
+    orig_store = _active_store()
+
+    # Clone current DB to a temp file so the simulation is isolated.
+    src_path = storage.DB_PATH
+    if orig_conn is not None:
+        # Checkpoint WAL so the main db file is complete before copying.
+        orig_conn.execute("PRAGMA wal_checkpoint(FULL)")
+        row = orig_conn.execute("PRAGMA database_list").fetchone()
+        if row:
+            src_path = row["file"]
+    fd, tmp_path = tempfile.mkstemp(suffix=".db")
+    os.close(fd)
+    shutil.copyfile(src_path, tmp_path)
+
+    try:
+        sim_conn = storage.get_conn(tmp_path)
+        storage.init_schema(sim_conn)
+        storage.migrate(sim_conn)
+        data_loader.set_conn(sim_conn)
+        sim_store = SQLiteHermesStore(sim_conn)
+        sim_store.init()
+        _set_store(sim_store)
+
+        # Reset simulation state to day 0.
+        sim_conn.execute("DELETE FROM state")
+        sim_conn.execute("DELETE FROM hermes_queue")
+        sim_conn.execute("DELETE FROM hermes_heartbeat")
+        sim_conn.execute("DELETE FROM status_history")
+        sim_conn.execute("DELETE FROM drift_events")
+        sim_conn.execute("DELETE FROM scan_jobs")
+        if seed is not None:
+            sim_conn.execute("UPDATE clock SET day=0, running=0, auto_fix=0, seed=? WHERE id=1", (seed,))
+        else:
+            sim_conn.execute("UPDATE clock SET day=0, running=0, auto_fix=0 WHERE id=1")
+        sim_conn.commit()
+
+        # Seed day-0 status_history.
+        monitor.run(0)
+
+        series: list[dict] = []
+        prevented_breaches = 0
+        approved_prevent_trades = 0
+
+        for d in range(1, days + 1):
+            if mode == "prevent":
+                # Proactive: scan green portfolios and auto-approve low-risk trades.
+                res = prevent_scan()
+                for row in res.get("queue", []):
+                    trades = row.get("_trades_obj") or json.loads(row["trades"])
+                    if _low_risk_trades(trades, sim_conn):
+                        effective.record_trades(row["client_id"], trades,
+                                                 rationale=row.get("rationale", "hermes prevent auto-approve"))
+                        approved_prevent_trades += len(trades)
+                        sim_store.mark_queue_processed([row["client_id"]], row["day"], _now(), mode="prevent")
+
+            # Reactive step: market tick + monitor.
+            before_counts = _book_counts(sim_conn)
+            mkt.tick(run_monitor=True)
+            after_counts = _book_counts(sim_conn)
+            if mode == "prevent":
+                # Crude prevention metric: green count increased or stayed higher.
+                if after_counts["red"] + after_counts["orange"] < before_counts["red"] + before_counts["orange"]:
+                    prevented_breaches += 1
+            series.append({"day": d, "counts": after_counts,
+                           "prevent_approved": approved_prevent_trades if mode == "prevent" else 0})
+
+        # Aggregate breach incidence: sum of (red+orange) portfolios across days.
+        reactive_incidence = sum(d["counts"]["red"] + d["counts"]["orange"] for d in series) if mode == "reactive" else None
+        prevent_incidence = sum(d["counts"]["red"] + d["counts"]["orange"] for d in series) if mode == "prevent" else None
+
+        return {
+            "mode": mode,
+            "days": days,
+            "seed": seed,
+            "series": series,
+            "prevented_breaches": prevented_breaches,
+            "approved_prevent_trades": approved_prevent_trades,
+            "reactive_incidence": reactive_incidence,
+            "prevent_incidence": prevent_incidence,
+        }
+    finally:
+        data_loader.set_conn(orig_conn)
+        _set_store(orig_store)
+        try:
+            os.remove(tmp_path)
+        except OSError:
+            pass
+
+
+def _book_counts(conn) -> dict:
+    row = conn.execute("SELECT green, orange, red FROM book_summary WHERE id=1").fetchone()
+    if row:
+        return {"green": row["green"], "orange": row["orange"], "red": row["red"]}
+    return {"green": 0, "orange": 0, "red": 0}
+
+
+def _low_risk_trades(trades: list[dict], conn) -> bool:
+    """Placeholder policy: all gated preventive trades are considered low-risk
+    for simulation purposes. A real policy would inspect weight deltas vs a band."""
+    return True

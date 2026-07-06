@@ -54,6 +54,15 @@ def set_conn(conn: sqlite3.Connection) -> None:
     _mandate_cache = {}
 
 
+def set_thread_conn(conn: Optional[sqlite3.Connection]) -> None:
+    """Set the connection used by the current thread only.
+
+    This is safer than set_conn for background work because it does not mutate
+    the global override used by the main request thread.
+    """
+    _conn_local.conn = conn
+
+
 def ensure_book(
     n: int = 34000,
     seed: Optional[int] = None,

@@ -207,6 +207,15 @@ export interface RunTestResult {
   returncode: number;
 }
 
+export interface HermesGenerateJob {
+  job_id: string;
+  status: "running" | "done" | "failed";
+  started_ts: string;
+  done_ts?: string;
+  error?: string;
+  result?: HermesGenerateResult;
+}
+
 export interface SummaryAiResult {
   narrative: string;
   aggregate: {

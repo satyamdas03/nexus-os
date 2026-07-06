@@ -14,6 +14,7 @@ writer and strategy_io refuses anything outside strategy.yaml/history/.
 import json
 import uuid
 from datetime import datetime, timezone
+from typing import Optional
 
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Query
 from pydantic import BaseModel
@@ -185,18 +186,54 @@ def hermes_adopt(body: AdoptBody, _user=Depends(require_mutation)):
     return result
 
 
-@router.post("/hermes/generate")
-def hermes_generate(body: GenerateBody = None, _user=Depends(require_mutation)):
-    """Synthetic Reality → Strategy Diff + Regression Test.
+def _run_generate_job(job_id: str, days: int, seed: int) -> None:
+    try:
+        result = generate_diff(days=days, seed=seed)
+        _hstore.update_generate_job_done(
+            job_id, datetime.now(timezone.utc).isoformat(),
+            result_json=json.dumps(result),
+        )
+    except Exception as e:  # noqa: BLE001
+        _hstore.update_generate_job_done(
+            job_id, datetime.now(timezone.utc).isoformat(), error=str(e),
+        )
 
-    Runs a short prevent-mode simulation against the current strategy, then
-    tests each tunable variable one-at-a-time. If a perturbation reduces
-    projected breach incidence by at least 5%, returns the diff and a generated
-    pytest regression test.
+
+@router.post("/hermes/generate")
+def hermes_generate(background: BackgroundTasks, body: GenerateBody = None, _user=Depends(require_mutation)):
+    """Synthetic Reality → Strategy Diff + Regression Test (async).
+
+    Spawns a background job that runs a short prevent-mode simulation against
+    the current strategy and tests each tunable variable one-at-a-time. Poll
+    GET /hermes/generate/{job_id} for status and the diff + generated test.
     """
     if body is None:
         body = GenerateBody()
-    return generate_diff(days=body.days, seed=body.seed)
+    job_id = uuid.uuid4().hex
+    _hstore.insert_generate_job(job_id, "running", datetime.now(timezone.utc).isoformat())
+    background.add_task(_run_generate_job, job_id, body.days, body.seed)
+    return {"job_id": job_id}
+
+
+@router.get("/hermes/generate/{job_id}")
+def hermes_generate_status(job_id: str):
+    row = _hstore.get_generate_job(job_id)
+    if not row:
+        raise HTTPException(404, "generate job not found")
+    result = None
+    if row.get("result_json"):
+        try:
+            result = json.loads(row["result_json"])
+        except json.JSONDecodeError:
+            pass
+    return {
+        "job_id": row["job_id"],
+        "status": row["status"],
+        "started_ts": row["started_ts"],
+        "done_ts": row["done_ts"],
+        "error": row["error"],
+        "result": result,
+    }
 
 
 @router.post("/hermes/run-test")

@@ -10,6 +10,8 @@ RUN npm ci
 
 # Copy source and build.
 COPY frontend /app
+# Ensure a public directory exists so the runner stage can copy it even when empty.
+RUN mkdir -p /app/public
 
 # Point server-side fetches to the backend service inside Docker.
 ENV API_URL=http://backend:8000

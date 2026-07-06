@@ -63,6 +63,10 @@ CREATE TABLE IF NOT EXISTS scan_jobs (
   job_id TEXT PRIMARY KEY, kind TEXT, status TEXT, started_ts TEXT, done_ts TEXT,
   scanned INTEGER, remediated INTEGER, missed INTEGER, error TEXT
 );
+CREATE TABLE IF NOT EXISTS generate_jobs (
+  job_id TEXT PRIMARY KEY, status TEXT, started_ts TEXT, done_ts TEXT,
+  result_json TEXT, error TEXT
+);
 CREATE TABLE IF NOT EXISTS clock (
   id INTEGER PRIMARY KEY CHECK(id=1),
   day INTEGER, running INTEGER, auto_interval_sec INTEGER, auto_fix INTEGER, seed INTEGER
@@ -119,9 +123,21 @@ def _migrate_mandates_table(conn: sqlite3.Connection) -> None:
     )
 
 
+def _migrate_generate_jobs_table(conn: sqlite3.Connection) -> None:
+    """Idempotent migration: add generate_jobs table for async diff generation."""
+    cols = _columns(conn, "generate_jobs")
+    if not cols:
+        conn.execute(
+            "CREATE TABLE generate_jobs ("
+            "job_id TEXT PRIMARY KEY, status TEXT, started_ts TEXT, done_ts TEXT, "
+            "result_json TEXT, error TEXT)"
+        )
+
+
 def init_schema(conn: sqlite3.Connection) -> None:
     conn.executescript(_SCHEMA)
     _migrate_mandates_table(conn)
+    _migrate_generate_jobs_table(conn)
     conn.commit()
 
 

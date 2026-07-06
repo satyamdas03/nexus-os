@@ -1,6 +1,7 @@
 """Tests for Hermes synthetic-reality strategy diff + generated tests."""
 import os
 import tempfile
+import time
 
 import pytest
 from fastapi.testclient import TestClient
@@ -47,21 +48,38 @@ def admin_client():
             os.environ["AUTH_SECRET"] = old_secret
 
 
+def _poll_generate(client: TestClient, job_id: str, timeout: int = 90) -> dict:
+    deadline = time.time() + timeout
+    while time.time() < deadline:
+        r = client.get(f"/hermes/generate/{job_id}")
+        assert r.status_code == 200, r.text
+        body = r.json()
+        if body["status"] in ("done", "failed"):
+            return body
+        time.sleep(0.5)
+    raise AssertionError("generate job did not complete in time")
+
+
 def test_generate_returns_diff_or_no_improvement(admin_client):
     r = admin_client.post("/hermes/generate", json={"days": 7, "seed": 42})
     assert r.status_code == 200, r.text
-    body = r.json()
-    assert body["ok"] is True
-    assert "diff" in body
-    assert "simulation" in body
+    init = r.json()
+    assert "job_id" in init
+    body = _poll_generate(admin_client, init["job_id"])
+    result = body["result"]
+    assert result["ok"] is True
+    assert "diff" in result
+    assert "simulation" in result
 
 
 def test_run_generated_test(admin_client):
     r = admin_client.post("/hermes/generate", json={"days": 7, "seed": 42})
     assert r.status_code == 200
-    body = r.json()
-    if body["diff"] is None:
+    init = r.json()
+    body = _poll_generate(admin_client, init["job_id"])
+    result = body["result"]
+    if result["diff"] is None:
         pytest.skip("no improvement found in this seed")
-    r2 = admin_client.post("/hermes/run-test", json={"source": body["test"]["source"]})
+    r2 = admin_client.post("/hermes/run-test", json={"source": result["test"]["source"]})
     assert r2.status_code == 200, r2.text
     assert r2.json()["ok"] is True

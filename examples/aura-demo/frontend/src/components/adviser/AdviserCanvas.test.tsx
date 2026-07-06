@@ -16,8 +16,9 @@ const whiteboard: AdviserWhiteboard = {
     },
   ],
   proposed_trades: [
-    { action: "sell", ticker: "AAPL", units: 50, value: 10000 },
+    { action: "sell", ticker: "AAPL", units: 50, value: 10000, rationale: "Trim overweight AAPL to comply with single-name limit" },
   ],
+  impact: { aum_impact_pct: -0.02, trades_count: 1 },
 };
 
 describe("AdviserCanvas", () => {

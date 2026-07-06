@@ -1,4 +1,4 @@
-import type { PortfolioSummary, Portfolio, RulesResult, RemediationResult, AuditEntry, ApproveResult, ExplainResult, SummaryAiResult, EvidencePack, HermesStrategy, HermesProposal, HermesAdoptResult, HermesHeartbeat, HermesHistoryEntry, HermesApproveBatchItem, HermesApproveBatchResult, HermesRollbackResult, HermesSimulationResult, MarketClock, MarketHistoryPoint, MarketPrices, MarketStatus, TopSafeguard, HermesQueuePage, HermesScanJob, MandateDetail, AdviserWhiteboard, AdviserChatResponse, ConfidenceResult, HermesGenerateResult, RunTestResult } from "./types";
+import type { PortfolioSummary, Portfolio, RulesResult, RemediationResult, AuditEntry, ApproveResult, ExplainResult, SummaryAiResult, EvidencePack, HermesStrategy, HermesProposal, HermesAdoptResult, HermesHeartbeat, HermesHistoryEntry, HermesApproveBatchItem, HermesApproveBatchResult, HermesRollbackResult, HermesSimulationResult, MarketClock, MarketHistoryPoint, MarketPrices, MarketStatus, TopSafeguard, HermesQueuePage, HermesScanJob, MandateDetail, AdviserWhiteboard, AdviserChatResponse, ConfidenceResult, HermesGenerateResult, HermesGenerateJob, RunTestResult } from "./types";
 
 function base() {
   // Client (browser): same-origin /api, proxied to backend via next.config rewrites.
@@ -125,7 +125,8 @@ export const api = {
     simulate: (body: { days?: number; mode?: "reactive" | "prevent"; seed?: number }) =>
       j<HermesSimulationResult>("/hermes/simulate", { method: "POST", body: JSON.stringify(body) }),
     generate: (body?: { days?: number; seed?: number }) =>
-      j<HermesGenerateResult>("/hermes/generate", { method: "POST", body: JSON.stringify(body || {}) }),
+      j<{ job_id: string }>("/hermes/generate", { method: "POST", body: JSON.stringify(body || {}) }),
+    generateJob: (jobId: string) => j<HermesGenerateJob>(`/hermes/generate/${jobId}`),
     runTest: (source: string) =>
       j<RunTestResult>("/hermes/run-test", { method: "POST", body: JSON.stringify({ source }) }),
   },

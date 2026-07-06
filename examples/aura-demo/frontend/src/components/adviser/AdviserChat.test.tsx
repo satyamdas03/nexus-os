@@ -5,7 +5,15 @@ import * as apiModule from "@/lib/api";
 
 describe("AdviserChat", () => {
   it("sends a message and renders the assistant answer", async () => {
-    vi.spyOn(apiModule.api.adviser, "chat").mockResolvedValueOnce({ answer: "You could trim AAPL to fix the single-holding breach." });
+    vi.spyOn(apiModule.api.adviser, "chat").mockResolvedValueOnce({ answer: "You could trim AAPL to fix the single-holding breach.", whiteboard: {
+      client_id: "c00001",
+      client_name: "Test Family Office",
+      current_status: "red",
+      post_status: "green",
+      breaches: [],
+      proposed_trades: [],
+      impact: { aum_impact_pct: 0, trades_count: 0 },
+    } });
 
     render(<AdviserChat clientId="c00001" />);
     const input = screen.getByPlaceholderText(/Ask about this portfolio/);

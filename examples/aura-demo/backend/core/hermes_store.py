@@ -52,6 +52,15 @@ class HermesStore(ABC):
     @abstractmethod
     def get_scan_job(self, job_id: str) -> Optional[dict]: ...
 
+    # ---- generate_jobs ----
+    @abstractmethod
+    def insert_generate_job(self, job_id: str, status: str, started_ts: str) -> None: ...
+    @abstractmethod
+    def update_generate_job_done(self, job_id: str, done_ts: str, result_json: Optional[str] = None,
+                                 error: Optional[str] = None) -> None: ...
+    @abstractmethod
+    def get_generate_job(self, job_id: str) -> Optional[dict]: ...
+
     # ---- hermes_queue ----
     @abstractmethod
     def clear_queue(self, day: Optional[int] = None, mode: Optional[str] = None) -> None: ...
@@ -195,6 +204,30 @@ class SQLiteHermesStore(HermesStore):
     def get_scan_job(self, job_id: str) -> Optional[dict]:
         conn = self._resolve_conn()
         row = conn.execute("SELECT * FROM scan_jobs WHERE job_id=?", (job_id,)).fetchone()
+        return dict(row) if row else None
+
+    def insert_generate_job(self, job_id: str, status: str, started_ts: str) -> None:
+        conn = self._resolve_conn()
+        conn.execute(
+            "INSERT INTO generate_jobs(job_id, status, started_ts, result_json, error) "
+            "VALUES (?, ?, ?, NULL, NULL)",
+            (job_id, status, started_ts),
+        )
+        conn.commit()
+
+    def update_generate_job_done(self, job_id: str, done_ts: str, result_json: Optional[str] = None,
+                                 error: Optional[str] = None) -> None:
+        conn = self._resolve_conn()
+        status = "failed" if error else "done"
+        conn.execute(
+            "UPDATE generate_jobs SET status=?, done_ts=?, result_json=?, error=? WHERE job_id=?",
+            (status, done_ts, result_json, error, job_id),
+        )
+        conn.commit()
+
+    def get_generate_job(self, job_id: str) -> Optional[dict]:
+        conn = self._resolve_conn()
+        row = conn.execute("SELECT * FROM generate_jobs WHERE job_id=?", (job_id,)).fetchone()
         return dict(row) if row else None
 
     def clear_queue(self, day: Optional[int] = None, mode: Optional[str] = None) -> None:
@@ -371,6 +404,18 @@ class PostgresHermesStore(HermesStore):
                 )
                 """
             )
+            cur.execute(
+                """
+                CREATE TABLE IF NOT EXISTS generate_jobs (
+                    job_id TEXT PRIMARY KEY,
+                    status TEXT,
+                    started_ts TEXT,
+                    done_ts TEXT,
+                    result_json TEXT,
+                    error TEXT
+                )
+                """
+            )
         conn.commit()
 
     def insert_scan_job(self, job_id: str, kind: str, status: str, started_ts: str) -> None:
@@ -399,6 +444,37 @@ class PostgresHermesStore(HermesStore):
         conn = self.get_conn()
         with conn.cursor() as cur:
             cur.execute("SELECT * FROM scan_jobs WHERE job_id=%s", (job_id,))
+            row = cur.fetchone()
+            if not row:
+                return None
+            cols = [c.name for c in cur.description]
+            return dict(zip(cols, row))
+
+    def insert_generate_job(self, job_id: str, status: str, started_ts: str) -> None:
+        conn = self.get_conn()
+        with conn.cursor() as cur:
+            cur.execute(
+                "INSERT INTO generate_jobs(job_id, status, started_ts, result_json, error) "
+                "VALUES (%s, %s, %s, NULL, NULL)",
+                (job_id, status, started_ts),
+            )
+        conn.commit()
+
+    def update_generate_job_done(self, job_id: str, done_ts: str, result_json: Optional[str] = None,
+                                 error: Optional[str] = None) -> None:
+        conn = self.get_conn()
+        status = "failed" if error else "done"
+        with conn.cursor() as cur:
+            cur.execute(
+                "UPDATE generate_jobs SET status=%s, done_ts=%s, result_json=%s, error=%s WHERE job_id=%s",
+                (status, done_ts, result_json, error, job_id),
+            )
+        conn.commit()
+
+    def get_generate_job(self, job_id: str) -> Optional[dict]:
+        conn = self.get_conn()
+        with conn.cursor() as cur:
+            cur.execute("SELECT * FROM generate_jobs WHERE job_id=%s", (job_id,))
             row = cur.fetchone()
             if not row:
                 return None

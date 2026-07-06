@@ -23,6 +23,7 @@ def _setup():
     generate_data.build_book(conn, n=100, seed=42, market_seed=42)
 
     # Point both the file path and the cached connection at the temp DB.
+    old_db_path = storage.DB_PATH
     storage.DB_PATH = db_path
     data_loader.set_conn(conn)
 
@@ -59,11 +60,12 @@ def _setup():
     assert r.status_code == 200, r.text
     c.headers["Authorization"] = f"Bearer {r.json()['access_token']}"
 
-    return c, db_path, strategy_path, audit_path, old_strategy, old_audit, old_enforce, old_secret
+    return c, db_path, strategy_path, audit_path, old_strategy, old_audit, old_enforce, old_secret, old_db_path
 
 
-def _teardown(db_path, strategy_path, audit_path, old_strategy, old_audit, old_enforce, old_secret):
+def _teardown(db_path, strategy_path, audit_path, old_strategy, old_audit, old_enforce, old_secret, old_db_path):
     data_loader.set_conn(None)
+    storage.DB_PATH = old_db_path
     for p in (db_path, strategy_path, audit_path):
         try:
             os.unlink(p)
@@ -89,11 +91,11 @@ def _teardown(db_path, strategy_path, audit_path, old_strategy, old_audit, old_e
 
 @pytest.fixture
 def admin_backup_client():
-    c, db_path, strategy_path, audit_path, old_strategy, old_audit, old_enforce, old_secret = _setup()
+    c, db_path, strategy_path, audit_path, old_strategy, old_audit, old_enforce, old_secret, old_db_path = _setup()
     try:
         yield c, db_path, strategy_path, audit_path
     finally:
-        _teardown(db_path, strategy_path, audit_path, old_strategy, old_audit, old_enforce, old_secret)
+        _teardown(db_path, strategy_path, audit_path, old_strategy, old_audit, old_enforce, old_secret, old_db_path)
 
 
 def test_backup_returns_zip(admin_backup_client):

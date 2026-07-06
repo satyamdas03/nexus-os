@@ -32,6 +32,8 @@ const mobileTabs = [
   { id: "command", label: "Command", icon: "dashboard", href: "/" },
   { id: "hermes", label: "Hermes", icon: "auto_awesome", href: "/hermes" },
   { id: "adviser", label: "Adviser", icon: "support_agent", href: "/adviser" },
+  { id: "synthetic", label: "Synthetic", icon: "science", href: "/synthetic" },
+  { id: "whiteboard", label: "Board", icon: "line_axis", href: "/whiteboard" },
 ];
 
 // NOTE: "Diagnosis" and "Workbench" are reached from inside the Command Centre / portfolio flow,

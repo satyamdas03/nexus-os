@@ -1,4 +1,4 @@
-import type { PortfolioSummary, Portfolio, RulesResult, RemediationResult, AuditEntry, ApproveResult, ExplainResult, SummaryAiResult, EvidencePack, HermesStrategy, HermesProposal, HermesAdoptResult, HermesHeartbeat, HermesHistoryEntry, HermesApproveBatchItem, HermesApproveBatchResult, HermesRollbackResult, HermesSimulationResult, MarketClock, MarketHistoryPoint, MarketPrices, MarketStatus, TopSafeguard, HermesQueuePage, HermesScanJob, MandateDetail, AdviserWhiteboard, AdviserChatResponse, ConfidenceResult, HermesGenerateResult, HermesGenerateJob, RunTestResult } from "./types";
+import type { PortfolioSummary, Portfolio, RulesResult, RemediationResult, AuditEntry, ApproveResult, ExplainResult, SummaryAiResult, EvidencePack, HermesStrategy, HermesProposal, HermesAdoptResult, HermesHeartbeat, HermesHistoryEntry, HermesApproveBatchItem, HermesApproveBatchResult, HermesRollbackResult, HermesSimulationResult, MarketClock, MarketHistoryPoint, MarketPrices, MarketStatus, TopSafeguard, HermesQueuePage, HermesScanJob, MandateDetail, AdviserWhiteboard, AdviserChatResponse, ConfidenceResult, HermesGenerateResult, HermesGenerateJob, RunTestResult, ScenarioMeta, ScenarioApplyResult, ScenarioStressPortfolioResult, ScenarioSweepJob } from "./types";
 
 function base() {
   // Client (browser): same-origin /api, proxied to backend via next.config rewrites.
@@ -171,5 +171,18 @@ export const api = {
         method: "POST",
         body: JSON.stringify({ trades }),
       }),
+  },
+
+  // Synthetic stress scenarios / crash testing.
+  scenarios: {
+    list: () => j<{ scenarios: ScenarioMeta[] }>("/scenarios"),
+    apply: (body: { client_id: string; scenario_id: string; seed?: number }) =>
+      j<ScenarioApplyResult>("/scenarios/apply", { method: "POST", body: JSON.stringify(body) }),
+    stressPortfolio: (body: { client_id: string; scenario_ids?: string[] }) =>
+      j<ScenarioStressPortfolioResult>("/scenarios/stress-portfolio", { method: "POST", body: JSON.stringify(body) }),
+    sweep: (body: { client_id: string; scenario_ids?: string[]; n?: number; seed?: number; record_limit?: number }) =>
+      j<{ job_id: string }>("/scenarios/sweep", { method: "POST", body: JSON.stringify(body) }),
+    sweepJob: (jobId: string) => j<ScenarioSweepJob>(`/scenarios/sweep/${jobId}`),
+    sweepReportHtmlUrl: (jobId: string) => `${base()}/scenarios/sweep/${jobId}/report.html`,
   },
 };

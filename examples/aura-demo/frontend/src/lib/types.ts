@@ -464,3 +464,65 @@ export interface HermesSimulationResult {
   reactive_incidence?: number;
   prevent_incidence?: number;
 }
+
+// ---- Synthetic stress scenarios / crash testing ----
+
+export interface ScenarioMeta {
+  id: string;
+  name: string;
+  description: string;
+  severity: "mild" | "moderate" | "severe" | "extreme";
+}
+
+export interface ScenarioApplyRequest {
+  client_id: string;
+  scenario_id: string;
+  seed?: number;
+}
+
+export interface ScenarioApplyResult {
+  client_id: string;
+  scenario_id: string;
+  baseline_status: Status;
+  stressed_status: Status;
+  baseline_value: number;
+  stressed_value: number;
+  value_change_pct: number;
+  stressed_portfolio: Portfolio;
+  baseline_rules_result: RulesResult;
+  stressed_rules_result: RulesResult;
+}
+
+export interface ScenarioStressItem {
+  scenario_id: string;
+  stressed_status: Status;
+  stressed_value: number;
+  value_change_pct: number;
+  breach_count: number;
+  watch_count: number;
+}
+
+export interface ScenarioStressPortfolioResult {
+  client_id: string;
+  baseline_status: Status;
+  baseline_value: number;
+  scenarios: ScenarioStressItem[];
+}
+
+export interface ScenarioSweepRequest {
+  client_id: string;
+  scenario_ids?: string[];
+  n?: number;
+  seed?: number;
+  record_limit?: number;
+}
+
+export interface ScenarioSweepJob {
+  job_id: string;
+  kind: string;
+  status: "running" | "done" | "failed";
+  started_ts: string;
+  done_ts?: string;
+  error?: string;
+  result?: any;
+}

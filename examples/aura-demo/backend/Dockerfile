@@ -22,6 +22,9 @@ RUN mkdir -p /app/data
 RUN useradd -m -u 1000 assure && chown -R assure:assure /app
 USER assure
 
+# Voice agent is run with python -m agents.livekit_assistant; ensure /packages is writable for logs if needed.
+ENV PYTHONUNBUFFERED=1
+
 EXPOSE 8000
 
 ENV PORTFOLIOS_DB=/app/data/portfolios.db

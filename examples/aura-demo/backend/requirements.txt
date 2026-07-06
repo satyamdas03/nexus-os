@@ -17,11 +17,11 @@ openpyxl==3.1.5
 python-docx==1.1.2
 requests==2.32.3
 
-# Voice explainer — only needed for server-side LiveKit agent (agents/livekit_assistant.py)
+# Voice explainer — server-side LiveKit agent (agents/livekit_assistant.py).
 # Token generation in agents/voice.py uses livekit.api (provided by livekit package).
-# livekit-agents
-# livekit-plugins-deepgram
-# livekit-plugins-openai
+livekit-agents>=0.12.0
+livekit-plugins-deepgram>=0.7.0
+livekit-plugins-openai>=0.11.0
 
 python-jose[cryptography]==3.4.0
 passlib[bcrypt]==1.7.4

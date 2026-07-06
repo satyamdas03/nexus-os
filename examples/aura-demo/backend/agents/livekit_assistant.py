@@ -17,6 +17,9 @@ Environment variables:
     ASSURE_API_BASE     — URL of this backend (default http://127.0.0.1:8000)
 """
 
+from __future__ import annotations
+
+import argparse
 import os
 import sys
 
@@ -32,8 +35,25 @@ except Exception:  # pragma: no cover — optional agent stack
     _HAS_AGENTS = False
 
 
+# Room name prefix used by the frontend /adviser/session and /voice/token endpoints.
+_ASSURE_ROOM_PREFIX = "assure-"
+_ADVISER_ROOM_PREFIX = "adviser-"
+
+
 def _env(key: str, default: str | None = None) -> str | None:
     return os.environ.get(key, default)
+
+
+def _client_id_from_room(room_name: str) -> str | None:
+    """Extract the ASSURE client_id from a LiveKit room name.
+
+    Rooms created by the app follow `assure-{client_id}` or `adviser-{client_id}`.
+    Returns the client_id if the name matches, otherwise None.
+    """
+    for prefix in (_ASSURE_ROOM_PREFIX, _ADVISER_ROOM_PREFIX):
+        if room_name.startswith(prefix):
+            return room_name[len(prefix):]
+    return None
 
 
 def _assure_chat_url(client_id: str) -> str:
@@ -96,27 +116,33 @@ if _HAS_AGENTS:
 async def _entrypoint(ctx: JobContext) -> None:
     """LiveKit worker entrypoint.
 
-    The client_id is read from the ASSURE_CLIENT_ID environment variable because
-    the worker is started per portfolio session.
+    The client_id is discovered from the room name (assure-{client_id} or
+    adviser-{client_id}) so one worker container can handle any portfolio session.
+    A fixed ASSURE_CLIENT_ID env var may still be used as an override.
     """
-    client_id = _env("ASSURE_CLIENT_ID")
+    room_name = ctx.room.name or ""
+    client_id = _env("ASSURE_CLIENT_ID") or _client_id_from_room(room_name)
     if not client_id:
         raise RuntimeError(
-            "ASSURE_CLIENT_ID is not set. Start the agent with --client-id <id>."
+            f"Could not determine ASSURE client_id from room '{room_name}'. "
+            "Room must start with 'assure-' or 'adviser-', or set ASSURE_CLIENT_ID."
         )
     await ctx.connect()
     session = AgentSession()
     await session.start(agent=AssureVoiceAgent(client_id), room=ctx.room)
 
 
-def run_agent(client_id: str) -> None:
-    """Launch the LiveKit voice agent for a specific client/portfolio.
+def run_agent(client_id: str | None = None) -> None:
+    """Launch the LiveKit voice agent.
 
     Usage:
+        python -m agents.livekit_assistant
         python -m agents.livekit_assistant --client-id C123
+        python -m agents.livekit_assistant start
+        python -m agents.livekit_assistant dev
 
-    This blocks forever and processes LiveKit jobs. Requires `livekit-agents`
-    and the speech plugins to be installed.
+    When run without --client-id, the agent reads the client_id from each room
+    it joins, which is the mode used in Docker Compose.
     """
     if not is_configured():
         raise RuntimeError(
@@ -132,7 +158,9 @@ def run_agent(client_id: str) -> None:
     if not _env("OPENAI_API_KEY"):
         raise RuntimeError("OPENAI_API_KEY is not set.")
 
-    os.environ["ASSURE_CLIENT_ID"] = client_id
+    if client_id:
+        os.environ["ASSURE_CLIENT_ID"] = client_id
+
     # livekit-agents' own CLI parses sys.argv and needs a subcommand like
     # `start` or `dev`. We already consumed --client-id, so reconstruct argv
     # to contain only the program name plus the default subcommand.
@@ -154,16 +182,23 @@ def run_agent(client_id: str) -> None:
 
 
 if __name__ == "__main__":
-    import argparse
-
     parser = argparse.ArgumentParser(description="ASSURE LiveKit voice assistant")
     parser.add_argument(
-        "--client-id", required=True, help="Portfolio client_id to answer about"
+        "--client-id",
+        default=None,
+        help="Optional fixed portfolio client_id (overrides room-name detection)",
+    )
+    parser.add_argument(
+        "subcommand",
+        nargs="?",
+        default="start",
+        choices=["start", "dev", "console", "connect", "download-files"],
+        help="livekit-agents CLI subcommand",
     )
     args = parser.parse_args()
 
     try:
-        run_agent(args.client_id)
+        run_agent(client_id=args.client_id)
     except RuntimeError as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         sys.exit(1)

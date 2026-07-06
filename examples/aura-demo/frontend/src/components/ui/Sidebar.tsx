@@ -8,6 +8,8 @@ const navItems = [
   { id: "command", label: "Command Centre", icon: "dashboard", href: "/" },
   { id: "hermes", label: "Hermes Engine", icon: "auto_awesome", href: "/hermes" },
   { id: "adviser", label: "AI Adviser", icon: "support_agent", href: "/adviser" },
+  { id: "synthetic", label: "Synthetic Reality", icon: "science", href: "/synthetic" },
+  { id: "whiteboard", label: "Whiteboard", icon: "line_axis", href: "/whiteboard" },
 ];
 
 export function Sidebar() {

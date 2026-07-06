@@ -1,4 +1,8 @@
 """Tests for the Kernel-as-a-Service HTTP API."""
+import logging
+import os
+import sys
+
 import pytest
 from fastapi.testclient import TestClient
 
@@ -8,6 +12,21 @@ from assure_kernel.main import app
 @pytest.fixture
 def client():
     return TestClient(app)
+
+
+@pytest.fixture
+def client_with_api_key(tmp_path, monkeypatch):
+    """Fresh app import with API_KEY enforcement enabled."""
+    monkeypatch.setenv("ASSURE_KERNEL_API_KEY", "super-secret-key")
+    # Remove cached import so main re-reads the env var.
+    to_reload = []
+    for name in list(sys.modules):
+        if name.startswith("assure_kernel"):
+            to_reload.append(name)
+    for name in to_reload:
+        del sys.modules[name]
+    from assure_kernel.main import app as auth_app
+    return TestClient(auth_app)
 
 
 @pytest.fixture
@@ -155,3 +174,28 @@ def test_evidence_pack_breach(client, sample_mandate):
     evidence = r.json()["evidence"]
     assert evidence["current_attestation"]["status"] == "red"
     assert "BREACH" in evidence["deterministic_summary"]
+
+
+def test_request_logging(client, sample_portfolio, sample_mandate, caplog):
+    with caplog.at_level(logging.INFO, logger="assure-kernel"):
+        r = client.post("/v1/evaluate", json={"portfolio": sample_portfolio, "mandate": sample_mandate})
+    assert r.status_code == 200
+    assert any("method=POST path=/v1/evaluate" in rec.message for rec in caplog.records)
+    assert any("status=200" in rec.message for rec in caplog.records)
+    assert "X-Request-ID" in r.headers
+
+
+def test_api_key_required_when_configured(client_with_api_key, sample_portfolio, sample_mandate):
+    r = client_with_api_key.post("/v1/evaluate", json={"portfolio": sample_portfolio, "mandate": sample_mandate})
+    assert r.status_code == 403
+    assert "API key" in r.json()["detail"]
+
+
+def test_api_key_accepts_valid_key(client_with_api_key, sample_portfolio, sample_mandate):
+    r = client_with_api_key.post(
+        "/v1/evaluate",
+        json={"portfolio": sample_portfolio, "mandate": sample_mandate},
+        headers={"X-API-Key": "super-secret-key"},
+    )
+    assert r.status_code == 200
+    assert r.json()["status"] == "green"

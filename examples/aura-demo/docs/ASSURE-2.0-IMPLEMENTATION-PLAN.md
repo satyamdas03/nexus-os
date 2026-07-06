@@ -182,8 +182,8 @@ packages/assure-kernel/
 ### Tasks
 1. ✅ Build FastAPI service with OpenAPI docs.
 2. ✅ Add `/v1/evidence` evidence pack builder with deterministic attestation, mandate docs, alignment history, remediation evidence, control statement, and print-ready HTML.
-3. ⬜ Add request/response logging.
-4. ⬜ Add API key auth middleware (pluggable).
+3. ✅ Add request/response logging.
+4. ✅ Add API key auth middleware (pluggable).
 5. ✅ Dockerize the kernel.
 6. ⬜ Add load tests (≥1,000 RPS check throughput).
 

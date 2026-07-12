@@ -7,7 +7,7 @@ in `agents.conversational`; this endpoint only handles audio transport tokens.
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
-from core.auth import get_current_user
+from core.auth import get_current_user, check_client_scope
 from agents.voice import create_token, is_configured
 
 router = APIRouter()
@@ -38,8 +38,9 @@ def voice_status(_user=Depends(get_current_user)):
 
 
 @router.post("/voice/token/{client_id}", response_model=VoiceTokenResponse)
-def voice_token(client_id: str, _user=Depends(get_current_user)):
+def voice_token(client_id: str, user=Depends(get_current_user)):
     """Create a LiveKit access token for a conversational assurance voice session."""
+    check_client_scope(user, client_id)
     try:
         token = create_token(client_id)
     except RuntimeError as exc:

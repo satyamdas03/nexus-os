@@ -228,6 +228,39 @@ async def require_mutation(user: User = Depends(get_current_user_or_dev)) -> Use
     return user
 
 
+def check_client_scope(user: User, client_id: str) -> None:
+    """Raise 403 if the user is not authorized for the requested client.
+
+    Rules:
+      - admin: always allowed.
+      - adviser with assigned_adviser_filter: allowed only when the portfolio's
+        adviser field matches the filter.
+      - adviser without filter: allowed for all clients (backward-compatible).
+      - viewer/others: denied.
+
+    This helper intentionally raises a generic 403 on denial so it does not
+    leak whether the client_id exists.
+    """
+    if user.role == "admin":
+        return
+    if user.role not in ("adviser",):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not authorized for this client",
+        )
+    if not user.assigned_adviser_filter:
+        return
+
+    from core.data_loader import get_portfolio
+
+    p = get_portfolio(client_id)
+    if p is None or p.get("adviser") != user.assigned_adviser_filter:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not authorized for this client",
+        )
+
+
 def ensure_bootstrap_admin() -> None:
     """Create the bootstrap admin user if the users table is empty.
 

@@ -9,12 +9,17 @@ The score is advisory only — it never overrides the deterministic rules engine
 """
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Any, Callable, Optional
 
+from core import data_loader
 from core.effective import get_effective
 from core.rules_engine import check
 from core.trades import apply_trades
+
+_AUDIT_PATH = Path(__file__).parent.parent / "data" / "audit.jsonl"
 
 
 @dataclass(frozen=True)
@@ -38,28 +43,102 @@ def _rule_score(rr: dict) -> float:
 
 
 def _simulate_score(simulate_fn: Optional[Callable] = None) -> float:
-    if simulate_fn is None:
-        return 0.85
+    """Compute the simulation baseline from a Hermes book simulation.
+
+    If a simulate_fn is supplied, call it with the contract (days=30,
+    mode="prevent", seed=42). If none is supplied, attempt a local deterministic
+    fallback via agents.hermes.loop.simulate_book. If nothing is available, or
+    the simulation fails, return 0.5 (uncertain) — never a fake high default.
+    """
+    sim = simulate_fn
+    if sim is None:
+        try:
+            from agents.hermes.loop import simulate_book
+
+            sim = simulate_book
+        except Exception:
+            return 0.5
     try:
-        result = simulate_fn(days=30, mode="prevent", seed=42)
+        result = sim(days=30, mode="prevent", seed=42)
         before = result.get("prevent_incidence", result.get("reactive_incidence", 0))
         if before is None:
-            return 0.85
+            return 0.5
         # Lower incidence = higher score. Scale so 0 incidence = 1.0, 500 = 0.0.
         return max(0.0, min(1.0, 1.0 - (before / 500)))
     except Exception:
         return 0.5
 
 
-def _historical_score(client_id: str, _trades: list[dict]) -> float:
-    """Placeholder for an audit-backed historical success score.
+def _load_audit(audit_path: Optional[Path] = None) -> list[dict]:
+    p = audit_path or _AUDIT_PATH
+    if not p.exists():
+        return []
+    try:
+        return [json.loads(line) for line in p.read_text().splitlines() if line.strip()]
+    except Exception:
+        return []
 
-    A real implementation would scan the audit trail for prior approvals of the
-    same client + ticker actions and measure how often the portfolio stayed
-    green on the following day. For now we optimistically bias to 0.9 because
-    every Hermes-queued trade is rules-engine green before approval.
+
+def _trade_signature(trades: list[dict]) -> set[tuple[str, str]]:
+    return {
+        (t.get("ticker", ""), t.get("action", ""))
+        for t in trades
+        if t.get("ticker")
+    }
+
+
+def _historical_score(
+    client_id: str, trades: list[dict], audit_path: Optional[Path] = None
+) -> float:
+    """Audit-backed historical success score.
+
+    Scan audit records for prior approvals of the same client + overlapping
+    ticker actions. For each matched approval, look up the portfolio's status
+    on the following day in status_history. The success rate is how often the
+    approved trades kept the portfolio green the next day. If no matching
+    history exists, return 0.5 (neutral).
     """
-    return 0.9
+    records = [
+        r
+        for r in _load_audit(audit_path)
+        if r.get("client_id") == client_id and r.get("action_type") == "approve"
+    ]
+    if not records:
+        return 0.5
+
+    current_sig = _trade_signature(trades)
+    matched: list[dict] = []
+    for rec in records:
+        payload = rec.get("payload", {})
+        rec_trades = payload.get("trades", [])
+        if current_sig and not _trade_signature(rec_trades).intersection(current_sig):
+            continue
+        matched.append(rec)
+
+    if not matched:
+        return 0.5
+
+    conn = data_loader.get_conn_cached()
+    successes = 0
+    for rec in matched:
+        payload = rec.get("payload", {})
+        day = payload.get("day")
+        status: Optional[str] = None
+        if day is not None:
+            row = conn.execute(
+                "SELECT status FROM status_history WHERE day=? AND client_id=?",
+                (day + 1, client_id),
+            ).fetchone()
+            if row is not None:
+                status = row["status"]
+        # Fallback for legacy audit entries without a day: use the recorded
+        # immediate post-approval status as a proxy.
+        if status is None:
+            status = payload.get("new_status")
+        if status == "green":
+            successes += 1
+
+    return successes / len(matched)
 
 
 def score_confidence(

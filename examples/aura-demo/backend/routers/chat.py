@@ -6,9 +6,10 @@ per_rule rows). The optional LLM only polishes prose; it may not change the
 facts or introduce unsupported claims.
 """
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
+from core.auth import get_current_user
 from agents.conversational import chat
 from core.data_loader import get_portfolio
 from core.effective import effective_portfolio
@@ -40,7 +41,7 @@ def _404(client_id: str):
 
 
 @router.post("/portfolio/{client_id}/chat", response_model=ChatResponse)
-def chat_endpoint(client_id: str, body: ChatBody):
+def chat_endpoint(client_id: str, body: ChatBody, _user=Depends(get_current_user)):
     """Answer a natural-language question about a portfolio.
 
     The request must include a `query` string. The response contains the answer,
@@ -62,7 +63,7 @@ def chat_endpoint(client_id: str, body: ChatBody):
 
 
 @router.post("/chat", response_model=ChatResponse)
-def chat_generic(body: GenericChatBody):
+def chat_generic(body: GenericChatBody, _user=Depends(get_current_user)):
     """Generic chat endpoint for callers who supply portfolio + mandate + rules result.
 
     This is useful for the Synthetic Reality Engine, external services, or the

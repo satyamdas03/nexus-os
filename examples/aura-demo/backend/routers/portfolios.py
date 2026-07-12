@@ -1,8 +1,9 @@
 from collections import Counter
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query
 
 from assure_kernel import describe_mandate, parse_mandate
+from core.auth import get_current_user
 from core.data_loader import list_portfolios, get_portfolio, summary, get_conn_cached, _mandate_full
 from core.effective import get_effective
 from core.rules_engine import check
@@ -33,7 +34,11 @@ def _summarize(p: dict, eff: dict, rr: dict) -> dict:
 
 
 @router.get("/portfolios")
-def list_portfolios_endpoint(limit: int = Query(500, ge=1, le=2000), offset: int = Query(0, ge=0)):
+def list_portfolios_endpoint(
+    limit: int = Query(500, ge=1, le=2000),
+    offset: int = Query(0, ge=0),
+    _user=Depends(get_current_user),
+):
     out = []
     for p in list_portfolios(limit=limit, offset=offset):
         eff = get_effective(p["client_id"], seed=p)
@@ -43,7 +48,7 @@ def list_portfolios_endpoint(limit: int = Query(500, ge=1, le=2000), offset: int
 
 
 @router.get("/portfolio/{client_id}")
-def portfolio_detail(client_id: str):
+def portfolio_detail(client_id: str, _user=Depends(get_current_user)):
     p = get_portfolio(client_id)
     if not p:
         raise HTTPException(404, "portfolio not found")
@@ -53,7 +58,7 @@ def portfolio_detail(client_id: str):
 
 
 @router.get("/portfolio/{client_id}/check")
-def portfolio_check(client_id: str):
+def portfolio_check(client_id: str, _user=Depends(get_current_user)):
     p = get_portfolio(client_id)
     if not p:
         raise HTTPException(404, "portfolio not found")
@@ -61,12 +66,12 @@ def portfolio_check(client_id: str):
 
 
 @router.get("/portfolios/summary")
-def portfolio_summary():
+def portfolio_summary(_user=Depends(get_current_user)):
     return summary()
 
 
 @router.get("/portfolios/summary_ai")
-def portfolio_summary_ai():
+def portfolio_summary_ai(_user=Depends(get_current_user)):
     """Claude prose grounded in a bounded sample + aggregate counts (no O(n)
     LLM). Narrative is advisory; the rules engine is the final word."""
     sample = list_portfolios(limit=200, offset=0)
@@ -75,7 +80,7 @@ def portfolio_summary_ai():
 
 
 @router.get("/portfolios/top")
-def portfolios_top(limit: int = Query(200, ge=1, le=1000)):
+def portfolios_top(limit: int = Query(200, ge=1, le=1000), _user=Depends(get_current_user)):
     """Heatmap safeguard: top-N portfolios by FUM + aggregate-rest.
 
     Orders strictly by FUM (largest first) so the paginated heatmap shows a
@@ -114,7 +119,7 @@ def portfolios_top(limit: int = Query(200, ge=1, le=1000)):
     return {"top": top, "rest": {"count": rest_count, "fum": rest_fum, "dominant_status": dominant}}
 
 @router.get("/portfolio/{client_id}/mandate")
-def portfolio_mandate(client_id: str):
+def portfolio_mandate(client_id: str, _user=Depends(get_current_user)):
     """Return the portfolio's mandate as a versioned DSL document plus human-readable rule docs."""
     p = get_portfolio(client_id)
     if not p:

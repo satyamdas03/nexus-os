@@ -3,15 +3,12 @@ import os, sqlite3, tempfile
 from fastapi.testclient import TestClient
 from core import storage, data_loader
 from generators import generate_data
+from tests.helpers import auth_client, build_db
 
 
 def _client():
-    fd, path = tempfile.mkstemp(suffix=".db"); os.close(fd)
-    conn = storage.get_conn(path); storage.init_schema(conn); storage.migrate(conn)
-    generate_data.build_book(conn, n=300, seed=42, market_seed=42)
-    data_loader.set_conn(conn)
-    from main import app
-    return TestClient(app)
+    conn = build_db(n=300)
+    return auth_client(conn)
 
 
 def test_clock_endpoint():

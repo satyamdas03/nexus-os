@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
-import type { HermesGenerateResult, HermesGenerateJob } from "@/lib/types";
+import type { HermesGenerateResult, HermesGenerateJob, RunTestResult } from "@/lib/types";
 import { StrategyDiff } from "./StrategyDiff";
 import { GeneratedTestView } from "./GeneratedTestView";
 import { PrimaryButton } from "@/components/ui/PrimaryButton";
@@ -16,6 +16,7 @@ export function HermesGeneratePanel({ onAdopted }: { onAdopted?: () => void }) {
   const [busy, setBusy] = useState(false);
   const [adopting, setAdopting] = useState(false);
   const [adoptErr, setAdoptErr] = useState<string | null>(null);
+  const [testResult, setTestResult] = useState<{ status: "passed" | "failed"; result: RunTestResult } | null>(null);
 
   const handleJobUpdate = (j: HermesGenerateJob) => {
     setJob(j);
@@ -44,11 +45,35 @@ export function HermesGeneratePanel({ onAdopted }: { onAdopted?: () => void }) {
     return () => clearInterval(id);
   }, [job]);
 
+  // Auto-run the generated regression test once per result so the Adopt gate
+  // has a deterministic pass/fail status before the user can commit.
+  useEffect(() => {
+    if (!result?.test) return;
+    let cancelled = false;
+    api.hermes
+      .runTest(result.test.source)
+      .then((r) => {
+        if (cancelled) return;
+        setTestResult({ status: r.ok ? "passed" : "failed", result: r });
+      })
+      .catch((e) => {
+        if (cancelled) return;
+        setTestResult({
+          status: "failed",
+          result: { ok: false, stdout: "", stderr: String(e.message ?? e), returncode: -1 },
+        });
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [result?.test]);
+
   const generate = async () => {
     setBusy(true);
     setAdoptErr(null);
     setResult(null);
     setJob(null);
+    setTestResult(null);
     try {
       const { job_id } = await api.hermes.generate({ days: 7, seed: 42 });
       const initial = await api.hermes.generateJob(job_id);
@@ -104,10 +129,30 @@ export function HermesGeneratePanel({ onAdopted }: { onAdopted?: () => void }) {
           {result.diff ? (
             <>
               <StrategyDiff diff={result.diff} />
-              {result.test && <GeneratedTestView source={result.test.source} />}
-              <PrimaryButton onClick={adopt} disabled={adopting} loading={adopting}>
+              {result.test && (
+                <GeneratedTestView
+                  source={result.test.source}
+                  result={testResult?.result ?? null}
+                  onResult={(r) => setTestResult({ status: r.ok ? "passed" : "failed", result: r })}
+                />
+              )}
+              <PrimaryButton
+                onClick={adopt}
+                disabled={testResult?.status !== "passed" || adopting}
+                loading={adopting}
+                title={
+                  testResult?.status !== "passed"
+                    ? "Generated regression test must pass before adopting"
+                    : undefined
+                }
+              >
                 Adopt as next version
               </PrimaryButton>
+              {result.test && testResult?.status !== "passed" && (
+                <p className="font-mono text-xs text-aura-text-muted">
+                  Adopt is disabled until the generated regression test passes. Run the test above.
+                </p>
+              )}
             </>
           ) : (
             <p className="font-mono text-xs text-aura-text-muted">

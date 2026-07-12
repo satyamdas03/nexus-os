@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { clsx } from "clsx";
 import { api } from "@/lib/api";
 import type {
@@ -50,15 +50,20 @@ export function HermesCrashPanel() {
       setScenarios(res.scenarios);
       if (res.scenarios.length && !scenarioId) setScenarioId(res.scenarios[0].id);
     });
-  }, []);
+  }, [clientId, scenarioId]);
+
+  const jobRef = useRef(job);
+  jobRef.current = job;
 
   useEffect(() => {
-    if (!job || job.status === "done" || job.status === "failed") return;
+    if (!jobRef.current || jobRef.current.status === "done" || jobRef.current.status === "failed") return;
     let ticks = 0;
     const id = window.setInterval(() => {
       ticks += 1;
+      const currentJobId = jobRef.current?.job_id;
+      if (!currentJobId) return;
       api.scenarios
-        .sweepJob(job.job_id)
+        .sweepJob(currentJobId)
         .then((j) => {
           setJob(j);
           if (j.status === "done" || j.status === "failed") {

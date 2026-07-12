@@ -4,9 +4,10 @@ Generates LiveKit access tokens for voice rooms. The conversational brain stays
 in `agents.conversational`; this endpoint only handles audio transport tokens.
 """
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
+from core.auth import get_current_user
 from agents.voice import create_token, is_configured
 
 router = APIRouter()
@@ -26,7 +27,7 @@ class VoiceStatusResponse(BaseModel):
 
 
 @router.get("/voice/status")
-def voice_status():
+def voice_status(_user=Depends(get_current_user)):
     """Report whether LiveKit voice is configured on this deployment."""
     if is_configured():
         return VoiceStatusResponse(configured=True, message="LiveKit voice is configured.")
@@ -37,7 +38,7 @@ def voice_status():
 
 
 @router.post("/voice/token/{client_id}", response_model=VoiceTokenResponse)
-def voice_token(client_id: str):
+def voice_token(client_id: str, _user=Depends(get_current_user)):
     """Create a LiveKit access token for a conversational assurance voice session."""
     try:
         token = create_token(client_id)

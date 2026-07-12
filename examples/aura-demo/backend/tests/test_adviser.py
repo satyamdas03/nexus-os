@@ -1,50 +1,28 @@
 """Tests for the AI Investment Manager adviser endpoints."""
-import os
-import tempfile
 
 import pytest
-from fastapi.testclient import TestClient
 
-from core import data_loader, storage
-from core.auth import create_user
-from generators import generate_data
+from core import data_loader
 
 
 def _client(n=100):
-    fd, path = tempfile.mkstemp(suffix=".db")
-    os.close(fd)
-    conn = storage.get_conn(path)
-    storage.init_schema(conn)
-    storage.migrate(conn)
-    generate_data.build_book(conn, n=n, seed=42, market_seed=42)
-    data_loader.set_conn(conn)
-    from main import app
-    return TestClient(app), conn
+    from tests.helpers import auth_client, build_db
+
+    conn = build_db(n=n)
+    return auth_client(conn), conn
 
 
 @pytest.fixture
-def admin_client():
-    old_enforce = os.environ.get("AUTH_ENFORCE")
-    old_secret = os.environ.get("AUTH_SECRET")
-    os.environ["AUTH_ENFORCE"] = "1"
-    os.environ["AUTH_SECRET"] = "test-secret-32-bytes-long-ok"
+def admin_client(monkeypatch):
+    """Authenticated admin client with auth env fully isolated via monkeypatch."""
+    monkeypatch.setenv("AUTH_ENFORCE", "1")
+    monkeypatch.setenv("AUTH_SECRET", "test-secret-32-bytes-long-ok")
+    monkeypatch.setenv("AUTH_ADMIN_PASSWORD", "adminpass")
     c, conn = _client(n=100)
-    create_user(conn, "admin", "adminpass", "admin")
-    r = c.post("/auth/token", json={"username": "admin", "password": "adminpass"})
-    assert r.status_code == 200, r.text
-    c.headers["Authorization"] = f"Bearer {r.json()['access_token']}"
     try:
         yield c
     finally:
         data_loader.set_conn(None)
-        if old_enforce is None:
-            os.environ.pop("AUTH_ENFORCE", None)
-        else:
-            os.environ["AUTH_ENFORCE"] = old_enforce
-        if old_secret is None:
-            os.environ.pop("AUTH_SECRET", None)
-        else:
-            os.environ["AUTH_SECRET"] = old_secret
 
 
 def test_whiteboard_returns_structured_payload(admin_client):

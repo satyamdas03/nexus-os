@@ -18,11 +18,21 @@ def generate_test(diff: dict, simulation: dict, seed: int = 42) -> dict:
     GENERATED_DIR.mkdir(parents=True, exist_ok=True)
     ts = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
     var = diff["variable"]
+    mode = diff.get("mode", "prevent")
     filename = f"test_strategy_{var}_{ts}.py"
     path = GENERATED_DIR / filename
 
-    before = simulation.get("prevent_incidence_before", 0) or simulation.get("reactive_incidence", 0) or 0
-    after = simulation.get("prevent_incidence_after", 0) or 0
+    if mode == "reactive":
+        before = simulation.get("reactive_incidence", 0) or 0
+        after = simulation.get("reactive_incidence_after", 0) or 0
+        mode_arg = "reactive"
+        incidence_key = "reactive_incidence"
+    else:
+        before = simulation.get("prevent_incidence_before", 0) or 0
+        after = simulation.get("prevent_incidence_after", 0) or 0
+        mode_arg = "prevent"
+        incidence_key = "prevent_incidence"
+
     threshold = int(after * 1.05) if after else before
 
     source = textwrap.dedent(f'''\
@@ -32,17 +42,13 @@ def generate_test(diff: dict, simulation: dict, seed: int = 42) -> dict:
 
         def test_strategy_change_lowers_incidence():
             baseline = load_strategy()
-            baseline_result = simulate_book(days=30, seed={seed}, strategy=baseline)
-            baseline_incidence = baseline_result.get(
-                "prevent_incidence", baseline_result.get("reactive_incidence", 0)
-            ) or 0
+            baseline_result = simulate_book(days=30, mode="{mode_arg}", seed={seed}, strategy=baseline)
+            baseline_incidence = baseline_result.get("{incidence_key}", 0) or 0
 
             candidate = dict(baseline)
             candidate["variables"]["{var}"]["value"] = {repr(diff["to"])}
-            candidate_result = simulate_book(days=30, seed={seed}, strategy=candidate)
-            candidate_incidence = candidate_result.get(
-                "prevent_incidence", candidate_result.get("reactive_incidence", 0)
-            ) or 0
+            candidate_result = simulate_book(days=30, mode="{mode_arg}", seed={seed}, strategy=candidate)
+            candidate_incidence = candidate_result.get("{incidence_key}", 0) or 0
 
             assert candidate_incidence <= {threshold}, (
                 f"Expected candidate incidence <= {threshold}, got {{candidate_incidence}}"

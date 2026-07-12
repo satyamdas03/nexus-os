@@ -13,7 +13,7 @@ import os
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
-from core.auth import get_current_user_or_dev
+from core.auth import get_current_user
 from agents.adviser.whiteboard import build_whiteboard
 from agents.adviser.prompts import _ADVISER_SYSTEM, chat_prompt
 from agents.llm import get_llm
@@ -32,12 +32,12 @@ class SessionRequest(BaseModel):
 
 
 @router.post("/adviser/whiteboard/{client_id}")
-def whiteboard(client_id: str, _user=Depends(get_current_user_or_dev)):
+def whiteboard(client_id: str, _user=Depends(get_current_user)):
     return build_whiteboard(client_id)
 
 
 @router.post("/adviser/chat")
-def chat(body: ChatRequest, _user=Depends(get_current_user_or_dev)):
+def chat(body: ChatRequest, _user=Depends(get_current_user)):
     wb = build_whiteboard(body.client_id)
     # Lightweight execution-refusal guard. The LLM is advisory only; even a
     # well-intentioned prompt asking to trade must be stopped at the API layer.
@@ -54,7 +54,7 @@ def chat(body: ChatRequest, _user=Depends(get_current_user_or_dev)):
 
 
 @router.post("/adviser/session")
-def session(body: SessionRequest, _user=Depends(get_current_user_or_dev)):
+def session(body: SessionRequest, _user=Depends(get_current_user)):
     if not is_configured():
         raise HTTPException(status_code=503, detail="LiveKit not configured")
     token = create_token(

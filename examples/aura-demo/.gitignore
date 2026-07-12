@@ -12,6 +12,7 @@ backend/data/portfolios.db
 backend/data/portfolios.db-shm
 backend/data/portfolios.db-wal
 backend/agents/hermes/history/
+backend/agents/hermes/generated_tests/
 backend/agents/hermes/heartbeat.json
 next-env.d.ts
 *.tsbuildinfo

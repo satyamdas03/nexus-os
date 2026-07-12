@@ -2,18 +2,31 @@
 
 import { useState } from "react";
 import { api } from "@/lib/api";
+import type { RunTestResult } from "@/lib/types";
 
-export function GeneratedTestView({ source }: { source: string }) {
-  const [result, setResult] = useState<{ ok: boolean; stderr: string } | null>(null);
+export function GeneratedTestView({
+  source,
+  result: controlledResult,
+  onResult,
+}: {
+  source: string;
+  result?: RunTestResult | null;
+  onResult?: (result: RunTestResult) => void;
+}) {
+  const [internalResult, setInternalResult] = useState<RunTestResult | null>(null);
   const [busy, setBusy] = useState(false);
+  const result = controlledResult !== undefined ? controlledResult : internalResult;
 
   const run = async () => {
     setBusy(true);
     try {
       const r = await api.hermes.runTest(source);
-      setResult(r);
+      if (controlledResult === undefined) setInternalResult(r);
+      onResult?.(r);
     } catch (e: any) {
-      setResult({ ok: false, stderr: e.message || "Run failed" });
+      const r: RunTestResult = { ok: false, stdout: "", stderr: e.message || "Run failed", returncode: -1 };
+      if (controlledResult === undefined) setInternalResult(r);
+      onResult?.(r);
     }
     setBusy(false);
   };

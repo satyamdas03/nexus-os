@@ -51,6 +51,7 @@ describe("HermesGeneratePanel", () => {
       .mockResolvedValueOnce(runningJob)
       .mockResolvedValueOnce(runningJob)
       .mockResolvedValueOnce(doneJob);
+    vi.spyOn(apiModule.api.hermes, "runTest").mockResolvedValueOnce({ ok: true, stdout: "", stderr: "", returncode: 0 });
     vi.spyOn(apiModule.api.hermes, "adopt").mockResolvedValueOnce({} as any);
 
     render(<HermesGeneratePanel />);

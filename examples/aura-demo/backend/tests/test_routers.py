@@ -1,24 +1,23 @@
 # backend/tests/test_routers.py
-import os, json, sqlite3, tempfile
-from fastapi.testclient import TestClient
-from core import storage, data_loader
-from core.hermes_store import SQLiteHermesStore, set_hermes_store
-from generators import generate_data
+import json
+
+import pytest
+
+from core import data_loader
+from tests.helpers import auth_client, build_db
+
+
+@pytest.fixture(autouse=True)
+def _auth_env(monkeypatch):
+    """Pin dev auth defaults for every router test so auth state never leaks."""
+    monkeypatch.setenv("AUTH_ENFORCE", "0")
+    monkeypatch.setenv("AUTH_SECRET", "test-secret-32-bytes-long-ok")
+    monkeypatch.setenv("AUTH_ADMIN_PASSWORD", "adminpass")
 
 
 def _client(n=400):
-    fd, path = tempfile.mkstemp(suffix=".db"); os.close(fd)
-    conn = storage.get_conn(path); storage.init_schema(conn); storage.migrate(conn)
-    generate_data.build_book(conn, n=n, seed=42, market_seed=42)
-    data_loader.set_conn(conn)
-    # Pin Hermes store to the same temp DB so scan/approve endpoints see the
-    # same queue/state tables as the test connection.
-    set_hermes_store(SQLiteHermesStore(conn))
-    # Reset any loop-level store override left by loop tests; use the global store.
-    from agents.hermes import loop
-    loop._set_store(None)
-    from main import app
-    return TestClient(app), conn
+    conn = build_db(n=n, with_hermes_store=True)
+    return auth_client(conn), conn
 
 
 def test_portfolios_paged():
@@ -112,11 +111,14 @@ def test_approve_batch_clears_breach_and_persists():
             break
         time.sleep(0.1)
     assert st["status"] == "done", f"scan job did not complete: {st}"
-    # find a red/orange queue row with trades
+    # Pick a gate-green row with trades. Gate-green rows are guaranteed to leave
+    # zero breaches after the proposed trades, so the final status must be green.
     rows = c.get("/hermes/queue?limit=200").json()["rows"]
-    targets = [r for r in rows if r.get("trades") and r["post_status"] in ("green", "orange")]
-    assert targets, "expected at least one remediated queue row"
+    targets = [r for r in rows if r.get("trades") and r["post_status"] == "green"]
+    assert targets, "expected at least one gate-green queue row with trades"
     item = targets[0]
+    prior = c.get(f"/portfolio/{item['client_id']}/check").json()
+    assert prior["status"] != "green", "queued portfolio must start non-green"
     # queue stores trades as a JSON string; approve-batch expects a list[dict]
     trades = json.loads(item["trades"]) if isinstance(item["trades"], str) else item["trades"]
     body = {"items": [{"client_id": item["client_id"], "trades": trades,
@@ -127,7 +129,7 @@ def test_approve_batch_clears_breach_and_persists():
     assert out["applied"] == 1
     # persists across reload (effective re-check)
     rr = c.get(f"/portfolio/{item['client_id']}/check").json()
-    assert rr["status"] in ("green", "orange")
+    assert rr["status"] == "green"
 
 
 # --- Admin reset clears SQLite state + clock rewind (Task 7c) ---

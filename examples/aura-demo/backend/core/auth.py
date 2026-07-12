@@ -30,17 +30,31 @@ _pwd_ctx = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
 
 
 def _secret() -> str:
-    """Read AUTH_SECRET at call time so tests can toggle it between imports."""
+    """Read AUTH_SECRET at call time so tests can toggle it between imports.
+
+    When AUTH_ENFORCE is enabled (the default), a missing or empty AUTH_SECRET
+    is a fatal configuration error and the backend refuses to start. Dev-only
+    fallback is allowed only when AUTH_ENFORCE=0 is explicitly set.
+    """
     secret = os.environ.get("AUTH_SECRET", "")
     if not secret:
-        # Keep local demos working without configuration, but make it obvious in logs.
+        if _auth_enforce():
+            raise RuntimeError(
+                "AUTH_SECRET is required and must not be empty when AUTH_ENFORCE is enabled. "
+                "Set AUTH_SECRET to a strong random secret, or explicitly disable enforcement "
+                "for local development with AUTH_ENFORCE=0 (never in production)."
+            )
+        # Dev fallback: never used when enforcement is on.
         return "dev-insecure-placeholder-change-me"
     return secret
 
 
 def _auth_enforce() -> bool:
-    """Read AUTH_ENFORCE at call time."""
-    return os.environ.get("AUTH_ENFORCE", "").lower() in ("1", "true", "on")
+    """Read AUTH_ENFORCE at call time.
+
+    Auth enforcement is ON by default. Set AUTH_ENFORCE=0 to disable it.
+    """
+    return os.environ.get("AUTH_ENFORCE", "1").lower() not in ("0", "false", "off")
 
 
 def hash_password(password: str) -> str:
@@ -217,12 +231,22 @@ async def require_mutation(user: User = Depends(get_current_user_or_dev)) -> Use
 def ensure_bootstrap_admin() -> None:
     """Create the bootstrap admin user if the users table is empty.
 
-    Runs once at startup. In production AUTH_ADMIN_PASSWORD must be a strong,
-    externally supplied secret; in dev it defaults to a well-known placeholder.
+    Runs once at startup. When AUTH_ENFORCE is enabled (the default),
+    AUTH_ADMIN_PASSWORD is required and boot fails loudly if it is missing or
+    empty. Dev-only fallback is allowed only when AUTH_ENFORCE=0.
     """
+    # Validate AUTH_SECRET at startup so the backend refuses to boot when it is
+    # missing and enforcement is enabled.
+    _ = _secret()
     admin_user = os.environ.get("AUTH_ADMIN_USERNAME", "admin")
-    admin_pass = os.environ.get("AUTH_ADMIN_PASSWORD", "admin")
+    admin_pass = os.environ.get("AUTH_ADMIN_PASSWORD", "")
     if not admin_user or not admin_pass:
+        if _auth_enforce():
+            raise RuntimeError(
+                "AUTH_ADMIN_PASSWORD is required and must not be empty when AUTH_ENFORCE is enabled. "
+                "Set AUTH_ADMIN_PASSWORD to a strong random password, or explicitly disable "
+                "enforcement for local development with AUTH_ENFORCE=0 (never in production)."
+            )
         return
     conn = get_conn_cached()
     count = conn.execute("SELECT COUNT(*) AS n FROM users").fetchone()["n"]

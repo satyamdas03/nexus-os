@@ -5,13 +5,13 @@ import { api } from "@/lib/api";
 
 type Message = { role: "user" | "assistant"; text: string };
 
-export function AdviserChat({ clientId }: { clientId: string }) {
+export function AdviserChat({ clientId, disabled }: { clientId: string; disabled?: boolean }) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
 
   const send = async () => {
-    if (!input.trim()) return;
+    if (!input.trim() || disabled) return;
     setBusy(true);
     setMessages((m) => [...m, { role: "user", text: input }]);
     try {
@@ -43,13 +43,14 @@ export function AdviserChat({ clientId }: { clientId: string }) {
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && send()}
-          className="flex-1 px-3 py-2 rounded border border-aura-border bg-aura-background text-sm"
-          placeholder="Ask about this portfolio..."
+          onKeyDown={(e) => e.key === "Enter" && !disabled && send()}
+          className="flex-1 px-3 py-2 rounded border border-aura-border bg-aura-background text-sm disabled:opacity-50"
+          placeholder={disabled ? "Confidence review required" : "Ask about this portfolio..."}
+          disabled={disabled}
         />
         <button
           onClick={send}
-          disabled={busy}
+          disabled={busy || disabled}
           className="px-4 py-2 rounded bg-aura-navy text-white text-sm disabled:opacity-50"
         >
           {busy ? "..." : "Ask"}

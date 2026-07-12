@@ -1,25 +1,52 @@
-"""Tests for the chat router."""
+"""Tests for the chat and voice routers."""
 
 import pytest
 from fastapi.testclient import TestClient
 
+from agents import voice as voice_mod
 from main import app
+from tests.helpers import auth_client, build_db
 
 
-client = TestClient(app)
+def _fake_voice_token(client_id, room_name=None, identity=None, ttl_seconds=3600):
+    return voice_mod.VoiceToken(
+        token="fake-token",
+        url="wss://test.livekit.cloud",
+        room=room_name or f"assure-{client_id}",
+        identity=identity or f"user-{client_id}",
+    )
 
 
-def test_chat_endpoint_unknown_portfolio():
+def _configure_voice(monkeypatch):
+    """Patch the voice adapter so configured-token tests work offline without
+    the LiveKit SDK or real credentials."""
+    import routers.voice as router_voice
+
+    monkeypatch.setattr(voice_mod, "is_configured", lambda: True)
+    monkeypatch.setattr(voice_mod, "create_token", _fake_voice_token)
+    monkeypatch.setattr(router_voice, "is_configured", lambda: True)
+    monkeypatch.setattr(router_voice, "create_token", _fake_voice_token)
+
+
+@pytest.fixture
+def client():
+    """Authenticated admin client backed by a small temp book."""
+    conn = build_db(n=10)
+    c = auth_client(conn)
+    yield c
+
+
+def test_chat_endpoint_unknown_portfolio(client):
     r = client.post("/portfolio/missing-client/chat", json={"query": "Why red?"})
     assert r.status_code == 404
 
 
-def test_chat_generic_requires_fields():
+def test_chat_generic_requires_fields(client):
     r = client.post("/chat", json={"query": "summary"})
     assert r.status_code == 422
 
 
-def test_chat_generic_returns_grounded_answer():
+def test_chat_generic_returns_grounded_answer(client):
     portfolio = {
         "client_id": "C-TEST",
         "client_name": "Test",
@@ -62,31 +89,27 @@ def test_chat_generic_returns_grounded_answer():
     assert len(data["citations"]) >= 1
 
 
-def test_voice_status_unconfigured():
+def test_voice_status_unconfigured(client):
     r = client.get("/voice/status")
     assert r.status_code == 200
     data = r.json()
     assert data["configured"] is False
 
 
-def test_voice_token_unconfigured():
+def test_voice_token_unconfigured(client):
     r = client.post("/voice/token/C-001")
     assert r.status_code == 503
 
 
-def test_voice_status_configured(monkeypatch):
-    monkeypatch.setenv("LIVEKIT_URL", "wss://test.livekit.cloud")
-    monkeypatch.setenv("LIVEKIT_API_KEY", "key")
-    monkeypatch.setenv("LIVEKIT_API_SECRET", "secret")
+def test_voice_status_configured(monkeypatch, client):
+    _configure_voice(monkeypatch)
     r = client.get("/voice/status")
     assert r.status_code == 200
     assert r.json()["configured"] is True
 
 
-def test_voice_token_configured(monkeypatch):
-    monkeypatch.setenv("LIVEKIT_URL", "wss://test.livekit.cloud")
-    monkeypatch.setenv("LIVEKIT_API_KEY", "key")
-    monkeypatch.setenv("LIVEKIT_API_SECRET", "secret")
+def test_voice_token_configured(monkeypatch, client):
+    _configure_voice(monkeypatch)
     r = client.post("/voice/token/C-001")
     assert r.status_code == 200
     data = r.json()

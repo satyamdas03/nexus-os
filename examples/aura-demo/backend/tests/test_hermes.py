@@ -22,17 +22,10 @@ def _client(n=400):
     """SQLite fixture: temp DB with n portfolios, wired into data_loader.
     Mirrors tests/test_routers.py::_client so hermes endpoint tests run against
     the real SQLite book instead of the removed file-based state."""
-    fd, path = tempfile.mkstemp(suffix=".db"); os.close(fd)
-    conn = storage.get_conn(path); storage.init_schema(conn); storage.migrate(conn)
-    generate_data.build_book(conn, n=n, seed=42, market_seed=42)
-    data_loader.set_conn(conn)
-    # Pin Hermes store to the same temp DB so scan/approve endpoints are isolated.
-    set_hermes_store(SQLiteHermesStore(conn))
-    # Reset any loop-level store override left by loop tests; use the global store.
-    from agents.hermes import loop
-    loop._set_store(None)
-    from main import app
-    return TestClient(app), conn
+    from tests.helpers import auth_client, build_db
+
+    conn = build_db(n=n, with_hermes_store=True)
+    return auth_client(conn), conn
 
 # A red portfolio the proportional trim can fix: Technology over its 25% cap.
 PORTFOLIO = {
@@ -253,13 +246,13 @@ def test_approve_batch_404_unknown_client(tmp_path, monkeypatch):
 def test_rollback_restores_prior_version_archives_current_and_audits(tmp_path, monkeypatch):
     """POST /hermes/rollback: restores history/v{version}.json, archives the
     current strategy first (reversible), bumps version forward, audits."""
-    from fastapi.testclient import TestClient
-    from main import app
     import agents.hermes.strategy_io as sio
+    from tests.helpers import auth_client, build_db
 
     strat, hist = _redirect_strategy(monkeypatch, tmp_path)
     _redirect_audit(monkeypatch, tmp_path)
-    client = TestClient(app)
+    conn = build_db(n=10)
+    client = auth_client(conn)
 
     # Seed: v0 strategy. Adopt once -> archives v0, bumps to v1, changes a var.
     before = sio.load_strategy()
@@ -297,11 +290,12 @@ def test_rollback_restores_prior_version_archives_current_and_audits(tmp_path, m
 
 def test_rollback_404_unknown_version(tmp_path, monkeypatch):
     """Rollback to a version with no archived snapshot returns 404."""
-    from fastapi.testclient import TestClient
-    from main import app
+    from tests.helpers import auth_client, build_db
+
     _redirect_strategy(monkeypatch, tmp_path)
     _redirect_audit(monkeypatch, tmp_path)
-    client = TestClient(app)
+    conn = build_db(n=10)
+    client = auth_client(conn)
     r = client.post("/hermes/rollback", json={"version": 999})
     assert r.status_code == 404
 

@@ -51,7 +51,7 @@ export default function Diagnosis({ params }: { params: { id: string } }) {
       <div className="absolute top-4 right-4 lg:top-6 lg:right-6 z-10">
         <AboutPopover title="About Diagnosis">
           <p>The Assurance Narrative is plain-English AI advisory, written only from breaches the rules engine flagged.</p>
-          <p>Breach chips are deterministic rule failures. Click one to highlight offending holdings. The "?" buttons explain the exact mandate rule for that holding or asset class.</p>
+          <p>Breach chips are deterministic rule failures. Click one to highlight offending holdings. The &ldquo;?&rdquo; buttons explain the exact mandate rule for that holding or asset class.</p>
           <p>The confidence line shows what is rule-maths (deterministic) vs AI-inferred (advisory).</p>
         </AboutPopover>
       </div>

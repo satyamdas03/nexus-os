@@ -23,115 +23,82 @@ def _client(n=100):
 
 
 @pytest.fixture
-def admin_client():
-    """Strict auth mode with a seeded admin user."""
-    old_enforce = os.environ.get("AUTH_ENFORCE")
-    old_secret = os.environ.get("AUTH_SECRET")
-    os.environ["AUTH_ENFORCE"] = "1"
-    os.environ["AUTH_SECRET"] = "test-secret-32-bytes-long-ok"
+def strict_auth(monkeypatch):
+    """Pin auth to enforced mode with a deterministic secret.
+
+    monkeypatch restores the environment after the test, so auth state never
+    leaks between tests."""
+    monkeypatch.setenv("AUTH_ENFORCE", "1")
+    monkeypatch.setenv("AUTH_SECRET", "test-secret-32-bytes-long-ok")
+    monkeypatch.setenv("AUTH_ADMIN_PASSWORD", "adminpass")
+
+
+@pytest.fixture
+def admin_client(strict_auth):
+    """Authenticated admin client backed by a 100-portfolio temp book."""
     c, conn = _client(n=100)
     create_user(conn, "admin", "adminpass", "admin")
     create_user(conn, "viewer", "viewerpass", "viewer")
     create_user(conn, "adviser", "adviserpass", "adviser")
     r = c.post("/auth/token", json={"username": "admin", "password": "adminpass"})
     assert r.status_code == 200, r.text
-    token = r.json()["access_token"]
-    c.headers["Authorization"] = f"Bearer {token}"
+    c.headers["Authorization"] = f"Bearer {r.json()['access_token']}"
     try:
         yield c
     finally:
-        if old_enforce is None:
-            os.environ.pop("AUTH_ENFORCE", None)
-        else:
-            os.environ["AUTH_ENFORCE"] = old_enforce
-        if old_secret is None:
-            os.environ.pop("AUTH_SECRET", None)
-        else:
-            os.environ["AUTH_SECRET"] = old_secret
+        data_loader.set_conn(None)
 
 
-def test_login_returns_token_and_role():
-    old_enforce = os.environ.get("AUTH_ENFORCE")
-    old_secret = os.environ.get("AUTH_SECRET")
-    os.environ["AUTH_ENFORCE"] = "1"
-    os.environ["AUTH_SECRET"] = "test-secret-32-bytes-long-ok"
+@pytest.fixture
+def strict_client(strict_auth):
+    """Unauthenticated client in strict-auth mode; tests log in themselves."""
     c, conn = _client(n=50)
-    create_user(conn, "admin", "adminpass", "admin")
     try:
-        r = c.post("/auth/token", json={"username": "admin", "password": "adminpass"})
-        assert r.status_code == 200
-        body = r.json()
-        assert body["token_type"] == "bearer"
-        assert body["role"] == "admin"
-        assert body["username"] == "admin"
-        assert "access_token" in body
+        yield c, conn
     finally:
-        if old_enforce is None:
-            os.environ.pop("AUTH_ENFORCE", None)
-        else:
-            os.environ["AUTH_ENFORCE"] = old_enforce
-        if old_secret is None:
-            os.environ.pop("AUTH_SECRET", None)
-        else:
-            os.environ["AUTH_SECRET"] = old_secret
+        data_loader.set_conn(None)
 
 
-def test_login_bad_password():
-    old_enforce = os.environ.get("AUTH_ENFORCE")
-    old_secret = os.environ.get("AUTH_SECRET")
-    os.environ["AUTH_ENFORCE"] = "1"
-    os.environ["AUTH_SECRET"] = "test-secret-32-bytes-long-ok"
-    c, conn = _client(n=50)
+def test_login_returns_token_and_role(strict_client):
+    c, conn = strict_client
     create_user(conn, "admin", "adminpass", "admin")
-    try:
-        r = c.post("/auth/token", json={"username": "admin", "password": "wrong"})
-        assert r.status_code == 401
-    finally:
-        if old_enforce is None:
-            os.environ.pop("AUTH_ENFORCE", None)
-        else:
-            os.environ["AUTH_ENFORCE"] = old_enforce
-        if old_secret is None:
-            os.environ.pop("AUTH_SECRET", None)
-        else:
-            os.environ["AUTH_SECRET"] = old_secret
+    r = c.post("/auth/token", json={"username": "admin", "password": "adminpass"})
+    assert r.status_code == 200
+    body = r.json()
+    assert body["token_type"] == "bearer"
+    assert body["role"] == "admin"
+    assert body["username"] == "admin"
+    assert "access_token" in body
+
+
+def test_login_bad_password(strict_client):
+    c, conn = strict_client
+    create_user(conn, "admin", "adminpass", "admin")
+    r = c.post("/auth/token", json={"username": "admin", "password": "wrong"})
+    assert r.status_code == 401
 
 
 def test_admin_reset_requires_auth():
+    # Dev fallback mode (conftest default): missing credentials still succeed.
     c, _ = _client(n=50)
     r = c.post("/admin/reset")
-    # In dev fallback mode, missing credentials still succeed.
     assert r.status_code == 200
 
 
-def test_enforced_admin_reset_requires_token():
-    old_enforce = os.environ.get("AUTH_ENFORCE")
-    old_secret = os.environ.get("AUTH_SECRET")
-    os.environ["AUTH_ENFORCE"] = "1"
-    os.environ["AUTH_SECRET"] = "test-secret-32-bytes-long-ok"
-    c, conn = _client(n=50)
+def test_enforced_admin_reset_requires_token(strict_client):
+    c, conn = strict_client
     create_user(conn, "admin", "adminpass", "admin")
     create_user(conn, "viewer", "viewerpass", "viewer")
-    try:
-        r = c.post("/admin/reset")
-        assert r.status_code == 401
-        r = c.post("/auth/token", json={"username": "viewer", "password": "viewerpass"})
-        c.headers["Authorization"] = f"Bearer {r.json()['access_token']}"
-        r = c.post("/admin/reset")
-        assert r.status_code == 403
-        r = c.post("/auth/token", json={"username": "admin", "password": "adminpass"})
-        c.headers["Authorization"] = f"Bearer {r.json()['access_token']}"
-        r = c.post("/admin/reset")
-        assert r.status_code == 200
-    finally:
-        if old_enforce is None:
-            os.environ.pop("AUTH_ENFORCE", None)
-        else:
-            os.environ["AUTH_ENFORCE"] = old_enforce
-        if old_secret is None:
-            os.environ.pop("AUTH_SECRET", None)
-        else:
-            os.environ["AUTH_SECRET"] = old_secret
+    r = c.post("/admin/reset")
+    assert r.status_code == 401
+    r = c.post("/auth/token", json={"username": "viewer", "password": "viewerpass"})
+    c.headers["Authorization"] = f"Bearer {r.json()['access_token']}"
+    r = c.post("/admin/reset")
+    assert r.status_code == 403
+    r = c.post("/auth/token", json={"username": "admin", "password": "adminpass"})
+    c.headers["Authorization"] = f"Bearer {r.json()['access_token']}"
+    r = c.post("/admin/reset")
+    assert r.status_code == 200
 
 
 def test_viewer_cannot_mutate(admin_client):

@@ -23,7 +23,7 @@ from assure_kernel.models import Portfolio
 from assure_kernel.synthetic.adversary import Adversary
 from assure_kernel.synthetic.report import StressReport
 from assure_kernel.synthetic.scenarios import list_scenarios, stress_portfolio
-from core.auth import require_mutation
+from core.auth import get_current_user, require_mutation
 from core.data_loader import get_conn_cached, get_portfolio
 from core.storage import init_schema
 
@@ -117,7 +117,7 @@ def _serialize_rules_result(result) -> dict:
 
 
 @router.get("/scenarios")
-def scenarios_list():
+def scenarios_list(_user=Depends(get_current_user)):
     """Return metadata for every built-in stress scenario."""
     return {"scenarios": list_scenarios()}
 
@@ -268,7 +268,7 @@ def _run_sweep_job(
 
 
 @router.get("/scenarios/sweep/{job_id}")
-def scenarios_sweep_status(job_id: str):
+def scenarios_sweep_status(job_id: str, _user=Depends(get_current_user)):
     """Poll an async sweep job; returns JSON result when done."""
     row = _store.get(job_id)
     if row is None:
@@ -291,7 +291,7 @@ def scenarios_sweep_status(job_id: str):
 
 
 @router.get("/scenarios/sweep/{job_id}/report.html")
-def scenarios_sweep_report_html(job_id: str):
+def scenarios_sweep_report_html(job_id: str, _user=Depends(get_current_user)):
     """Return the deterministic HTML report for a completed sweep job."""
     row = _store.get(job_id)
     if row is None:

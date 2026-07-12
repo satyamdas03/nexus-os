@@ -11,7 +11,7 @@ from fastapi import APIRouter, Depends, Query
 from pydantic import BaseModel
 
 from core import market as M, data_loader
-from core.auth import require_mutation
+from core.auth import get_current_user, require_mutation
 
 router = APIRouter(prefix="/market", tags=["market"])
 
@@ -44,7 +44,7 @@ async def _autorun_loop():
 
 
 @router.get("/clock")
-def clock():
+def clock(_user=Depends(get_current_user)):
     return M.get_clock()
 
 
@@ -94,17 +94,17 @@ def auto_fix(body: AutoFixBody, _user=Depends(require_mutation)):
 
 
 @router.get("/prices")
-def prices():
+def prices(_user=Depends(get_current_user)):
     return data_loader.current_prices()
 
 
 @router.get("/history")
-def history(from_day: int = Query(0), to_day: int = Query(100)):
+def history(from_day: int = Query(0), to_day: int = Query(100), _user=Depends(get_current_user)):
     return M.history(from_day, to_day)
 
 
 @router.get("/status")
-def status():
+def status(_user=Depends(get_current_user)):
     return M.status()
 
 

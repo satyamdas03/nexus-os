@@ -3,10 +3,11 @@ from datetime import datetime, timezone
 from pathlib import Path
 from pydantic import BaseModel
 from core.data_loader import get_portfolio
+from core.market import get_clock
 from core.rules_engine import check
 from core.effective import effective_portfolio, record_trades
 from core.trades import apply_trades
-from core.auth import require_mutation
+from core.auth import get_current_user, require_mutation
 from agents.explain import explain
 from agents.remediate import remediate
 from agents.reflect import suggest, adopt
@@ -48,7 +49,7 @@ def _log(client_id: str, action_type: str, actor: str, tier: str, payload: dict,
 
 
 @router.post("/portfolio/{client_id}/explain")
-def explain_endpoint(client_id: str, body: ExplainBody | None = None):
+def explain_endpoint(client_id: str, body: ExplainBody | None = None, _user=Depends(get_current_user)):
     p = get_portfolio(client_id)
     if not p:
         _404(client_id)
@@ -61,7 +62,7 @@ def explain_endpoint(client_id: str, body: ExplainBody | None = None):
 
 
 @router.post("/portfolio/{client_id}/verify")
-def verify_endpoint(client_id: str, body: VerifyBody):
+def verify_endpoint(client_id: str, body: VerifyBody, _user=Depends(get_current_user)):
     """Verify arbitrary trades against the mandate WITHOUT persisting.
 
     Enables: editable workbench live re-check, Hermes row expand, manual what-if.
@@ -108,7 +109,7 @@ def approve_endpoint(client_id: str, body: ApproveBody, _user=Depends(require_mu
     new_rr = check(new_eff, p["mandate"])
     _log(client_id, "approve", "human", "deterministic",
          {"trades": body.trades, "prior_status": prior["status"], "new_status": new_rr["status"],
-          "breach_type": body.breach_type, "choice": body.choice},
+          "breach_type": body.breach_type, "choice": body.choice, "day": get_clock()["day"]},
          body.rationale or "approved by manager")
     _log(client_id, "verify", "engine", "deterministic",
          {"status": new_rr["status"], "breaches": len(new_rr["breaches"]), "watches": len(new_rr["watches"])},

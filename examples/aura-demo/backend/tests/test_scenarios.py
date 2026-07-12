@@ -13,20 +13,10 @@ from generators import generate_data
 
 
 def _client(n=400):
-    fd, path = tempfile.mkstemp(suffix=".db")
-    os.close(fd)
-    conn = storage.get_conn(path)
-    storage.init_schema(conn)
-    storage.migrate(conn)
-    generate_data.build_book(conn, n=n, seed=42, market_seed=42)
-    data_loader.set_conn(conn)
-    set_hermes_store(SQLiteHermesStore(conn))
-    from agents.hermes import loop
+    from tests.helpers import auth_client, build_db
 
-    loop._set_store(None)
-    from main import app
-
-    return TestClient(app), conn
+    conn = build_db(n=n, with_hermes_store=True)
+    return auth_client(conn), conn
 
 
 def test_scenarios_list():

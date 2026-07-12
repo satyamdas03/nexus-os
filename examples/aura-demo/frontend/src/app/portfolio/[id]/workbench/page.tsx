@@ -41,6 +41,14 @@ export default function Workbench({ params }: { params: { id: string } }) {
     api.getPortfolio(id).then(setP).catch(() => setErr(true));
   }, [id]);
 
+  useEffect(() => {
+    if (trades.length > 0) {
+      api.confidence.calculate(id, trades).then(setConfidence).catch(() => setConfidence(null));
+    } else {
+      setConfidence(null);
+    }
+  }, [trades, id]);
+
   if (err) return <div className="p-8 font-mono text-aura-crimson">Backend unreachable. Check backend and retry.</div>;
   if (!p) {
     return (
@@ -60,14 +68,6 @@ export default function Workbench({ params }: { params: { id: string } }) {
     setTrades(next);
     api.verify(id, next).then(setLiveVerify).catch(() => setLiveVerify(null));
   };
-
-  useEffect(() => {
-    if (trades.length > 0) {
-      api.confidence.calculate(id, trades).then(setConfidence).catch(() => setConfidence(null));
-    } else {
-      setConfidence(null);
-    }
-  }, [trades, id]);
 
   const approve = async () => {
     if (approving) return;
@@ -179,7 +179,7 @@ export default function Workbench({ params }: { params: { id: string } }) {
               <VerifyPanel verification={verifyResult} resolved={resolved} retried={res?.retried ?? false} priorStatus={p.rules_result?.status ?? "unknown"} />
             ) : (
               <div className="bg-aura-surface-low border border-aura-border rounded p-4">
-                <p className="font-mono text-sm text-aura-text-muted">Click "Propose a fix" to generate compliant trades.</p>
+                <p className="font-mono text-sm text-aura-text-muted">Click &ldquo;Propose a fix&rdquo; to generate compliant trades.</p>
               </div>
             )}
             {liveVerify && (

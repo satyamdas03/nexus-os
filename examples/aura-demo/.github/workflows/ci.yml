@@ -33,10 +33,22 @@ jobs:
           python-version: "3.11"
           cache: "pip"
       - run: pip install -r requirements.txt
+      - name: Verify required secrets are present
+        run: |
+          if [ -z "${{ secrets.ANTHROPIC_API_KEY }}" ]; then
+            echo "::error::ANTHROPIC_API_KEY secret is missing"
+            exit 1
+          fi
+          if [ -z "${{ secrets.ADMIN_SECRET }}" ]; then
+            echo "::error::ADMIN_SECRET secret is missing"
+            exit 1
+          fi
       - run: pytest --tb=short
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY || 'dummy' }}
-          ADMIN_SECRET: ${{ secrets.ADMIN_SECRET || 'ci-secret' }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ADMIN_SECRET: ${{ secrets.ADMIN_SECRET }}
+          AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+          AUTH_ADMIN_PASSWORD: ${{ secrets.AUTH_ADMIN_PASSWORD }}
 
   frontend:
     runs-on: ubuntu-latest
@@ -53,3 +65,5 @@ jobs:
       - run: npm ci
       - run: npm run typecheck
       - run: npm run test
+      - run: npm run lint
+      - run: npm run build

@@ -170,7 +170,7 @@ export function WorkbenchTable({
             {trades.length === 0 && (
               <tr>
                 <td colSpan={5} className="py-8 text-center font-mono text-xs text-aura-text-muted">
-                  No trades proposed - click "Propose a fix"
+                  No trades proposed - click &ldquo;Propose a fix&rdquo;
                 </td>
               </tr>
             )}

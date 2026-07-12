@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { clsx } from "clsx";
 import { api } from "@/lib/api";
 import type {
@@ -45,7 +45,7 @@ export default function HermesPage() {
   const [queueMode, setQueueMode] = useState<"remediate" | "prevent" | undefined>(undefined);
   const guard = useMutationGuard();
 
-  const refreshAll = async () => {
+  const refreshAll = useCallback(async () => {
     const [hb, strat, hist] = await Promise.all([
       api.hermes.heartbeat().catch(() => null),
       api.hermes.strategy(),
@@ -54,12 +54,12 @@ export default function HermesPage() {
     setHeartbeat(hb);
     setStrategy(strat);
     setHistory(hist);
-  };
+  }, []);
 
   // The /hermes/queue SELECT returns `trades` as a JSON STRING (not Trade[])
   // and omits `client_name`. Coerce both at load time so the queue renders and
   // downstream approve/verify calls send arrays, not strings.
-  const loadQueue = async () => {
+  const loadQueue = useCallback(async () => {
     try {
       const page = await api.hermes.queue(undefined, 0, 50, queueMode);
       setQueue(
@@ -75,17 +75,17 @@ export default function HermesPage() {
     } catch {
       /* keep last */
     }
-  };
+  }, [queueMode]);
 
   useEffect(() => {
     Promise.all([refreshAll(), loadQueue()])
       .catch((e) => setErr(String(e.message ?? e)))
       .finally(() => setInitializing(false));
-  }, []);
+  }, [refreshAll, loadQueue]);
 
   useEffect(() => {
     if (!initializing) loadQueue().catch(() => {});
-  }, [queueMode]);
+  }, [loadQueue, initializing]);
 
   // Progress animation while scanning.
   useEffect(() => {
@@ -149,8 +149,9 @@ export default function HermesPage() {
       rationale: q.rationale,
       mode: q.mode ?? "remediate",
     }));
-    await api.hermes.approveBatch(payload);
+    const result = await api.hermes.approveBatch(payload);
     await Promise.all([loadQueue(), refreshAll()]);
+    return result;
   };
 
   const handleRollback = (r: { strategy: HermesStrategy; history?: HermesHistoryEntry[] }) => {

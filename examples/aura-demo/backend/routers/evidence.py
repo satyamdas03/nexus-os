@@ -5,16 +5,17 @@ This router does not mutate portfolio state, approve trades, or write to the
 audit log.
 """
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import HTMLResponse
 
+from core.auth import get_current_user
 from agents.evidence import build_portfolio_evidence
 
 router = APIRouter()
 
 
 @router.get("/evidence/portfolio/{client_id}")
-def portfolio_evidence_json(client_id: str):
+def portfolio_evidence_json(client_id: str, _user=Depends(get_current_user)):
     """Return a structured evidence pack for a single portfolio."""
     try:
         evidence = build_portfolio_evidence(client_id)
@@ -26,7 +27,7 @@ def portfolio_evidence_json(client_id: str):
 
 
 @router.get("/evidence/portfolio/{client_id}/html")
-def portfolio_evidence_html(client_id: str):
+def portfolio_evidence_html(client_id: str, _user=Depends(get_current_user)):
     """Return a print-ready HTML evidence pack for a single portfolio."""
     try:
         evidence = build_portfolio_evidence(client_id)

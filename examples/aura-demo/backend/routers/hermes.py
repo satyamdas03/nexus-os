@@ -22,9 +22,10 @@ from pydantic import BaseModel
 from core import data_loader
 from core.data_loader import get_portfolio, get_conn_cached
 from core.effective import effective_portfolio, record_trades, get_effective
+from core.market import get_clock
 from core.rules_engine import check
 from core.hermes_store import get_hermes_store, HERMES_STORE_URL
-from core.auth import require_mutation, require_admin
+from core.auth import get_current_user, require_mutation, require_admin
 from agents.hermes import HEARTBEAT_PATH, HISTORY_DIR
 from agents.hermes.loop import scan_book, prevent_scan, simulate_book
 from agents.hermes.reflect import reflect
@@ -33,7 +34,11 @@ from agents.hermes.generator import generate_diff
 from agents.hermes.test_generator import run_generated_test
 from routers.audit import append_audit
 
-_hstore = get_hermes_store()
+def _store():
+    """Resolve the Hermes store at call time so tests can swap it via
+    core.hermes_store.set_hermes_store without re-importing routers."""
+    return get_hermes_store()
+
 
 router = APIRouter()
 
@@ -72,6 +77,7 @@ class SimulateBody(BaseModel):
 class GenerateBody(BaseModel):
     days: int = 7
     seed: int = 42
+    expanded_search: bool = False  # run reactive+prevent + bidirectional perturbations
 
 
 class RunTestBody(BaseModel):
@@ -92,7 +98,7 @@ def hermes_scan(background: BackgroundTasks, _user=Depends(require_mutation)):
     scan writes a scan_jobs row and the paged hermes_queue as it goes.
     Human-applies gate still holds — this only proposes + gates + queues."""
     job_id = uuid.uuid4().hex
-    _hstore.insert_scan_job(job_id, "full", "running", datetime.now(timezone.utc).isoformat())
+    _store().insert_scan_job(job_id, "full", "running", datetime.now(timezone.utc).isoformat())
     background.add_task(_run_scan_job, job_id)
     return {"job_id": job_id}
 
@@ -101,12 +107,12 @@ def _run_scan_job(job_id: str):
     try:
         result = scan_book()  # writes heartbeat + paged queue + counts
         counts = result.get("heartbeat", {}).get("counts", {})
-        _hstore.update_scan_job_done(
+        _store().update_scan_job_done(
             job_id, datetime.now(timezone.utc).isoformat(),
             counts.get("scanned", 0), counts.get("remediated", 0), counts.get("missed", 0),
         )
     except Exception as e:  # noqa: BLE001 — record failure on the job row
-        _hstore.update_scan_job_done(
+        _store().update_scan_job_done(
             job_id, datetime.now(timezone.utc).isoformat(), 0, 0, 0, error=str(e),
         )
 
@@ -120,7 +126,7 @@ def hermes_prevent_scan(background: BackgroundTasks, _user=Depends(require_mutat
     for execution unless a low-risk policy explicitly auto-approves.
     """
     job_id = uuid.uuid4().hex
-    _hstore.insert_scan_job(job_id, "prevent", "running", datetime.now(timezone.utc).isoformat())
+    _store().insert_scan_job(job_id, "prevent", "running", datetime.now(timezone.utc).isoformat())
     background.add_task(_run_prevent_scan_job, job_id)
     return {"job_id": job_id}
 
@@ -129,18 +135,18 @@ def _run_prevent_scan_job(job_id: str):
     try:
         result = prevent_scan()
         counts = result.get("counts", {})
-        _hstore.update_scan_job_done(
+        _store().update_scan_job_done(
             job_id, datetime.now(timezone.utc).isoformat(),
             counts.get("scanned", 0), counts.get("remediated", 0), counts.get("missed", 0),
         )
     except Exception as e:  # noqa: BLE001
-        _hstore.update_scan_job_done(
+        _store().update_scan_job_done(
             job_id, datetime.now(timezone.utc).isoformat(), 0, 0, 0, error=str(e),
         )
 
 
 @router.post("/hermes/simulate")
-def hermes_simulate(body: SimulateBody):
+def hermes_simulate(body: SimulateBody, _user=Depends(get_current_user)):
     """Run a virtual 100-day simulation on a cloned book.
 
     Modes:
@@ -153,15 +159,15 @@ def hermes_simulate(body: SimulateBody):
 
 
 @router.get("/hermes/scan/{job_id}")
-def hermes_scan_status(job_id: str):
-    row = _hstore.get_scan_job(job_id)
+def hermes_scan_status(job_id: str, _user=Depends(get_current_user)):
+    row = _store().get_scan_job(job_id)
     if not row:
         raise HTTPException(404, "scan job not found")
     return row
 
 
 @router.get("/hermes/strategy")
-def hermes_strategy():
+def hermes_strategy(_user=Depends(get_current_user)):
     return load_strategy()
 
 
@@ -186,15 +192,22 @@ def hermes_adopt(body: AdoptBody, _user=Depends(require_mutation)):
     return result
 
 
-def _run_generate_job(job_id: str, days: int, seed: int) -> None:
+def _run_generate_job(job_id: str, days: int, seed: int, expanded_search: bool) -> None:
     try:
-        result = generate_diff(days=days, seed=seed)
-        _hstore.update_generate_job_done(
+        if expanded_search:
+            result = generate_diff(
+                days=days, seed=seed,
+                modes=("reactive", "prevent"),
+                bidirectional=True,
+            )
+        else:
+            result = generate_diff(days=days, seed=seed)
+        _store().update_generate_job_done(
             job_id, datetime.now(timezone.utc).isoformat(),
             result_json=json.dumps(result),
         )
     except Exception as e:  # noqa: BLE001
-        _hstore.update_generate_job_done(
+        _store().update_generate_job_done(
             job_id, datetime.now(timezone.utc).isoformat(), error=str(e),
         )
 
@@ -210,14 +223,14 @@ def hermes_generate(background: BackgroundTasks, body: GenerateBody = None, _use
     if body is None:
         body = GenerateBody()
     job_id = uuid.uuid4().hex
-    _hstore.insert_generate_job(job_id, "running", datetime.now(timezone.utc).isoformat())
-    background.add_task(_run_generate_job, job_id, body.days, body.seed)
+    _store().insert_generate_job(job_id, "running", datetime.now(timezone.utc).isoformat())
+    background.add_task(_run_generate_job, job_id, body.days, body.seed, body.expanded_search)
     return {"job_id": job_id}
 
 
 @router.get("/hermes/generate/{job_id}")
-def hermes_generate_status(job_id: str):
-    row = _hstore.get_generate_job(job_id)
+def hermes_generate_status(job_id: str, _user=Depends(get_current_user)):
+    row = _store().get_generate_job(job_id)
     if not row:
         raise HTTPException(404, "generate job not found")
     result = None
@@ -243,8 +256,8 @@ def hermes_run_test(body: RunTestBody, _user=Depends(require_mutation)):
 
 
 @router.get("/hermes/heartbeat")
-def hermes_heartbeat():
-    hb = _hstore.read_heartbeat()
+def hermes_heartbeat(_user=Depends(get_current_user)):
+    hb = _store().read_heartbeat()
     if hb is None:
         return {"counts": None, "queue_size": 0, "miss_count": 0, "score": None,
                 "stale": True, "message": "no scan run yet — POST /hermes/scan"}
@@ -252,7 +265,7 @@ def hermes_heartbeat():
 
 
 @router.get("/hermes/history")
-def hermes_history():
+def hermes_history(_user=Depends(get_current_user)):
     if not HISTORY_DIR.exists():
         return []
     out = []
@@ -267,13 +280,13 @@ def hermes_history():
 @router.get("/hermes/queue")
 def hermes_queue(day: int | None = None, cursor: int = 0,
                  limit: int = Query(50, ge=1, le=500),
-                 mode: str | None = None):
+                 mode: str | None = None, _user=Depends(get_current_user)):
     """Paged Hermes remediation queue. day defaults to the latest queue day.
     cursor = rowid offset. mode filters remediate/prevent. Returns rows + next_cursor."""
     if day is None:
-        d = _hstore.get_latest_queue_day(mode=mode)
+        d = _store().get_latest_queue_day(mode=mode)
         day = d if d is not None else 0
-    rows = _hstore.get_queue(day, cursor, limit, mode=mode)
+    rows = _store().get_queue(day, cursor, limit, mode=mode)
     return {"day": day, "rows": rows, "next_cursor": cursor + len(rows)}
 
 
@@ -309,7 +322,8 @@ def hermes_approve_batch(body: ApproveBatchBody, _user=Depends(require_mutation)
                  {"trades": item.trades,
                   "prior_status": prior["status"],
                   "new_status": new_rr["status"],
-                  "rationale": item.rationale},
+                  "rationale": item.rationale,
+                  "day": get_clock()["day"]},
                  item.rationale or "hermes bulk approve")
             results.append({"client_id": item.client_id,
                             "prior_status": prior["status"],
@@ -327,7 +341,7 @@ def hermes_approve_batch(body: ApproveBatchBody, _user=Depends(require_mutation)
         for item in body.items:
             by_mode.setdefault(item.mode, []).append(item.client_id)
         for mode, cids in by_mode.items():
-            _hstore.mark_queue_processed(
+            _store().mark_queue_processed(
                 cids, day, datetime.now(timezone.utc).isoformat(), mode=mode,
             )
     return {"results": results, "applied": applied, "failed": failed}

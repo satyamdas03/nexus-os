@@ -1,6 +1,8 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from pathlib import Path
 import json
+
+from core.auth import get_current_user
 
 router = APIRouter()
 _AUDIT = Path(__file__).parent.parent / "data" / "audit.jsonl"
@@ -13,7 +15,7 @@ def append_audit(entry: dict) -> None:
 
 
 @router.get("/audit")
-def audit_tail(limit: int = 50):
+def audit_tail(limit: int = 50, _user=Depends(get_current_user)):
     if not _AUDIT.exists():
         return []
     lines = _AUDIT.read_text().splitlines()[-limit:]

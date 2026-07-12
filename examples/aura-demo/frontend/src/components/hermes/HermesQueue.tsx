@@ -8,7 +8,7 @@ import { PrimaryButton } from "@/components/ui/PrimaryButton";
 import { StatusBadge } from "@/components/StatusBadge";
 import { VerifyPanel } from "@/components/VerifyPanel";
 import { api } from "@/lib/api";
-import type { HermesQueueItem, HermesHeartbeat, RulesResult, ConfidenceResult } from "@/lib/types";
+import type { HermesQueueItem, HermesHeartbeat, RulesResult, ConfidenceResult, HermesApproveBatchResult } from "@/lib/types";
 import { useMutationGuard } from "@/components/auth/useMutationGuard";
 import { ConfidenceCard } from "@/components/ConfidenceCard";
 
@@ -19,11 +19,17 @@ function QueueRow({
   rank,
   onApprove,
   onReject,
+  checked,
+  onToggle,
+  batchError,
 }: {
   q: HermesQueueItem;
   rank: number;
   onApprove: (q: HermesQueueItem) => Promise<void>;
   onReject: (q: HermesQueueItem) => void;
+  checked?: boolean;
+  onToggle?: () => void;
+  batchError?: string | null;
 }) {
   const [open, setOpen] = useState(false);
   const [verification, setVerification] = useState<RulesResult | null>(null);
@@ -110,6 +116,21 @@ function QueueRow({
       >
         <div className="flex items-center justify-between gap-3 flex-wrap mb-2">
           <div className="flex items-center gap-2">
+            {onToggle && (
+              <span
+                className="inline-flex items-center"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <input
+                  type="checkbox"
+                  checked={checked}
+                  onChange={onToggle}
+                  onClick={(e) => e.stopPropagation()}
+                  aria-label={`Select ${q.client_name ?? q.client_id}`}
+                  className="h-4 w-4 rounded border-aura-border text-aura-navy focus:ring-aura-navy bg-aura-surface"
+                />
+              </span>
+            )}
             <span className="font-mono text-sm text-aura-text-subtle w-6">#{rank}</span>
             <span className="font-mono text-sm font-medium text-aura-emerald">{q.client_name}</span>
             <span className="font-mono text-xs text-aura-text-subtle">({q.client_id})</span>
@@ -248,6 +269,7 @@ function QueueRow({
               Reject
             </button>
             {err && <span className="font-mono text-xs text-aura-crimson">ERR: {err}</span>}
+            {batchError && <span className="font-mono text-xs text-aura-crimson">BATCH_ERR: {batchError}</span>}
           </div>
           <p className="font-mono text-xs text-aura-text-muted leading-snug">
             Every item was deterministically verified by the rules engine before it reached you. You are the final authority.
@@ -268,13 +290,16 @@ export function HermesQueue({
   queue: HermesQueueItem[];
   heartbeat: HermesHeartbeat | null;
   onApprove: (q: HermesQueueItem) => Promise<void>;
-  onApproveBatch: (items: HermesQueueItem[]) => Promise<void>;
+  onApproveBatch: (items: HermesQueueItem[]) => Promise<HermesApproveBatchResult>;
   onRefreshQueue?: () => Promise<void>;
 }) {
   const misses = heartbeat?.top_misses ?? [];
   const [items, setItems] = useState<HermesQueueItem[]>(queue);
   const [batchBusy, setBatchBusy] = useState(false);
   const [batchErr, setBatchErr] = useState<string | null>(null);
+  const [batchProgress, setBatchProgress] = useState<{ current: number; total: number } | null>(null);
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [itemErrors, setItemErrors] = useState<Map<string, string>>(new Map());
   const guard = useMutationGuard();
 
   // keep local items in sync when the prop changes (e.g. after a new scan)
@@ -284,6 +309,15 @@ export function HermesQueue({
     if (queue !== lastRef) {
       setLastRef(queue);
       setItems(queue);
+      setSelected((prev) => {
+        const ids = new Set(queue.map((i) => i.client_id));
+        const next = new Set(prev);
+        for (const id of next) {
+          if (!ids.has(id)) next.delete(id);
+        }
+        return next;
+      });
+      setItemErrors(new Map());
     }
   }, [queue, lastRef]);
 
@@ -300,27 +334,52 @@ export function HermesQueue({
     removeItem(q.client_id);
   };
 
-  const approveAll = async () => {
-    if (items.length === 0) return;
-    const ok = window.confirm(
-      `Approve all ${items.length} verified proposal(s)?\nEach was rules-engine gated green. This sends the trades to execution.`
-    );
-    if (!ok) return;
+  const allSelected = items.length > 0 && selected.size === items.length;
+
+  const toggleSelectAll = () => {
+    if (allSelected) {
+      setSelected(new Set());
+    } else {
+      setSelected(new Set(items.map((i) => i.client_id)));
+    }
+  };
+
+  const approveItems = async (itemsToApprove: HermesQueueItem[], isAll: boolean) => {
+    if (itemsToApprove.length === 0) return;
+    if (isAll) {
+      const ok = window.confirm(
+        `Approve all ${itemsToApprove.length} verified proposal(s)?\nEach was rules-engine gated green. This sends the trades to execution.`
+      );
+      if (!ok) return;
+    }
     setBatchBusy(true);
     setBatchErr(null);
+    setItemErrors(new Map());
+    setBatchProgress({ current: itemsToApprove.length, total: items.length });
     try {
-      await onApproveBatch(items);
-      if (onRefreshQueue) {
-        await onRefreshQueue();
-      } else {
-        setItems([]);
+      const result = await onApproveBatch(itemsToApprove);
+      const nextErrors = new Map<string, string>();
+      for (const r of result.results) {
+        if (r.error) nextErrors.set(r.client_id, r.error);
       }
+      setItemErrors(nextErrors);
+      const succeeded = new Set(result.results.filter((r) => !r.error).map((r) => r.client_id));
+      setSelected((prev) => {
+        const next = new Set(prev);
+        for (const id of succeeded) next.delete(id);
+        return next;
+      });
+      if (onRefreshQueue) await onRefreshQueue();
     } catch (e) {
       setBatchErr(String((e as Error).message ?? e));
     } finally {
       setBatchBusy(false);
+      setBatchProgress(null);
     }
   };
+
+  const approveSelected = () => approveItems(items.filter((i) => selected.has(i.client_id)), false);
+  const approveAll = () => approveItems(items, true);
 
   return (
     <Panel
@@ -338,20 +397,43 @@ export function HermesQueue({
       )}
 
       {items.length > 0 && (
-        <div className="mb-4 border border-aura-emerald rounded bg-aura-surface p-3">
-          <div className="flex items-center justify-between gap-3 flex-wrap">
-            <div>
-              <div className="font-mono text-sm font-medium text-aura-text">Bulk Action</div>
-              <p className="font-mono text-xs text-aura-text-muted leading-snug">
-                Approve all verified — every queued item is rules-engine green.
-              </p>
-            </div>
-            <PrimaryButton onClick={approveAll} disabled={batchBusy || guard.disabled} title={guard.title} loading={batchBusy} className="flex items-center gap-2">
-              <span className="material-symbols-outlined text-[16px]">done_all</span>
-              {batchBusy ? "Approving all..." : `Approve all verified (${items.length})`}
-            </PrimaryButton>
-          </div>
-          {batchErr && <p className="font-mono text-xs text-aura-crimson mt-2">BATCH_ERR: {batchErr}</p>}
+        <div className="mb-4 border border-aura-border rounded bg-aura-surface p-3 flex flex-wrap items-center gap-3">
+          <label className="inline-flex items-center gap-2 font-mono text-xs text-aura-text cursor-pointer">
+            <input
+              type="checkbox"
+              checked={allSelected}
+              onChange={toggleSelectAll}
+              className="h-4 w-4 rounded border-aura-border text-aura-navy focus:ring-aura-navy bg-aura-surface"
+            />
+            {allSelected ? "Select none" : "Select all"}
+          </label>
+          <PrimaryButton
+            onClick={approveSelected}
+            disabled={selected.size === 0 || batchBusy || guard.disabled}
+            title={guard.title}
+            loading={batchBusy}
+            className="flex items-center gap-2"
+          >
+            <span className="material-symbols-outlined text-[16px]">done_all</span>
+            Approve selected{selected.size > 0 ? ` (${selected.size})` : ""}
+          </PrimaryButton>
+          <PrimaryButton
+            onClick={approveAll}
+            disabled={batchBusy || guard.disabled}
+            title={guard.title}
+            loading={batchBusy}
+            className="flex items-center gap-2"
+          >
+            <span className="material-symbols-outlined text-[16px]">done_all</span>
+            Approve all ({items.length})
+          </PrimaryButton>
+          {batchBusy && batchProgress && (
+            <span className="font-mono text-xs text-aura-text-muted inline-flex items-center gap-2">
+              <span className="material-symbols-outlined animate-spin text-[16px]">progress_activity</span>
+              Approving {batchProgress.current} of {batchProgress.total}...
+            </span>
+          )}
+          {batchErr && <span className="font-mono text-xs text-aura-crimson">BATCH_ERR: {batchErr}</span>}
         </div>
       )}
 
@@ -363,6 +445,16 @@ export function HermesQueue({
             rank={i + 1}
             onApprove={handleApprove}
             onReject={handleReject}
+            checked={selected.has(q.client_id)}
+            onToggle={() =>
+              setSelected((prev) => {
+                const next = new Set(prev);
+                if (next.has(q.client_id)) next.delete(q.client_id);
+                else next.add(q.client_id);
+                return next;
+              })
+            }
+            batchError={itemErrors.get(q.client_id) ?? null}
           />
         ))}
       </div>

@@ -2,16 +2,19 @@
 
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
-import { AdviserWhiteboard } from "@/lib/types";
+import { AdviserWhiteboard, ConfidenceResult } from "@/lib/types";
 import { AdviserCanvas } from "@/components/adviser/AdviserCanvas";
 import { AdviserChat } from "@/components/adviser/AdviserChat";
 import { AdviserControls } from "@/components/adviser/AdviserControls";
+import { ConfidenceCard } from "@/components/ConfidenceCard";
 
 export default function AdviserPage() {
   const [portfolios, setPortfolios] = useState<{ client_id: string; client_name: string }[]>([]);
   const [selected, setSelected] = useState<string | null>(null);
   const [whiteboard, setWhiteboard] = useState<AdviserWhiteboard | null>(null);
   const [loading, setLoading] = useState(false);
+  const [confidence, setConfidence] = useState<ConfidenceResult | null>(null);
+  const [confidenceLoading, setConfidenceLoading] = useState(false);
 
   useEffect(() => {
     api.listPortfolios(100, 0).then((ps) => {
@@ -31,6 +34,21 @@ export default function AdviserPage() {
       .catch(() => setWhiteboard(null))
       .finally(() => setLoading(false));
   }, [selected]);
+
+  useEffect(() => {
+    if (!whiteboard) {
+      setConfidence(null);
+      return;
+    }
+    setConfidenceLoading(true);
+    api.confidence
+      .calculate(whiteboard.client_id, whiteboard.proposed_trades || [])
+      .then(setConfidence)
+      .catch(() => setConfidence(null))
+      .finally(() => setConfidenceLoading(false));
+  }, [whiteboard]);
+
+  const gated = Boolean(confidence && confidence.confidence < 0.85);
 
   return (
     <div className="p-4 lg:p-6 max-w-[1440px] mx-auto">
@@ -56,13 +74,22 @@ export default function AdviserPage() {
       {loading && <p className="font-mono text-xs text-aura-text-muted">Loading whiteboard…</p>}
 
       {whiteboard && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="space-y-6">
-            <AdviserCanvas whiteboard={whiteboard} />
-            <AdviserControls clientId={whiteboard.client_id} />
-          </div>
-          <div>
-            <AdviserChat clientId={whiteboard.client_id} />
+        <div className="space-y-6">
+          {confidenceLoading && <p className="font-mono text-xs text-aura-text-muted">Calculating confidence…</p>}
+          {confidence && <ConfidenceCard result={confidence} />}
+          {gated && (
+            <div className="rounded border border-aura-crimson bg-aura-crimson-soft p-3 text-sm font-mono text-aura-crimson">
+              Confidence score is below the 85% threshold. Chat and voice controls are disabled pending human review.
+            </div>
+          )}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="space-y-6">
+              <AdviserCanvas whiteboard={whiteboard} />
+              <AdviserControls clientId={whiteboard.client_id} disabled={gated} />
+            </div>
+            <div>
+              <AdviserChat clientId={whiteboard.client_id} disabled={gated} />
+            </div>
           </div>
         </div>
       )}

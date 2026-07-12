@@ -158,10 +158,10 @@ def test_synthetic_disclaimer_present():
 
 
 def test_html_route_returns_200():
-    _setup()
-    from main import app
+    conn = _setup()
+    from tests.helpers import auth_client
 
-    client = TestClient(app)
+    client = auth_client(conn)
     cid = _find_by_status("red")
     r = client.get(f"/evidence/portfolio/{cid}/html")
     assert r.status_code == 200
@@ -178,10 +178,10 @@ def test_html_route_returns_200():
 
 
 def test_json_route_returns_200_and_strips_html():
-    _setup()
-    from main import app
+    conn = _setup()
+    from tests.helpers import auth_client
 
-    client = TestClient(app)
+    client = auth_client(conn)
     cid = _find_by_status("green")
     r = client.get(f"/evidence/portfolio/{cid}")
     assert r.status_code == 200
@@ -192,9 +192,9 @@ def test_json_route_returns_200_and_strips_html():
 
 
 def test_404_for_unknown_client():
-    _setup()
-    from main import app
+    conn = _setup()
+    from tests.helpers import auth_client
 
-    client = TestClient(app)
+    client = auth_client(conn)
     r = client.get("/evidence/portfolio/zzz")
     assert r.status_code == 404

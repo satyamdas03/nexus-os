@@ -4,7 +4,7 @@ import { useRef, useState, Fragment } from "react";
 import { clsx } from "clsx";
 import type { Holding, RulesResult } from "@/lib/types";
 import { api } from "@/lib/api";
-import { metricForHolding } from "@/lib/explainMetric";
+import { metricForHolding, explainHolding } from "@/lib/explainMetric";
 import { Panel } from "@/components/ui/Panel";
 
 export function HoldingsTable({ holdings, cash, highlight = [], clientId, rulesResult }: {
@@ -18,6 +18,7 @@ export function HoldingsTable({ holdings, cash, highlight = [], clientId, rulesR
   const [explainFor, setExplainFor] = useState<string | null>(null);
   const [explainText, setExplainText] = useState<string>("");
   const [loading, setLoading] = useState(false);
+  const [offline, setOffline] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
 
   const metricFor = (h: Holding): string | undefined =>
@@ -37,11 +38,22 @@ export function HoldingsTable({ holdings, cash, highlight = [], clientId, rulesR
     setExplainFor(h.ticker);
     setLoading(true);
     setExplainText("");
+    setOffline(false);
     try {
       const r = await api.explain(clientId, metric, controller.signal);
-      if (!controller.signal.aborted) setExplainText(r.narrative);
+      if (!controller.signal.aborted) {
+        if (r.narrative?.trim()) {
+          setExplainText(r.narrative.trim());
+        } else {
+          setExplainText(explainHolding(rulesResult, h));
+          setOffline(true);
+        }
+      }
     } catch {
-      if (!controller.signal.aborted) setExplainText("Explain unavailable");
+      if (!controller.signal.aborted) {
+        setExplainText(explainHolding(rulesResult, h));
+        setOffline(true);
+      }
     } finally {
       if (!controller.signal.aborted) setLoading(false);
     }
@@ -53,7 +65,7 @@ export function HoldingsTable({ holdings, cash, highlight = [], clientId, rulesR
       right={
         <span className="text-aura-text-muted font-mono text-xs flex items-center gap-1">
           <span className="material-symbols-outlined text-[16px]">info</span>
-          click "?" to explain a metric
+          click &ldquo;?&rdquo; to explain a metric
         </span>
       }
     >
@@ -124,7 +136,12 @@ export function HoldingsTable({ holdings, cash, highlight = [], clientId, rulesR
                     <tr className="bg-aura-surface">
                       <td colSpan={6} className="px-3 py-3 border-b border-aura-border">
                         <div className="font-mono text-xs text-aura-text-muted">
-                          <span className="text-aura-navy">AI Explain [{metricFor(h) ?? "summary"}]:{" "}</span>
+                          <span className={clsx("inline-flex items-center gap-1", offline ? "text-aura-ochre" : "text-aura-navy")}>
+                            {offline && (
+                              <span className="material-symbols-outlined text-[14px]">offline_bolt</span>
+                            )}
+                            {offline ? "Offline Explain" : "AI Explain"} [{metricFor(h) ?? "summary"}]:{" "}
+                          </span>
                           {loading ? (
                             <span className="inline-flex items-center gap-1">
                               <span className="material-symbols-outlined text-[14px] animate-spin">progress_activity</span>
